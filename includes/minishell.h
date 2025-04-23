@@ -6,12 +6,16 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:06:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/21 14:08:28 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:18:04 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define PROGRAMM_ERROR 0
+# define MALLOC_ERROR 1
+# define INVALID_ARGUMENT_ERROR 3
 
 //library
 # include "libft.h"
@@ -48,7 +52,11 @@
 # include <curses.h> // нужен для tgetent и других termcap-функций
 # include <sys/ioctl.h>
 
-void ft_print(char *str);
+void	throw_err(int err_type);
+void	*safe_malloc(size_t bytes);
+void	free_ptr(void *ptr);
+char	*read_promt(void);
+void	setup_signals(void);
 
 
 #endif

@@ -1,42 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   read.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 15:20:01 by ggevorgi         ###   ########.fr       */
+/*   Created: 2025/04/23 11:49:47 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/04/23 15:03:01 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[], char *envp[])
+char	*read_promt(void)
 {
 	char	*line;
 
-	(void) argv;
-	(void) envp;
-	if (argc > 1)
-		throw_err(INVALID_ARGUMENT_ERROR);
-	setup_signals();
-	while (1)
-	{
-		line = read_promt();
-		if (!line) // Ctrl-D
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (*line)
-		{
-			//do_command(line);
-			add_history(line);
-		}
-		printf("%s\n", line);
-		free(line);
-	}
-	rl_clear_history();
-	return (0);
+	line = readline("\033[1;32mminishell$ \033[0m");
+	if (line && *line)
+		add_history (line);
+	return (line);
 }

@@ -6,13 +6,14 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:10 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/20 17:16:52 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/23 11:51:35 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_print(char *str)
+void	free_ptr(void *ptr)
 {
-	printf("%s", str);
+	free(ptr);
+	ptr = NULL;	
 }

@@ -28,7 +28,8 @@ all: $(LIBS_DIR)/$(READLINE) $(LIBS_DIR)/$(LIBFT)/libft.a $(NAME)
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ \
 		-L$(READLINE_LIB_PATH) -lreadline \
-		-L$(LIBS_DIR)/$(LIBFT) -lft
+		-L$(LIBS_DIR)/$(LIBFT) -lft \
+		-lncurses
 
 # Object rule with directory creation
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c Makefile

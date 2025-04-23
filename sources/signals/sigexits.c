@@ -1,42 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sigexits.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 15:20:01 by ggevorgi         ###   ########.fr       */
+/*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/04/23 15:20:41 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[], char *envp[])
+static void	sigint_handler(int sig)
 {
-	char	*line;
+	(void)sig;
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_redisplay();
+}
 
-	(void) argv;
-	(void) envp;
-	if (argc > 1)
-		throw_err(INVALID_ARGUMENT_ERROR);
-	setup_signals();
-	while (1)
-	{
-		line = read_promt();
-		if (!line) // Ctrl-D
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (*line)
-		{
-			//do_command(line);
-			add_history(line);
-		}
-		printf("%s\n", line);
-		free(line);
-	}
-	rl_clear_history();
-	return (0);
+void	setup_signals(void)
+{
+	signal(SIGINT, sigint_handler);     // Ctrl-C
+	signal(SIGQUIT, SIG_IGN);           // Ctrl-
 }

@@ -1,42 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   safe_malloc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 15:20:01 by ggevorgi         ###   ########.fr       */
+/*   Created: 2025/04/23 11:52:04 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/04/23 15:19:16 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[], char *envp[])
+void	*safe_malloc(size_t bytes)
 {
-	char	*line;
+	void	*malloced;
 
-	(void) argv;
-	(void) envp;
-	if (argc > 1)
-		throw_err(INVALID_ARGUMENT_ERROR);
-	setup_signals();
-	while (1)
+	malloced = malloc(bytes);
+	if (!malloced)
 	{
-		line = read_promt();
-		if (!line) // Ctrl-D
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (*line)
-		{
-			//do_command(line);
-			add_history(line);
-		}
-		printf("%s\n", line);
-		free(line);
+		throw_err(MALLOC_ERROR);
+		return (NULL);
 	}
-	rl_clear_history();
-	return (0);
+	return (malloced);
 }

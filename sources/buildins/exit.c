@@ -1,41 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 17:38:14 by ggevorgi         ###   ########.fr       */
+/*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/04/23 17:33:15 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[], char *envp[])
+void ft_exit(int status)
 {
-	char	*line;
-
-	(void) argv;
-	(void) envp;
-	if (argc > 1)
-		throw_err(INVALID_ARGUMENT_ERROR);
-	setup_signals();
-	while (1)
-	{
-		line = read_promt();
-		if (!line) // Ctrl-D
-		{
-			ft_putstr_fd("exit\n", 1);
-			break ;
-		}
-		if (*line)
-		{
-			//do_command(line);
-			add_history(line);
-		}
-		free(line);
-	}
-	rl_clear_history();
-	return (0);
+	ft_putstr_fd("exit\n", 1);
+	exit(status);
 }

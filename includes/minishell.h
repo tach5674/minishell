@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:06:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 15:18:04 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/23 18:52:46 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,15 @@
 # define MALLOC_ERROR 1
 # define INVALID_ARGUMENT_ERROR 3
 
+# ifndef PATH_MAX
+# define PATH_MAX 1024
+# endif
+
 //library
 # include "libft.h"
 
-#include <stdbool.h>
+# include <stdbool.h>
+# include <limits.h>
 
 // Работа с памятью и строками
 # include <stdlib.h>
@@ -57,6 +62,9 @@ void	*safe_malloc(size_t bytes);
 void	free_ptr(void *ptr);
 char	*read_promt(void);
 void	setup_signals(void);
+int		ft_pwd(void);
+void	ft_echo(char *msg, bool is_nl);
+void	ft_exit(int status);
 
 
 #endif

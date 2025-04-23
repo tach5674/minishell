@@ -1,41 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 17:38:14 by ggevorgi         ###   ########.fr       */
+/*   Created: 2025/04/23 16:58:23 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/04/23 17:21:18 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[], char *envp[])
+int	ft_pwd(void)
 {
-	char	*line;
+	char	cwd[PATH_MAX];
 
-	(void) argv;
-	(void) envp;
-	if (argc > 1)
-		throw_err(INVALID_ARGUMENT_ERROR);
-	setup_signals();
-	while (1)
+	if (!getcwd(cwd, sizeof(cwd)))
 	{
-		line = read_promt();
-		if (!line) // Ctrl-D
-		{
-			ft_putstr_fd("exit\n", 1);
-			break ;
-		}
-		if (*line)
-		{
-			//do_command(line);
-			add_history(line);
-		}
-		free(line);
+		perror("getcwd() error");
+		return (1);
 	}
-	rl_clear_history();
+	printf("%s\n", cwd);
 	return (0);
 }

@@ -6,14 +6,19 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:10 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 11:51:35 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:51:52 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+bool	ft_isspace(char c)
+{
+	return (c == ' ' || (c >= 9 && c <= 13));
+}
+
 void	free_ptr(void *ptr)
 {
 	free(ptr);
-	ptr = NULL;	
+	ptr = NULL;
 }

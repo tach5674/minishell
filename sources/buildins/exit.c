@@ -6,13 +6,13 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 17:33:15 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:54:51 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_exit(int status)
+void	ft_exit(int status)
 {
 	ft_putstr_fd("exit\n", 1);
 	exit(status);

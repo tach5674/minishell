@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:53:32 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 15:20:59 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:52:16 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	throw_err(int err_type)
 	}
 	else if (err_type == INVALID_ARGUMENT_ERROR)
 	{
-		print_error("Error: This program does not accept any arguments.\n", NULL);
+		print_error("Error: This program does not"
+			" accept any arguments.\n", NULL);
 		exit(INVALID_ARGUMENT_ERROR);
 	}
 	else
@@ -49,5 +50,5 @@ void	throw_err(int err_type)
 		print_error("Unexpected program error.\n", NULL);
 		exit(EXIT_FAILURE);
 	}
-	// rl_clear_history();
+	rl_clear_history();
 }

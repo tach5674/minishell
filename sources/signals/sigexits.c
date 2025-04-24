@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 15:20:41 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:51:29 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ static void	sigint_handler(int sig)
 
 void	setup_signals(void)
 {
-	signal(SIGINT, sigint_handler);     // Ctrl-C
-	signal(SIGQUIT, SIG_IGN);           // Ctrl-
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

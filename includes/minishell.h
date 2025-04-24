@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:06:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/23 18:52:46 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:57:05 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # define MALLOC_ERROR 1
 # define INVALID_ARGUMENT_ERROR 3
 
-# ifndef PATH_MAX
+#ifndef PATH_MAX
 # define PATH_MAX 1024
-# endif
+#endif
 
 //library
 # include "libft.h"
@@ -54,17 +54,44 @@
 // termios и управление терминалом
 # include <termios.h>
 # include <termcap.h>
-# include <curses.h> // нужен для tgetent и других termcap-функций
+# include <curses.h>
 # include <sys/ioctl.h>
 
-void	throw_err(int err_type);
-void	*safe_malloc(size_t bytes);
-void	free_ptr(void *ptr);
-char	*read_promt(void);
-void	setup_signals(void);
-int		ft_pwd(void);
-void	ft_echo(char *msg, bool is_nl);
-void	ft_exit(int status);
+typedef enum e_token_type {
+    TOKEN_WORD,
+    TOKEN_PIPE,          // |
+    TOKEN_AND,           // &&
+    TOKEN_OR,            // ||
+    TOKEN_REDIR_IN,      // <
+    TOKEN_REDIR_OUT,     // >
+    TOKEN_REDIR_APPEND,  // >>
+    TOKEN_HEREDOC,       // <<
+    TOKEN_PAREN_LEFT,    // (
+    TOKEN_PAREN_RIGHT,   // )
+    TOKEN_EOF
+} t_token_type;
 
+typedef struct s_token {
+    char            *value;
+    t_token_type    type;
+    struct s_token  *next;
+} t_token;
+
+
+
+int			    ft_pwd(void);
+bool	        is_operator(char c);
+bool            ft_isspace(char c);
+char		    *read_prompt(void);
+void		    throw_err(int err_type);
+void		    *safe_malloc(size_t bytes);
+void		    free_ptr(void *ptr);
+void		    setup_signals(void);
+void		    ft_echo(char *msg, bool is_nl);
+void		    ft_exit(int status);
+void	        ft_lstadd_back_token(t_token **lst, t_token *new);
+t_token	        *ft_lstnew_token(t_token_type type, char *value);
+t_token         *tokenize(char *line, int i);
+t_token_type	oper_type(const char *s, int *len);
 
 #endif

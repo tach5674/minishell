@@ -32,6 +32,4 @@ void			ht_print(t_ht *ht);
 void			ht_free(t_ht *ht);
 void            ht_free_node(t_ht_item *node);
 
-void ht_print_bucket_sizes(t_ht *ht);
-
 #endif

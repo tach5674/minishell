@@ -2,9 +2,6 @@
 #define HT_H
 
 #include "libft.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include <stdbool.h>
 
 typedef struct s_ht_item

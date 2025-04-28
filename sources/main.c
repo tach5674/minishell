@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/28 16:04:23 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/04/28 19:32:11 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,31 +49,37 @@ void	execute_commands(char *line)
 	print_tokens(token_list);
 }
 
+void	shell_init(t_shell **shell, char **envp)
+{
+	(*shell)->env = ht_init(envp);
+	(*shell)->last_status_code = '0';
+	(*shell)->shell_name = "minishell";
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
-	char	*line;
-	t_ht	*env_table;
+	t_shell	*shell;
 	
 	(void) argv;
-	env_table = ht_init(envp);
-	ht_print(env_table);
+	shell_init(&shell, envp);
+	// ht_print(shell->env);
 	if (argc > 1)
 		throw_err(INVALID_ARGUMENT_ERROR);
 	setup_signals();
 	while (1)
 	{
-		line = read_prompt();
-		if (!line)
+		shell->commands = read_prompt();
+		if (!shell->commands)
 		{
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		if (*line)
+		if (*shell->commands)
 		{
-			add_history(line);
-			execute_commands(line);
+			add_history(shell->commands);
+			execute_commands(shell->commands);
 		}
-		free(line);
+		free(shell->commands);
 	}
 	rl_clear_history();
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:06:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/28 12:09:27 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/04/28 19:13:51 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,13 @@ typedef struct s_token {
     t_token_type    type;
     struct s_token  *next;
 } t_token;
+
+typedef struct s_shell {
+    t_ht    *env;
+    char    *shell_name;
+    char    last_status_code;
+    char    *commands;
+} t_shell;
 
 
 

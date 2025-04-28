@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:06:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/24 17:57:05 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:09:27 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #ifndef PATH_MAX
 # define PATH_MAX 1024
 #endif
+
+//hash table
+#include "ht.h"
 
 //library
 # include "libft.h"
@@ -93,5 +96,8 @@ void	        ft_lstadd_back_token(t_token **lst, t_token *new);
 t_token	        *ft_lstnew_token(t_token_type type, char *value);
 t_token         *tokenize(char *line, int i);
 t_token_type	oper_type(const char *s, int *len);
+
+int				ft_strcmp(const char *s1, const char *s2);
+char			*ft_strndup(const char *s, size_t n);
 
 #endif

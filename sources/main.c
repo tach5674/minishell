@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/24 18:06:53 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/28 16:04:23 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_tokens(t_token *list)
 	while (list)
 	{
 		printf("Type: %-12s | Value: '%s'\n",
-token_type_str(list->type), list->value);
+		token_type_str(list->type), list->value);
 		list = list->next;
 	}
 }
@@ -52,9 +52,11 @@ void	execute_commands(char *line)
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
-
+	t_ht	*env_table;
+	
 	(void) argv;
-	(void) envp;
+	env_table = ht_init(envp);
+	ht_print(env_table);
 	if (argc > 1)
 		throw_err(INVALID_ARGUMENT_ERROR);
 	setup_signals();

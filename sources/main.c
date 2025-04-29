@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/24 18:06:53 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/04/28 19:32:11 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_tokens(t_token *list)
 	while (list)
 	{
 		printf("Type: %-12s | Value: '%s'\n",
-token_type_str(list->type), list->value);
+		token_type_str(list->type), list->value);
 		list = list->next;
 	}
 }
@@ -49,29 +49,37 @@ void	execute_commands(char *line)
 	print_tokens(token_list);
 }
 
+void	shell_init(t_shell **shell, char **envp)
+{
+	(*shell)->env = ht_init(envp);
+	(*shell)->last_status_code = '0';
+	(*shell)->shell_name = "minishell";
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {
-	char	*line;
-
+	t_shell	*shell;
+	
 	(void) argv;
-	(void) envp;
+	shell_init(&shell, envp);
+	// ht_print(shell->env);
 	if (argc > 1)
 		throw_err(INVALID_ARGUMENT_ERROR);
 	setup_signals();
 	while (1)
 	{
-		line = read_prompt();
-		if (!line)
+		shell->commands = read_prompt();
+		if (!shell->commands)
 		{
 			ft_putstr_fd("exit\n", 1);
 			break ;
 		}
-		if (*line)
+		if (*shell->commands)
 		{
-			add_history(line);
-			execute_commands(line);
+			add_history(shell->commands);
+			execute_commands(shell->commands);
 		}
-		free(line);
+		free(shell->commands);
 	}
 	rl_clear_history();
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:53:32 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/28 19:04:29 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/06 20:12:38 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,8 @@ void	throw_err(int err_type)
 		exit(EXIT_FAILURE);
 	}
 	rl_clear_history();
+}
+
+void syntax_error(const char *token) {
+	printf("minishell: syntax error near unexpected token `%s`\n", token);
 }

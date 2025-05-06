@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/28 19:32:11 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/06 20:17:56 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,59 @@ void	print_tokens(t_token *list)
 		list = list->next;
 	}
 }
+#include <stdio.h>
 
-void	execute_commands(char *line)
+void print_cmd(t_cmd *cmd) {
+    if (!cmd) {
+        printf("Command: NULL\n");
+        return;
+    }
+
+    printf("Command name: %s\n", cmd->name ? cmd->name : "NULL");
+
+    printf("Arguments:\n");
+    if (cmd->args) {
+        for (size_t i = 0; cmd->args[i]; i++) {
+            printf("  [%zu]: %s\n", i, cmd->args[i]);
+        }
+    } else {
+        printf("  None\n");
+    }
+
+    printf("Redirections:\n");
+    if (cmd->redirections && cmd->redir_count > 0) {
+        for (size_t i = 0; i < cmd->redir_count; i++) {
+            t_redirection *r = cmd->redirections[i];
+            if (!r) continue;
+            const char *type_str = "UNKNOWN";
+            switch (r->type) {
+                case REDIR_IN: type_str = "<"; break;
+                case REDIR_OUT: type_str = ">"; break;
+                case REDIR_APPEND: type_str = ">>"; break;
+                case REDIR_HEREDOC: type_str = "<<"; break;
+            }
+            printf("  [%zu]: %s %s\n", i, type_str, r->target ? r->target : "NULL");
+        }
+    } else {
+        printf("  None\n");
+    }
+}
+
+void	execute_commands(t_shell *shell_data)
 {
 	t_token	*token_list;
 
-	token_list = tokenize(line, 0);
-	print_tokens(token_list);
+	token_list = tokenize(shell_data->commands, 0);
+	t_cmd *cmd = create_cmd_from_tokens(token_list);
+	if (cmd)
+		print_cmd(cmd);
+	// print_tokens(token_list);
 }
 
 void	shell_init(t_shell **shell, char **envp)
 {
-	(*shell)->env = ht_init(envp);
+(void) envp;
+	// (*shell)->env = ht_init(envp);
 	(*shell)->last_status_code = '0';
 	(*shell)->shell_name = "minishell";
 }
@@ -59,8 +100,9 @@ void	shell_init(t_shell **shell, char **envp)
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
-	
+
 	(void) argv;
+	shell = safe_malloc(sizeof(t_shell));
 	shell_init(&shell, envp);
 	// ht_print(shell->env);
 	if (argc > 1)
@@ -77,7 +119,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (*shell->commands)
 		{
 			add_history(shell->commands);
-			execute_commands(shell->commands);
+			execute_commands(shell);
 		}
 		free(shell->commands);
 	}

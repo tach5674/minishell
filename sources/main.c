@@ -6,11 +6,70 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/06 20:17:56 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:44:05 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_ast_node(t_ast *node, int depth)
+{
+	if (!node)
+		return;
+
+	// Отступы для визуальной структуры дерева
+	for (int i = 0; i < depth; i++)
+		printf("  ");
+
+	// Печать типа узла
+	if (node->type == AST_COMMAND)
+	{
+		printf("AST_COMMAND\n");
+		printf("%*sCommand: %s\n", depth * 2, "", node->cmd->name);
+		for (size_t i = 0; i < node->cmd->redir_count; i++)
+		{
+			printf("%*sRedirection %zu: %s %s\n", depth * 2, "", i + 1, 
+				node->cmd->redirections[i]->type == REDIR_IN ? "<" :
+				node->cmd->redirections[i]->type == REDIR_OUT ? ">" :
+				node->cmd->redirections[i]->type == REDIR_APPEND ? ">>" : "<<", 
+				node->cmd->redirections[i]->target);
+		}
+	}
+	else if (node->type == AST_PIPE)
+	{
+		printf("AST_PIPE\n");
+	}
+	else if (node->type == AST_AND)
+	{
+		printf("AST_AND\n");
+	}
+	else if (node->type == AST_OR)
+	{
+		printf("AST_OR\n");
+	}
+	else if (node->type == AST_SUBSHELL)
+	{
+		printf("AST_SUBSHELL\n");
+	}
+
+	// Рекурсивный вызов для левого и правого поддеревьев
+	if (node->left)
+		print_ast_node(node->left, depth + 1);
+	if (node->right)
+		print_ast_node(node->right, depth + 1);
+	if (node->subshell)
+		print_ast_node(node->subshell, depth + 1);
+}
+
+void	print_ast(t_ast *ast)
+{
+	if (!ast)
+	{
+		printf("AST is NULL\n");
+		return;
+	}
+	print_ast_node(ast, 0);
+}
 
 const char *token_type_str(t_token_type type)
 {
@@ -40,7 +99,6 @@ void	print_tokens(t_token *list)
 		list = list->next;
 	}
 }
-#include <stdio.h>
 
 void print_cmd(t_cmd *cmd) {
     if (!cmd) {
@@ -80,32 +138,25 @@ void print_cmd(t_cmd *cmd) {
 
 void	execute_commands(t_shell *shell_data)
 {
-	t_token	*token_list;
+	t_ast	*ast;
+	t_token	*tokens;
+	t_token	*tokens_tmp;
 
-	token_list = tokenize(shell_data->commands, 0);
-	t_cmd *cmd = create_cmd_from_tokens(token_list);
-	if (cmd)
-		print_cmd(cmd);
-	// print_tokens(token_list);
-}
-
-void	shell_init(t_shell **shell, char **envp)
-{
-(void) envp;
-	// (*shell)->env = ht_init(envp);
-	(*shell)->last_status_code = '0';
-	(*shell)->shell_name = "minishell";
+	tokens = tokenize(shell_data->commands, 0);
+	tokens_tmp = tokens;
+	ast = parse(&tokens);
+	free_tokens(tokens_tmp);
+	print_ast(ast);
+	free_ast(ast);
 }
 
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
 
-	(void) argv;
 	shell = safe_malloc(sizeof(t_shell));
-	shell_init(&shell, envp);
-	// ht_print(shell->env);
-	if (argc > 1)
+	shell_init(shell, envp);
+	if (argc > 1 && argv)
 		throw_err(INVALID_ARGUMENT_ERROR);
 	setup_signals();
 	while (1)
@@ -124,5 +175,6 @@ int	main(int argc, char *argv[], char *envp[])
 		free(shell->commands);
 	}
 	rl_clear_history();
+	free_shell(shell);
 	return (0);
 }

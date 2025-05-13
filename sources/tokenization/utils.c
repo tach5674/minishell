@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:42:15 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/04/24 17:46:21 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:02:57 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,17 @@ bool	is_operator(char c)
 {
 	return (c == '|' || c == '&' || c == '<' || c == '>' || c == '('
 		|| c == ')');
+}
+
+void	free_tokens(t_token *tokens)
+{
+	t_token	*tmp;
+
+	while (tokens)
+	{
+		tmp = tokens->next;
+		free(tokens->value);
+		free(tokens);
+		tokens = tmp;
+	}
 }

@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   shell_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 13:49:05 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 17:07:06 by ggevorgi         ###   ########.fr       */
+/*   Created: 2025/05/13 16:42:54 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/05/13 17:01:48 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(t_ht *env)
+void	free_shell(t_shell *shell)
 {
-	ht_print(env);
+	ht_free(shell->env);
+	free(shell);
+}
+
+void	shell_init(t_shell *shell, char **envp)
+{
+	shell->env = ht_init(envp);
+	shell->last_status_code = 0;
+	shell->shell_name = "minishell";
 }

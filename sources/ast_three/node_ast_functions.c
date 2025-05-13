@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/06 19:17:16 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:36:24 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,29 +107,4 @@ t_redirection *new_redirection(t_redir_type type, char *target)
     redir->type = type;
     redir->target = ft_strdup(target);
     return (redir);
-}
-
-void free_cmd(t_cmd *cmd)
-{
-    size_t i;
-
-    if (cmd == NULL)
-        return ;
-    free(cmd->name);
-    i = 0;
-    while (cmd->args && cmd->args[i])
-    {
-        free(cmd->args[i]);
-        i++;
-    }
-    free(cmd->args);
-    i = 0;
-    while (i < cmd->redir_count)
-    {
-        free(cmd->redirections[i]->target);
-        free(cmd->redirections[i]);
-        i++;
-    }
-    free(cmd->redirections);
-    free(cmd);
 }

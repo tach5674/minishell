@@ -6,101 +6,62 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:04:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/06 20:11:35 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:06:21 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd *create_cmd_from_tokens(t_token *tokens)
+int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
 {
-	t_cmd *cmd;
-	t_token *tmp = tokens;
-	t_token *sectmp;
-	bool	in_redirection = false;
+	t_token	*next;
 
-
-	cmd = new_cmd_node(NULL);
-	while (tmp)
+	next = (*tmp)->next;
+	if (!next || next->type != TOKEN_WORD)
 	{
-		if (tmp->type == TOKEN_WORD && !in_redirection)
-		{
-			if (cmd->name == NULL)
-				cmd->name = ft_strdup(tmp->value);
-			add_arg(cmd, tmp->value);
-		}
-		else if (tmp->type == TOKEN_REDIR_IN)
-		{
-			in_redirection = true;
-			sectmp = tmp->next;
-			if (sectmp && sectmp->type == TOKEN_WORD)
-				add_redirection(cmd, REDIR_IN, sectmp->value);
-			else
-			{
-				if (sectmp)
-					syntax_error(sectmp->value);
-				else
-					syntax_error("newline");
-				return (NULL);
-			}
-			tmp = tmp->next;
-		}
-		else if (tmp->type == TOKEN_REDIR_OUT)
-		{
-			in_redirection = true;
-			sectmp = tmp->next;
-			if (sectmp && sectmp->type == TOKEN_WORD)
-				add_redirection(cmd, REDIR_OUT, sectmp->value);
-			else
-			{
-				if (sectmp)
-					syntax_error(sectmp->value);
-				else
-					syntax_error("newline");
-				return (NULL);
-			}
-			tmp = tmp->next;
-		}
-		else if (tmp->type == TOKEN_REDIR_APPEND)
-		{
-			in_redirection = true;
-			sectmp = tmp->next;
-			if (sectmp && sectmp->type == TOKEN_WORD)
-				add_redirection(cmd, REDIR_APPEND, sectmp->value);
-			else
-			{
-				if (sectmp)
-					syntax_error(sectmp->value);
-				else
-					syntax_error("newline");
-				return (NULL);
-			}
-			tmp = tmp->next;
-		}
-		else if (tmp->type == TOKEN_HEREDOC)
-		{
-			in_redirection = true;
-			sectmp = tmp->next;
-			if (sectmp && sectmp->type == TOKEN_WORD)
-				add_redirection(cmd, REDIR_HEREDOC, sectmp->value);
-			else
-			{
-				if (sectmp)
-					syntax_error(sectmp->value);
-				else
-					syntax_error("newline");
-				return (NULL);
-			}
-			tmp = tmp->next;
-		}
+		if (next)
+			syntax_error(next->value);
 		else
-		{
-			*tokens = *tmp;
-			break ;	
-		}
-		in_redirection = false;
-		if (tmp)
-			tmp = tmp->next;
+			syntax_error("newline");
+		return (1);
+	}
+	add_redirection(cmd, type, next->value);
+	*tmp = next;
+	return (0);
+}
+
+void	handle_word_token(t_cmd *cmd, t_token *token)
+{
+	if (!cmd->name)
+		cmd->name = ft_strdup(token->value);
+	add_arg(cmd, token->value);
+}
+
+t_cmd	*create_cmd_from_tokens(t_token *tokens)
+{
+	t_cmd	*cmd;
+	t_token	*tmp;
+
+	tmp = tokens;
+	cmd = new_cmd_node(NULL);
+	while (tmp && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_AND
+		&& tmp->type != TOKEN_OR && tmp->type != TOKEN_PAREN_RIGHT)
+	{
+		if (tmp->type == TOKEN_WORD)
+			handle_word_token(cmd, tmp);
+		else if (tmp->type == TOKEN_REDIR_IN
+			&& handle_redirect(&tmp, cmd, REDIR_IN))
+			return (free_cmd(cmd), NULL);
+		else if (tmp->type == TOKEN_REDIR_OUT
+			&& handle_redirect(&tmp, cmd, REDIR_OUT))
+			return (free_cmd(cmd), NULL);
+		else if (tmp->type == TOKEN_REDIR_APPEND
+			&& handle_redirect(&tmp, cmd, REDIR_APPEND))
+			return (free_cmd(cmd), NULL);
+		else if (tmp->type == TOKEN_HEREDOC
+			&& handle_redirect(&tmp, cmd, REDIR_HEREDOC))
+			return (free_cmd(cmd), NULL);
+		tmp = tmp->next;
 	}
 	return (cmd);
 }

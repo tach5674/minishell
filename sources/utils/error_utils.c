@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:53:32 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/06 20:12:38 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/13 17:02:13 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,6 @@ static int	print_error(const char *err, const char *msg)
 		printf("\033[1;31m%s\033[0m", err);
 	return (4);
 }
-
-// static void	print_success(const char *scs, const char *msg)
-// {
-// 	if (msg)
-// 		printf("\033[1;32m%s\033[0m %s", scs, msg);
-// 	else
-// 		printf("\033[1;32m%s\033[0m", scs);
-// }
-
-// readline, rl_clear_history, rl_on_new_line,
-// rl_replace_line, rl_redisplay, add_history,
 
 void	throw_err(int err_type)
 {
@@ -53,6 +42,7 @@ void	throw_err(int err_type)
 	rl_clear_history();
 }
 
-void syntax_error(const char *token) {
+void	syntax_error(const char *token)
+{
 	printf("minishell: syntax error near unexpected token `%s`\n", token);
 }

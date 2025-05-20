@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 16:44:05 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:04:53 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,7 @@ void	execute_commands(t_shell *shell_data)
 
 	tokens = tokenize(shell_data->commands, 0);
 	tokens_tmp = tokens;
+	// print_tokens(tokens);
 	ast = parse(&tokens);
 	free_tokens(tokens_tmp);
 	print_ast(ast);

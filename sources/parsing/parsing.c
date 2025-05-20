@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 17:05:38 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/20 20:11:49 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,26 +89,30 @@ t_ast	*parse_and_or(t_token **tokens)
 
 t_ast	*parse_subshell(t_token **tokens)
 {
-	t_ast	*node;
+	t_ast	*subshell_node;
+	t_ast	*child;
 
 	if (*tokens && (*tokens)->type == TOKEN_PAREN_LEFT)
 	{
 		*tokens = (*tokens)->next;
-		node = parse_and_or(tokens);
-		if (!node)
+		child = parse_and_or(tokens);
+		if (!child)
 			return (NULL);
 		if (*tokens && (*tokens)->type == TOKEN_PAREN_RIGHT)
 			*tokens = (*tokens)->next;
 		else
 		{
 			syntax_error("expected ')'");
-			free_ast(node);
+			free_ast(child);
 			return (NULL);
 		}
-		return (node);
+		subshell_node = new_ast_node(AST_SUBSHELL);
+		subshell_node->left = child;
+		return (subshell_node);
 	}
 	return (NULL);
 }
+
 
 t_ast	*parse(t_token **tokens)
 {

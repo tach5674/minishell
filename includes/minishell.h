@@ -22,9 +22,6 @@
 #  define PATH_MAX 1024
 # endif
 
-//hash table
-# include "ht.h"
-
 //library
 # include "libft.h"
 
@@ -60,6 +57,9 @@
 # include <termcap.h>
 # include <curses.h>
 # include <sys/ioctl.h>
+
+// hash table
+# include "ht.h"
 
 typedef enum e_token_type {
 	TOKEN_WORD,
@@ -112,7 +112,6 @@ typedef struct s_ast {
 	struct s_ast	*subshell;
 }	t_ast;
 
-
 typedef struct s_token {
 	char			*value;
 	t_token_type	type;
@@ -125,6 +124,9 @@ typedef struct s_shell {
 	int		last_status_code;
 	char	*commands;
 }	t_shell;
+
+// execution
+# include "execution.h"
 
 void			print_env(t_ht *env);
 bool			is_operator(char c);

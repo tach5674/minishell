@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/21 14:38:26 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/21 16:07:54 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ void print_cmd(t_cmd *cmd) {
 
 static int    execute_cmd(t_cmd *cmd, t_shell *shell_data)
 {
-	(void)cmd;
 	(void)shell_data;
+	printf("%s\n", cmd->name);
 	return (0);
 }
 
@@ -155,7 +155,7 @@ static int    execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
 		exit(EXIT_FAILURE);
 	}
     if (pid == 0)
-		return (execute_ast(ast, shell_data));
+		exit(execute_ast(ast, shell_data));
 	if (wait == false)
 		return (0);
 	waitpid(pid, &status, 0);
@@ -164,7 +164,6 @@ static int    execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
 
 static int    execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 {
-	pid_t	pid[2];
 	int		pipe_fd[2];
 	int		exit_code;
 	
@@ -179,8 +178,8 @@ static int    execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 		execute_subshell(ast->left, shell_data, false);
 	if (last_pipe == true)
 	{
-		exit_code = execute_subshell(ast->left, shell_data, true);
-		while (wait(NULL))
+		exit_code = execute_subshell(ast->right, shell_data, true);
+		while (wait(NULL) != -1)
 			;
 		return (exit_code);
 	}
@@ -211,7 +210,9 @@ int  execute_ast(t_ast *ast, t_shell *shell_data)
 			return (0);
 		}
 		else if(ast->type == AST_SUBSHELL)
-			return (execute_subshell(ast->subshell, shell_data, true));
+		{
+			return (execute_subshell(ast->left, shell_data, true));
+		}
 		else if(ast->type == AST_PIPE)
 			return (execute_pipe(ast, shell_data, true));
 	}
@@ -229,7 +230,7 @@ void	execute_commands(t_shell *shell_data)
 	tokens_tmp = tokens;
 	ast = parse(&tokens);
 	free_tokens(tokens_tmp);
-	print_ast(ast);
+	//print_ast(ast);
 	execute_ast(ast, shell_data);
 	free_ast(ast);
 }

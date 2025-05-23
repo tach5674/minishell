@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/21 16:07:54 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/23 16:45:30 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ static int    execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 		perror(shell_data->shell_name);
 		exit(EXIT_FAILURE);
 	}
+	//apply_pipe_redirections(ast);
 	if (ast->left->type == AST_PIPE)
 		execute_pipe(ast->left, shell_data, false);
 	else
@@ -229,8 +230,8 @@ void	execute_commands(t_shell *shell_data)
 	tokens = tokenize(shell_data->commands, 0);
 	tokens_tmp = tokens;
 	ast = parse(&tokens);
+	print_ast(ast);
+	execute_ast(ast, shell_data);	
 	free_tokens(tokens_tmp);
-	//print_ast(ast);
-	execute_ast(ast, shell_data);
 	free_ast(ast);
 }

@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*	                                                                        */
+/*			                                                                  */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -22,144 +22,151 @@
 #  define PATH_MAX 1024
 # endif
 
-//library
+// library
 # include "libft.h"
-
-# include <stdbool.h>
 # include <limits.h>
+# include <stdbool.h>
 
 // Работа с памятью и строками
+# include <errno.h>
+# include <stddef.h>
 # include <stdlib.h>
 # include <string.h>
-# include <stddef.h>
-# include <errno.h>
 
 // Ввод-вывод
-# include <unistd.h>
-# include <stdio.h>
 # include <fcntl.h>
+# include <stdio.h>
+# include <unistd.h>
 
 // Работа с процессами и сигналами
+# include <signal.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <signal.h>
 
 // Работа с файлами и директориями
 # include <dirent.h>
 # include <sys/stat.h>
 
 // readline
-# include <readline/readline.h>
 # include <readline/history.h>
+# include <readline/readline.h>
 
 // termios и управление терминалом
-# include <termios.h>
-# include <termcap.h>
 # include <curses.h>
 # include <sys/ioctl.h>
+# include <termcap.h>
+# include <termios.h>
 
 // hash table
 # include "ht.h"
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
 	TOKEN_WORD,
-	TOKEN_PIPE,		  // |
-	TOKEN_AND,		   // &&
-	TOKEN_OR,			// ||
-	TOKEN_REDIR_IN,	  // <
-	TOKEN_REDIR_OUT,	 // >
-	TOKEN_REDIR_APPEND,  // >>
-	TOKEN_HEREDOC,	   // <<
-	TOKEN_PAREN_LEFT,	// (
-	TOKEN_PAREN_RIGHT,   // )
+	TOKEN_PIPE,         // |
+	TOKEN_AND,          // &&
+	TOKEN_OR,           // ||
+	TOKEN_REDIR_IN,     // <
+	TOKEN_REDIR_OUT,    // >
+	TOKEN_REDIR_APPEND, // >>
+	TOKEN_HEREDOC,      // <<
+	TOKEN_PAREN_LEFT,   // (
+	TOKEN_PAREN_RIGHT,  // )
 	TOKEN_EOF
-}	t_token_type;
+}					t_token_type;
 
-typedef enum e_ast_node_type {
-	AST_COMMAND,	 // обычная команда: echo, ls и т.д.
-	AST_PIPE,		// |
-	AST_AND,		 // &&
-	AST_OR,		  // ||
-	AST_SUBSHELL	 // ( ... )
-}	t_ast_node_type;
+typedef enum e_ast_node_type
+{
+	AST_COMMAND, // обычная команда: echo, ls и т.д.
+	AST_PIPE,    // |
+	AST_AND,     // &&
+	AST_OR,      // ||
+	AST_SUBSHELL // ( ... )
+}					t_ast_node_type;
 
-typedef enum e_redir_type {
-	REDIR_IN,		// <
-	REDIR_OUT,	   // >
-	REDIR_APPEND,	// >>
-	REDIR_HEREDOC    // <<
-}	t_redir_type;
+typedef enum e_redir_type
+{
+	REDIR_IN,     // <
+	REDIR_OUT,    // >
+	REDIR_APPEND, // >>
+	REDIR_HEREDOC // <<
+}					t_redir_type;
 
-
-typedef struct s_redirection {
+typedef struct s_redirection
+{
 	t_redir_type	type;
 	char			*target;
-} t_redirection;
+}					t_redirection;
 
-
-typedef struct s_cmd {
-	char 			*name;
-	char 			**args;
+typedef struct s_cmd
+{
+	char			*name;
+	char			**args;
 	size_t			redir_count;
 	t_redirection	**redirections;
-}	t_cmd;
+	int				out_fd;
+}					t_cmd;
 
-typedef struct s_ast {
+typedef struct s_ast
+{
 	t_ast_node_type	type;
 	t_cmd			*cmd;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	struct s_ast	*subshell;
-}	t_ast;
+}					t_ast;
 
-typedef struct s_token {
+typedef struct s_token
+{
 	char			*value;
 	t_token_type	type;
 	struct s_token	*next;
-}	t_token;
+}					t_token;
 
-typedef struct s_shell {
-	t_ht	*env;
-	char	*shell_name;
-	int		last_status_code;
-	char	*commands;
-}	t_shell;
+typedef struct s_shell
+{
+	t_ht			*env;
+	char			*shell_name;
+	int				last_status_code;
+	char			*commands;
+}					t_shell;
 
 // execution
 # include "execution.h"
 
-void			print_env(t_ht *env);
-bool			is_operator(char c);
-bool			ft_isspace(char c);
-t_token_type	oper_type(const char *s, int *len);
-void			*safe_malloc(size_t bytes);
-void			free_ptr(void *ptr);
-void			free_shell(t_shell *shell);
-void			free_cmd(t_cmd *cmd);
-void			free_ast(t_ast *ast);
-void			free_tokens(t_token *tokens);
-void			throw_err(int err_type);
-void			syntax_error(const char *token);
-int				ft_pwd(void);
-void			ft_echo(char *msg, bool is_nl);
-void			ft_exit(int status);
-void			setup_signals(void);
-void			shell_init(t_shell *shell, char **envp);
-t_ast			*parse(t_token **tokens);
-t_ast			*parse_subshell(t_token **tokens);
-t_ast			*parse_and_or(t_token **tokens);
-t_ast			*parse_command_or_subshell(t_token **tokens);
-t_ast			*parse_pipeline(t_token **tokens);
-t_cmd			*create_cmd_from_tokens(t_token *tokens);
-t_ast			*new_ast_node(t_ast_node_type type);
-t_cmd			*new_cmd_node(char *name);
-void			add_redirection(t_cmd *cmd, t_redir_type type, char *target);
-void			add_arg(t_cmd *cmd, char *arg);
-t_token			*tokenize(char *line, int i);
-t_token			*ft_lstnew_token(t_token_type type, char *value);
-void			ft_lstadd_back_token(t_token **lst, t_token *new);
-char			*read_prompt(void);
-int				ft_strcmp(const char *s1, const char *s2);
-char			*ft_strndup(const char *s, size_t n);
+void				print_env(t_ht *env);
+bool				is_operator(char c);
+bool				ft_isspace(char c);
+t_token_type		oper_type(const	char *s, int *len);
+void				*safe_malloc(size_t bytes);
+void				free_ptr(void *ptr);
+void				free_shell(t_shell *shell);
+void				free_cmd(t_cmd *cmd);
+void				free_ast(t_ast *ast);
+void				free_tokens(t_token *tokens);
+void				throw_err(int err_type);
+void				syntax_error(const char *token);
+int					ft_pwd(void);
+void				ft_echo(char *msg, bool is_nl);
+void				ft_exit(int status);
+void				setup_signals(void);
+void				shell_init(t_shell *shell, char **envp);
+t_ast				*parse(t_token **tokens);
+t_ast				*parse_subshell(t_token **tokens);
+t_ast				*parse_and_or(t_token **tokens);
+t_ast				*parse_command_or_subshell(t_token **tokens);
+t_ast				*parse_pipeline(t_token **tokens);
+t_cmd				*create_cmd_from_tokens(t_token *tokens);
+t_ast				*new_ast_node(t_ast_node_type type);
+t_cmd				*new_cmd_node(char *name);
+void				add_redirection(t_cmd *cmd, t_redir_type type,
+						char *target);
+void				add_arg(t_cmd *cmd, char *arg);
+t_token				*tokenize(char *line, int i);
+t_token				*ft_lstnew_token(t_token_type type, char *value);
+void				ft_lstadd_back_token(t_token **lst, t_token *new);
+char				*read_prompt(void);
+int					ft_strcmp(const char *s1, const char *s2);
+char				*ft_strndup(const char *s, size_t n);
 
 #endif

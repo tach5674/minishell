@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*			                                                                  */
+/*								                                                   */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -104,7 +104,8 @@ typedef struct s_cmd
 	char			**args;
 	size_t			redir_count;
 	t_redirection	**redirections;
-	int				out_fd;
+	int				pipe_in;
+	int				pipe_out;
 }					t_cmd;
 
 typedef struct s_ast
@@ -137,7 +138,7 @@ typedef struct s_shell
 void				print_env(t_ht *env);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
-t_token_type		oper_type(const	char *s, int *len);
+t_token_type		oper_type(const char *s, int *len);
 void				*safe_malloc(size_t bytes);
 void				free_ptr(void *ptr);
 void				free_shell(t_shell *shell);

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ht.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:00 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 16:50:57 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:35:55 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HT_H
 # define HT_H
 
-# include "libft.h"
-# include <stdbool.h>
+#include "minishell.h"
 
 typedef struct s_ht_item
 {
@@ -30,7 +29,7 @@ typedef struct s_ht
 	size_t		count;
 }	t_ht;
 
-// Core functions
+
 unsigned long	ht_hash(const char *key);
 t_ht			*ht_init(char **envp);
 bool			ht_add(t_ht *ht, const char *key, const char *value);

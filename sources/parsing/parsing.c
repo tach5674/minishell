@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/20 20:11:49 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:38:11 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_ast	*parse_pipeline(t_token **tokens)
 	{
 		if (!left)
 		{
-			syntax_error("syntax error near unexpected token `|'");
+			syntax_error("|");
 			return (NULL);
 		}
 		*tokens = (*tokens)->next;
@@ -33,7 +33,7 @@ t_ast	*parse_pipeline(t_token **tokens)
 		node->right = parse_command_or_subshell(tokens);
 		if (!node->right)
 		{
-			syntax_error("syntax error near unexpected token `newline'");
+			syntax_error("newline");
 			return (free_ast(node), NULL);
 		}
 		left = node;
@@ -120,7 +120,7 @@ t_ast	*parse(t_token **tokens)
 
 	if (*tokens && (*tokens)->type == TOKEN_PIPE)
 	{
-		syntax_error("syntax error near unexpected token `|'");
+		syntax_error("|");
 		return (NULL);
 	}
 	ast = parse_and_or(tokens);

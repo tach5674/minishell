@@ -168,5 +168,49 @@ void				ft_lstadd_back_token(t_token **lst, t_token *new);
 char				*read_prompt(void);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strndup(const char *s, size_t n);
+=======
+}	t_token;
+
+typedef struct s_shell {
+	t_ht	*env;
+	char	*shell_name;
+	int		last_status_code;
+	char	*commands;
+}	t_shell;
+
+void			print_env(t_ht *env);
+bool			is_operator(char c);
+bool			ft_isspace(char c);
+t_token_type	oper_type(const char *s, int *len);
+void			*safe_malloc(size_t bytes);
+void			free_ptr(void *ptr);
+void			free_shell(t_shell *shell);
+void			free_cmd(t_cmd *cmd);
+void			free_ast(t_ast *ast);
+void			free_tokens(t_token *tokens);
+void			throw_err(int err_type);
+void			syntax_error(const char *token);
+int				ft_pwd(void);
+void			ft_echo(t_cmd *cmd);
+void			ft_exit(t_cmd *cmd);
+void			setup_signals(void);
+void			shell_init(t_shell *shell, char **envp);
+t_ast			*parse(t_token **tokens);
+t_ast			*parse_subshell(t_token **tokens);
+t_ast			*parse_and_or(t_token **tokens);
+t_ast			*parse_command_or_subshell(t_token **tokens);
+t_ast			*parse_pipeline(t_token **tokens);
+t_cmd			*create_cmd_from_tokens(t_token *tokens);
+t_ast			*new_ast_node(t_ast_node_type type);
+t_cmd			*new_cmd_node(char *name);
+void			add_redirection(t_cmd *cmd, t_redir_type type, char *target);
+void			add_arg(t_cmd *cmd, char *arg);
+t_token			*tokenize(char *line, int i);
+t_token			*ft_lstnew_token(t_token_type type, char *value);
+void			ft_lstadd_back_token(t_token **lst, t_token *new);
+char			*read_prompt(void);
+int				ft_strcmp(const char *s1, const char *s2);
+char			*ft_strndup(const char *s, size_t n);
+
 
 #endif

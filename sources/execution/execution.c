@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/23 16:45:30 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:47:40 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	is_operator_syntax_err(t_token *tokens)
+{
+	bool	is_operator;
+
+	is_operator = false;
+	while (tokens)
+	{
+		if (tokens->type != TOKEN_WORD)
+		{
+			if (is_operator)
+			{
+				syntax_error(tokens->value);
+				return (true);
+			}
+			is_operator = true;
+		}
+		else
+			is_operator = false;
+		tokens = tokens->next;
+	}
+	return (false);
+}
 
 void	print_ast_node(t_ast *node, int depth)
 {
@@ -229,9 +252,15 @@ void	execute_commands(t_shell *shell_data)
 
 	tokens = tokenize(shell_data->commands, 0);
 	tokens_tmp = tokens;
-	ast = parse(&tokens);
-	print_ast(ast);
-	execute_ast(ast, shell_data);	
+	if (!is_operator_syntax_err(tokens))
+	{
+		ast = parse(&tokens);
+		if (ast != NULL)
+		{
+			print_ast(ast);
+			execute_ast(ast, shell_data);	
+		}
+		free_ast(ast);
+	}
 	free_tokens(tokens_tmp);
-	free_ast(ast);
 }

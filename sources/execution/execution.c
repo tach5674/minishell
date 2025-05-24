@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/24 12:09:16 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/24 12:43:27 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,7 @@ static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-		exit(execute_ast(ast, shell_data));
+		exit(execute_ast(ast, shell_data, true));
 	if (wait == false)
 		return (0);
 	waitpid(pid, &status, 0);
@@ -276,7 +276,7 @@ int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait)
 		{
 			exit_code = execute_ast(ast->left, shell_data, wait);
 			if (exit_code == 0)
-				return (execute_ast,(ast->right, shell_data, wait));
+				return (execute_ast(ast->right, shell_data, wait));
 			return (exit_code);
 		}
 		else if (ast->type == AST_OR)

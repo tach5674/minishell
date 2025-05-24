@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/23 18:29:56 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:09:16 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,9 +191,10 @@ void	print_cmd(t_cmd *cmd)
 	}
 }
 
-static int	execute_cmd(t_cmd *cmd, t_shell *shell_data)
+static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait)
 {
 	(void)shell_data;
+	(void)wait;
 	printf("%s\n", cmd->name);
 	return (0);
 }
@@ -226,8 +227,8 @@ static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
 		else
 			ast->cmd->pipe_out = fd;		
 	}
-	else if (ast->type == AST_AND || ast->type == AST_OR)
-		set_pipe_redirections(ast->right, fd, type);
+	// else if (ast->type == AST_AND || ast->type == AST_OR)
+	// 	set_pipe_redirections(ast->right, fd, type);
 	else if (ast->type == AST_SUBSHELL)
 		set_pipe_redirections(ast->left, fd, type);
 	else if (ast->type == AST_PIPE)
@@ -249,43 +250,44 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 	if (ast->left->type == AST_PIPE)
 		execute_pipe(ast->left, shell_data, false);
 	else
-		execute_subshell(ast->left, shell_data, false);
+		execute_ast(ast->left, shell_data, false);
+	
 	if (last_pipe == true)
 	{
-		exit_code = execute_subshell(ast->right, shell_data, true);
+		exit_code = execute_ast(ast->right, shell_data, true);
 		while (wait(NULL) != -1)
 			;
 		return (exit_code);
 	}
 	else
-		execute_subshell(ast->left, shell_data, false);
+		execute_ast(ast->left, shell_data, false);
 	return (0);
 }
 
-int	execute_ast(t_ast *ast, t_shell *shell_data)
+int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait)
 {
 	int	exit_code;
 
 	if (ast)
 	{
 		if (ast->type == AST_COMMAND)
-			return (execute_cmd(ast->cmd, shell_data));
+			return (execute_cmd(ast->cmd, shell_data, wait));
 		else if (ast->type == AST_AND)
 		{
-			exit_code = execute_ast(ast->left, shell_data);
+			exit_code = execute_ast(ast->left, shell_data, wait);
 			if (exit_code == 0)
-				return (execute_ast(ast->right, shell_data));
+				return (execute_ast,(ast->right, shell_data, wait));
 			return (exit_code);
 		}
 		else if (ast->type == AST_OR)
 		{
-			if (execute_ast(ast->left, shell_data) != 0)
-				return (execute_ast(ast->right, shell_data));
+			if (execute_ast(ast->left, shell_data, wait) != 0)
+				return (execute_ast(ast->right, shell_data, wait));
 			return (0);
 		}
 		else if (ast->type == AST_SUBSHELL)
 		{
-			return (execute_subshell(ast->left, shell_data, true));
+			return (execute_subshell(ast->left, shell_data, wait));
 		}
 		else if (ast->type == AST_PIPE)
 			return (execute_pipe(ast, shell_data, true));
@@ -308,7 +310,7 @@ void	execute_commands(t_shell *shell_data)
 		if (ast != NULL)
 		{
 			print_ast(ast);
-			execute_ast(ast, shell_data);
+			execute_ast(ast, shell_data, true);
 		}
 		free_ast(ast);
 	}

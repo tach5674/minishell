@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/25 14:56:03 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:05:34 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,10 +190,19 @@ static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait)
 	if (pid == 0)
 	{
 		if (cmd->pipe_out != -1)
+		{
 			dup2(cmd->pipe_out, STDOUT_FILENO);
+			close(cmd->pipe_out);
+		}
 		if (cmd->pipe_in != -1)
+		{
 			dup2(cmd->pipe_in, STDIN_FILENO);
+			close(cmd->pipe_in);
+		}
+		if (cmd->extra_fd != -1)
+			close(cmd->extra_fd);
 		execve(cmd_path, cmd->args, shell_data->shell_envp);
+		exit(EXIT_FAILURE);
 	}
 	if (wait == true)
 	{
@@ -223,7 +232,7 @@ static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
 	return (status);
 }
 
-static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
+static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type, int extra_fd)
 {	
 	if (ast->type == AST_COMMAND)
 	{
@@ -231,42 +240,52 @@ static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
 			ast->cmd->pipe_in = fd;
 		else
 			ast->cmd->pipe_out = fd;		
+		if (extra_fd != -1)
+			ast->cmd->extra_fd = extra_fd;
 	}
 	else if (ast->type == AST_AND || ast->type == AST_OR)
 	{
-		set_pipe_redirections(ast->left, fd, type);
-		set_pipe_redirections(ast->right, fd, type);		
+		set_pipe_redirections(ast->left, fd, type, extra_fd);
+		set_pipe_redirections(ast->right, fd, type, extra_fd);		
 	}
 	else if (ast->type == AST_SUBSHELL)
-		set_pipe_redirections(ast->left, fd, type);
+		set_pipe_redirections(ast->left, fd, type, extra_fd);
 	else if (ast->type == AST_PIPE)
-		set_pipe_redirections(ast->right, fd, type);
+		set_pipe_redirections(ast->right, fd, type, extra_fd);
 }
 
 static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 {
 	int	pipefd[2];
 	int	exit_code;
+	int	extra_fd;
+	
 	// int	old_stdout;
 	// int	old_stdin;
 
-	if (ast->left->type = AST_PIPE)
-		execute_pipe(ast->left, shell_data, false);
+	if (ast->left->type == AST_PIPE)
+		extra_fd = execute_pipe(ast->left, shell_data, false);
+	else
+		extra_fd = -1;
 	if (pipe(pipefd) == -1)
 	{
 		perror(shell_data->shell_name);
 		exit(EXIT_FAILURE);
 	}
-	set_pipe_redirections(ast->left, pipefd[1], REDIR_OUT);
-	set_pipe_redirections(ast->right, pipefd[0], REDIR_IN);
+	set_pipe_redirections(ast->left, pipefd[1], REDIR_OUT, pipefd[0]);
+	set_pipe_redirections(ast->right, pipefd[0], REDIR_IN, -1);
 	// old_stdout = dup(STDOUT_FILENO);
 	// old_stdin = dup(STDIN_FILENO);
 	
 	// dup2(pipefd[1], STDOUT_FILENO);
 	// close(pipefd[1]);
-	
-	execute_ast(ast->left, shell_data, false);
+	if (ast->left->type == AST_PIPE)
+		execute_ast(ast->left->right, shell_data, false);
+	else
+		execute_ast(ast->left, shell_data, false);
 	close(pipefd[1]);
+	if (extra_fd != -1)
+		close(extra_fd);
 	// dup2(old_stdout, STDOUT_FILENO);
 	// close(old_stdout);
 	
@@ -278,12 +297,12 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 		exit_code = execute_ast(ast->right, shell_data, last_pipe);
 		while (wait(NULL) != -1)
 			;
+		close(pipefd[0]);
 		return (exit_code);
 	}
-	
 	// dup2(old_stdin, STDIN_FILENO);
 	// close(old_stdin);
-	return (0);
+	return (pipefd[0]);
 }
 
 int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait)

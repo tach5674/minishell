@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/24 12:43:27 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/25 13:46:02 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,67 +135,68 @@ void	print_tokens(t_token *list)
 	}
 }
 
-void	print_cmd(t_cmd *cmd)
+void	free_split(char **arr)
 {
-	t_redirection	*r;
-			const char *type_str = "UNKNOWN";
+	int	i;
 
-	if (!cmd)
-	{
-		printf("Command: NULL\n");
+	if (!arr)
 		return ;
-	}
-	printf("Command name: %s\n", cmd->name ? cmd->name : "NULL");
-	printf("Arguments:\n");
-	if (cmd->args)
+	i = 0;
+	while (arr[i])
 	{
-		for (size_t i = 0; cmd->args[i]; i++)
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
+
+static char	*take_correct_path(char *command, char *path)
+{
+	char	**paths;
+	int		i;
+	char	*tmp;
+	char	*tmp2;
+
+	i = -1;
+	if (access(command, X_OK) == 0)
+		return (ft_strdup(command));
+	paths = ft_split(path, ':');
+	if (!paths)
+		return (NULL);
+	while (paths[++i] != NULL)
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		tmp2 = ft_strjoin(tmp, command);
+		free(tmp);
+		if (access(tmp2, F_OK) != -1)
 		{
-			printf("  [%zu]: %s\n", i, cmd->args[i]);
+			free_split(paths);
+			return (tmp2);
 		}
+		free(tmp2);
 	}
-	else
-	{
-		printf("  None\n");
-	}
-	printf("Redirections:\n");
-	if (cmd->redirections && cmd->redir_count > 0)
-	{
-		for (size_t i = 0; i < cmd->redir_count; i++)
-		{
-			r = cmd->redirections[i];
-			if (!r)
-				continue ;
-			switch (r->type)
-			{
-			case REDIR_IN:
-				type_str = "<";
-				break ;
-			case REDIR_OUT:
-				type_str = ">";
-				break ;
-			case REDIR_APPEND:
-				type_str = ">>";
-				break ;
-			case REDIR_HEREDOC:
-				type_str = "<<";
-				break ;
-			}
-			printf("  [%zu]: %s %s\n", i, type_str,
-				r->target ? r->target : "NULL");
-		}
-	}
-	else
-	{
-		printf("  None\n");
-	}
+	free_split(paths);
+	return (NULL);
 }
 
 static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait)
 {
-	(void)shell_data;
-	(void)wait;
-	printf("%s\n", cmd->name);
+	char	*cmd_path;
+	int		pid;
+	int		status;
+	
+	cmd_path = take_correct_path(cmd->name, ht_get(shell_data->env, "PATH"));
+	pid = fork();
+	if (pid == 0)
+	{
+		execve(cmd_path, cmd->args, shell_data->shell_envp);
+	}
+	if (wait == true)
+	{
+		waitpid(pid, &status, 0);
+		return (status);
+	}
+	// printf("%s\n", cmd->name);
 	return (0);
 }
 
@@ -218,50 +219,64 @@ static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
 	return (status);
 }
 
-static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
-{	
-	if (ast->type == AST_COMMAND)
-	{
-		if (type == REDIR_IN)
-			ast->cmd->pipe_in = fd;
-		else
-			ast->cmd->pipe_out = fd;		
-	}
-	// else if (ast->type == AST_AND || ast->type == AST_OR)
-	// 	set_pipe_redirections(ast->right, fd, type);
-	else if (ast->type == AST_SUBSHELL)
-		set_pipe_redirections(ast->left, fd, type);
-	else if (ast->type == AST_PIPE)
-		set_pipe_redirections(ast->right, fd, type);
-}
+// static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
+// {	
+// 	if (ast->type == AST_COMMAND)
+// 	{
+// 		if (type == REDIR_IN)
+// 			ast->cmd->pipe_in = fd;
+// 		else
+// 			ast->cmd->pipe_out = fd;		
+// 	}
+// 	else if (ast->type == AST_AND || ast->type == AST_OR)
+// 	{
+// 		set_pipe_redirections(ast->left, fd, type);
+// 		set_pipe_redirections(ast->right, fd, type);		
+// 	}
+// 	else if (ast->type == AST_SUBSHELL)
+// 		set_pipe_redirections(ast->left, fd, type);
+// 	else if (ast->type == AST_PIPE)
+// 		set_pipe_redirections(ast->right, fd, type);
+// }
 
 static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 {
 	int	pipefd[2];
 	int	exit_code;
+	int	old_stdout;
+	int	old_stdin;
 
 	if (pipe(pipefd) == -1)
 	{
 		perror(shell_data->shell_name);
 		exit(EXIT_FAILURE);
 	}
-	set_pipe_redirections(ast->left, pipefd[0], REDIR_OUT);
-	set_pipe_redirections(ast->right, pipefd[1], REDIR_IN);
-	if (ast->left->type == AST_PIPE)
-		execute_pipe(ast->left, shell_data, false);
-	else
-		execute_ast(ast->left, shell_data, false);
+	// set_pipe_redirections(ast->left, pipefd[1], REDIR_OUT);
+	// set_pipe_redirections(ast->right, pipefd[0], REDIR_IN);
+	old_stdout = dup(STDOUT_FILENO);
+	old_stdin = dup(STDIN_FILENO);
 	
+	dup2(pipefd[1], STDOUT_FILENO);
+	close(pipefd[1]);
+	
+	execute_ast(ast->left, shell_data, false);
+	
+	dup2(old_stdout, STDOUT_FILENO);
+	close(old_stdout);
+	
+	dup2(pipefd[0], STDIN_FILENO);
+	close(pipefd[0]);
 	if (last_pipe == true)
 	{
 		exit_code = execute_ast(ast->right, shell_data, true);
 		while (wait(NULL) != -1)
 			;
-		return (exit_code);
 	}
 	else
-		execute_ast(ast->left, shell_data, false);
-	return (0);
+		exit_code = execute_ast(ast->left, shell_data, false);
+	dup2(old_stdin, STDIN_FILENO);
+	close(old_stdin);
+	return (exit_code);
 }
 
 int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait)
@@ -309,7 +324,7 @@ void	execute_commands(t_shell *shell_data)
 		ast = parse(&tokens);
 		if (ast != NULL)
 		{
-			print_ast(ast);
+			// print_ast(ast);
 			execute_ast(ast, shell_data, true);
 		}
 		free_ast(ast);

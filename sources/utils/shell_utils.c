@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:42:54 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 17:01:48 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/25 13:22:23 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	free_shell(t_shell *shell)
 
 void	shell_init(t_shell *shell, char **envp)
 {
+	shell->shell_envp = envp;
 	shell->env = ht_init(envp);
 	shell->last_status_code = 0;
 	shell->shell_name = "minishell";

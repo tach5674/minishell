@@ -126,6 +126,7 @@ typedef struct s_token
 
 typedef struct s_shell
 {
+	char			**shell_envp;
 	t_ht			*env;
 	char			*shell_name;
 	int				last_status_code;

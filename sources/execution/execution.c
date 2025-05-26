@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/25 17:05:34 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:41:05 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ static char	*take_correct_path(char *command, char *path)
 	return (NULL);
 }
 
-static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait)
+static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait, int extra_fd)
 {
 	char	*cmd_path;
 	int		pid;
@@ -199,8 +199,8 @@ static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait)
 			dup2(cmd->pipe_in, STDIN_FILENO);
 			close(cmd->pipe_in);
 		}
-		if (cmd->extra_fd != -1)
-			close(cmd->extra_fd);
+		if (extra_fd != -1)
+			close(extra_fd);
 		execve(cmd_path, cmd->args, shell_data->shell_envp);
 		exit(EXIT_FAILURE);
 	}
@@ -213,7 +213,7 @@ static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait)
 	return (0);
 }
 
-static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
+static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait, int extra_fd)
 {
 	pid_t	pid;
 	int		status;
@@ -225,7 +225,11 @@ static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait)
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-		exit(execute_ast(ast, shell_data, true));
+	{
+		if (extra_fd != -1)
+			close(extra_fd);
+		exit(execute_ast(ast, shell_data, true, -1));
+	}
 	if (wait == false)
 		return (0);
 	waitpid(pid, &status, 0);
@@ -280,9 +284,9 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 	// dup2(pipefd[1], STDOUT_FILENO);
 	// close(pipefd[1]);
 	if (ast->left->type == AST_PIPE)
-		execute_ast(ast->left->right, shell_data, false);
+		execute_ast(ast->left->right, shell_data, false, pipefd[0]);
 	else
-		execute_ast(ast->left, shell_data, false);
+		execute_ast(ast->left, shell_data, false, pipefd[0]);
 	close(pipefd[1]);
 	if (extra_fd != -1)
 		close(extra_fd);
@@ -294,7 +298,7 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 	
 	if (last_pipe == true)
 	{
-		exit_code = execute_ast(ast->right, shell_data, last_pipe);
+		exit_code = execute_ast(ast->right, shell_data, last_pipe, -1);
 		while (wait(NULL) != -1)
 			;
 		close(pipefd[0]);
@@ -305,30 +309,30 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 	return (pipefd[0]);
 }
 
-int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait)
+int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait, int extra_fd)
 {
 	int	exit_code;
 
 	if (ast)
 	{
 		if (ast->type == AST_COMMAND)
-			return (execute_cmd(ast->cmd, shell_data, wait));
+			return (execute_cmd(ast->cmd, shell_data, wait, extra_fd));
 		else if (ast->type == AST_AND)
 		{
-			exit_code = execute_ast(ast->left, shell_data, wait);
+			exit_code = execute_ast(ast->left, shell_data, wait, extra_fd);
 			if (exit_code == 0)
-				return (execute_ast(ast->right, shell_data, wait));
+				return (execute_ast(ast->right, shell_data, wait, extra_fd));
 			return (exit_code);
 		}
 		else if (ast->type == AST_OR)
 		{
-			if (execute_ast(ast->left, shell_data, wait) != 0)
-				return (execute_ast(ast->right, shell_data, wait));
+			if (execute_ast(ast->left, shell_data, wait, extra_fd) != 0)
+				return (execute_ast(ast->right, shell_data, wait, extra_fd));
 			return (0);
 		}
 		else if (ast->type == AST_SUBSHELL)
 		{
-			return (execute_subshell(ast->left, shell_data, wait));
+			return (execute_subshell(ast->left, shell_data, wait, extra_fd));
 		}
 		else if (ast->type == AST_PIPE)
 			return (execute_pipe(ast, shell_data, true));
@@ -350,8 +354,8 @@ void	execute_commands(t_shell *shell_data)
 		ast = parse(&tokens);
 		if (ast != NULL)
 		{
-			print_ast(ast);
-			execute_ast(ast, shell_data, true);
+			// print_ast(ast);
+			execute_ast(ast, shell_data, true, -1);
 		}
 		free_ast(ast);
 	}

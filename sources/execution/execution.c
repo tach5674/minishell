@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/26 11:41:05 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/26 11:51:33 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,11 @@ static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait, int extra_fd)
 	
 	cmd_path = take_correct_path(cmd->name, ht_get(shell_data->env, "PATH"));
 	pid = fork();
+	if (pid == -1)
+	{
+		perror(shell_data->shell_name);
+		exit(EXIT_FAILURE);
+	}
 	if (pid == 0)
 	{
 		if (cmd->pipe_out != -1)
@@ -236,26 +241,24 @@ static int	execute_subshell(t_ast *ast, t_shell *shell_data, bool wait, int extr
 	return (status);
 }
 
-static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type, int extra_fd)
+static void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
 {	
 	if (ast->type == AST_COMMAND)
 	{
 		if (type == REDIR_IN)
 			ast->cmd->pipe_in = fd;
 		else
-			ast->cmd->pipe_out = fd;		
-		if (extra_fd != -1)
-			ast->cmd->extra_fd = extra_fd;
+			ast->cmd->pipe_out = fd;
 	}
 	else if (ast->type == AST_AND || ast->type == AST_OR)
 	{
-		set_pipe_redirections(ast->left, fd, type, extra_fd);
-		set_pipe_redirections(ast->right, fd, type, extra_fd);		
+		set_pipe_redirections(ast->left, fd, type);
+		set_pipe_redirections(ast->right, fd, type);		
 	}
 	else if (ast->type == AST_SUBSHELL)
-		set_pipe_redirections(ast->left, fd, type, extra_fd);
+		set_pipe_redirections(ast->left, fd, type);
 	else if (ast->type == AST_PIPE)
-		set_pipe_redirections(ast->right, fd, type, extra_fd);
+		set_pipe_redirections(ast->right, fd, type);
 }
 
 static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
@@ -276,8 +279,8 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 		perror(shell_data->shell_name);
 		exit(EXIT_FAILURE);
 	}
-	set_pipe_redirections(ast->left, pipefd[1], REDIR_OUT, pipefd[0]);
-	set_pipe_redirections(ast->right, pipefd[0], REDIR_IN, -1);
+	set_pipe_redirections(ast->left, pipefd[1], REDIR_OUT);
+	set_pipe_redirections(ast->right, pipefd[0], REDIR_IN);
 	// old_stdout = dup(STDOUT_FILENO);
 	// old_stdin = dup(STDIN_FILENO);
 	
@@ -299,9 +302,9 @@ static int	execute_pipe(t_ast *ast, t_shell *shell_data, bool last_pipe)
 	if (last_pipe == true)
 	{
 		exit_code = execute_ast(ast->right, shell_data, last_pipe, -1);
+		close(pipefd[0]);
 		while (wait(NULL) != -1)
 			;
-		close(pipefd[0]);
 		return (exit_code);
 	}
 	// dup2(old_stdin, STDIN_FILENO);

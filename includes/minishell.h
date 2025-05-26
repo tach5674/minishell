@@ -106,7 +106,6 @@ typedef struct s_cmd
 	t_redirection	**redirections;
 	int				pipe_in;
 	int				pipe_out;
-	int				extra_fd;
 }					t_cmd;
 
 typedef struct s_ast

@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/21 11:23:26 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/27 19:30:33 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char *argv[], char *envp[])
 	setup_signals();
 	while (1)
 	{
-		shell->commands = read_prompt();
+		shell->commands = readline("\033[1;32mminishell$ \033[0m");
 		if (!shell->commands)
 		{
 			ft_putstr_fd("exit\n", 1);

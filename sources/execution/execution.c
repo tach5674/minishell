@@ -6,39 +6,11 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/27 13:39:30 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/27 20:37:37 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	is_operator_syntax_err(t_token *tokens)
-{
-	bool	is_operator;
-
-	is_operator = false;
-	if (tokens->type != TOKEN_WORD && tokens->type != TOKEN_PAREN_LEFT)
-	{
-		syntax_error(tokens->value);
-		return (true);
-	}
-	while (tokens)
-	{
-		if (tokens->type != TOKEN_WORD)
-		{
-			if (is_operator)
-			{
-				syntax_error(tokens->value);
-				return (true);
-			}
-			is_operator = true;
-		}
-		else
-			is_operator = false;
-		tokens = tokens->next;
-	}
-	return (false);
-}
 
 void	free_split(char **arr)
 {
@@ -102,6 +74,7 @@ static int	execute_cmd(t_cmd *cmd, t_shell *shell_data, bool wait, int extra_fd)
 		apply_redirections(cmd, extra_fd);
 		execve(cmd_path, cmd->args, shell_data->shell_envp);
 		free(cmd_path);
+		ft_putstr_fd("Command not found\n", 2);
 		exit(EXIT_FAILURE);
 	}
 	free(cmd_path);
@@ -192,29 +165,25 @@ int	execute_ast(t_ast *ast, t_shell *shell_data, bool wait, int extra_fd)
 {
 	int	exit_code;
 
-	if (ast)
+	if (ast->type == AST_COMMAND)
+		return (execute_cmd(ast->cmd, shell_data, wait, extra_fd));
+	else if (ast->type == AST_AND)
 	{
-		if (ast->type == AST_COMMAND)
-			return (execute_cmd(ast->cmd, shell_data, wait, extra_fd));
-		else if (ast->type == AST_AND)
-		{
-			exit_code = execute_ast(ast->left, shell_data, wait, extra_fd);
-			if (exit_code == 0)
-				return (execute_ast(ast->right, shell_data, wait, extra_fd));
-			return (exit_code);
-		}
-		else if (ast->type == AST_OR)
-		{
-			if (execute_ast(ast->left, shell_data, wait, extra_fd) != 0)
-				return (execute_ast(ast->right, shell_data, wait, extra_fd));
-			return (0);
-		}
-		else if (ast->type == AST_SUBSHELL)
-			return (execute_subshell(ast->left, shell_data, wait, extra_fd));
-		else if (ast->type == AST_PIPE)
-			return (execute_pipe(ast, shell_data, true));
+		exit_code = execute_ast(ast->left, shell_data, wait, extra_fd);
+		if (exit_code == 0)
+			return (execute_ast(ast->right, shell_data, wait, extra_fd));
+		return (exit_code);
 	}
-	printf("AST is empty\n");
+	else if (ast->type == AST_OR)
+	{
+		if (execute_ast(ast->left, shell_data, wait, extra_fd) != 0)
+			return (execute_ast(ast->right, shell_data, wait, extra_fd));
+		return (0);
+	}
+	else if (ast->type == AST_SUBSHELL)
+		return (execute_subshell(ast->left, shell_data, wait, extra_fd));
+	else if (ast->type == AST_PIPE)
+		return (execute_pipe(ast, shell_data, true));
 	return (0);
 }
 
@@ -226,7 +195,7 @@ void	execute_commands(t_shell *shell_data)
 
 	tokens = tokenize(shell_data->commands, 0);
 	tokens_tmp = tokens;
-	if (!is_operator_syntax_err(tokens))
+	if (!syntax_error_check(tokens))
 	{
 		ast = parse(&tokens);
 		if (ast != NULL)

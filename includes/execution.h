@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:26:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/27 13:35:27 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/27 20:09:41 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int     execute_ast(t_ast *ast, t_shell *shell_data, bool wait, int extra_fd);
 void	redirect_files(t_redirection *redir);
 void	apply_redirections(t_cmd *cmd, int extra_fd);
 void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type);
-
+bool	syntax_error_check(t_token *tokens);
 
 // has to be removed
 

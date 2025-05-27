@@ -6,11 +6,21 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/27 13:21:57 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/27 19:13:53 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void    exit_error(char *filename)
+{
+    char    *msg;
+    
+    msg = ft_strjoin("minishell: ", filename);
+    perror(msg);
+    free(msg);
+    exit(EXIT_FAILURE);
+}
 
 void	redirect_files(t_redirection *redir)
 {
@@ -19,18 +29,24 @@ void	redirect_files(t_redirection *redir)
 	if (redir->type == REDIR_IN)
 	{
 		fd = open(redir->target, O_RDONLY);
+        if (fd == -1)
+            exit_error(redir->target);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
 	else if (redir->type == REDIR_OUT)
 	{
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+        if (fd == -1)
+            exit_error(redir->target);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
 	else if (redir->type == REDIR_APPEND)
 	{
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0666);
+        if (fd == -1)
+            exit_error(redir->target);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}

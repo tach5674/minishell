@@ -9,7 +9,7 @@ LIBFT = libft
 CC = cc
 LIBS_DIR = libraries
 READLINE_LIB_PATH = $(LIBS_DIR)/$(READLINE)/lib
-CFLAGS = -Wall -Wextra -Werror -I./includes -I./$(LIBS_DIR)/$(READLINE)/include -I./$(LIBS_DIR)/$(LIBFT) #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I./includes -I./$(LIBS_DIR)/$(READLINE)/include -I./$(LIBS_DIR)/$(LIBFT) -g -O0 #-fsanitize=address
 
 # Directories
 SRCS_DIR = sources

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/23 16:38:11 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:02:09 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,11 @@ t_ast	*parse(t_token **tokens)
 {
 	t_ast	*ast;
 
-	if (*tokens && (*tokens)->type == TOKEN_PIPE)
-	{
-		syntax_error("|");
-		return (NULL);
-	}
+	// if (*tokens && (*tokens)->type == TOKEN_PIPE)
+	// {
+	// 	syntax_error("|");
+	// 	return (NULL);
+	// }
 	ast = parse_and_or(tokens);
 	if (ast && *tokens)
 	{

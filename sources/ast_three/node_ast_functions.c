@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 13:36:24 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:21:24 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ t_cmd *new_cmd_node(char *name)
     cmd->args[0] = NULL;
     cmd->redirections = NULL;
     cmd->redir_count = 0;
-
+    cmd->pipe_in = -1;
+    cmd->pipe_out = -1;
     return (cmd);
 }
 

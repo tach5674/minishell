@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/28 13:23:52 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:23:33 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,9 +236,11 @@ void	execute_commands(t_shell *shell_data)
 		{
 			// print_ast(ast);
 			execute_ast(ast, shell_data, true, -1);
-			// if (WIFSIGNALED(status))
-			// 	if (WTERMSIG(status) == SIGINT)
-			// 		write(1, "\n", 1);
+			if (signal_status == SIGINT)
+				write(1, "\n", 1);
+			else if (signal_status == SIGQUIT)
+				write(1, "Quit (core dumped)\n", 19);
+			signal_status = 0;
 			setup_signals();
 		}
 		free_ast(ast);

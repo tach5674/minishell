@@ -60,6 +60,8 @@
 // hash table
 # include "ht.h"
 
+extern int	signal_status;
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
@@ -152,6 +154,8 @@ int					ft_pwd(void);
 void				ft_echo(t_cmd *cmd);
 void				ft_exit(t_cmd *cmd);
 void				setup_signals(void);
+void				setup_signals_child(void);
+void				setup_signals_parent_exec(void);
 void				shell_init(t_shell *shell, char **envp);
 t_ast				*parse(t_token **tokens);
 t_ast				*parse_subshell(t_token **tokens);

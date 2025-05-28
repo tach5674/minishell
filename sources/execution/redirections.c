@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/27 19:13:53 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/27 21:28:14 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,19 @@ void    exit_error(char *filename)
     exit(EXIT_FAILURE);
 }
 
+// void	heredoc_handler(char *limiter)
+// {
+// 	char		*heredoc_name;
+// 	char		*tmp;
+// 	static int	i;
+
+// 	heredoc_name = ft_strjoin
+// }
+
 void	redirect_files(t_redirection *redir)
 {
-	int	fd;
-	
+	int		fd;
+
 	if (redir->type == REDIR_IN)
 	{
 		fd = open(redir->target, O_RDONLY);
@@ -50,6 +59,15 @@ void	redirect_files(t_redirection *redir)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
+	// else if (redir->type == REDIR_HEREDOC)
+	// {
+	// 	heredoc_handler(redir->target);
+	// 	fd = open("file.txt", O_CREAT | O_EXCL | O_WRONLY, 0600);
+    //     if (fd == -1)
+    //         exit_error(redir->target);
+	// 	dup2(fd, STDOUT_FILENO);
+	// 	close(fd);
+	// }
 }
 
 void	apply_redirections(t_cmd *cmd, int extra_fd)

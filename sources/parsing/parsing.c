@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/27 19:02:09 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:51:39 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ t_ast	*parse_subshell(t_token **tokens)
 			return (NULL);
 		}
 		subshell_node = new_ast_node(AST_SUBSHELL);
+		subshell_node->cmd = new_cmd_node(NULL);
 		subshell_node->left = child;
 		return (subshell_node);
 	}

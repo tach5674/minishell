@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 14:00:41 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:49:24 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_ast *new_ast_node(t_ast_node_type type)
     node->left = NULL;
     node->right = NULL;
     node->subshell = NULL;
-
     return (node);
 }
 

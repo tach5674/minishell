@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 16:57:22 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 18:06:09 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		ft_exit(t_cmd *cmd, t_shell *shell)
 		{
 			if (cmd->args[2])
 			{
+				ft_putstr_fd("exit\n", 1);
 				ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 				return (EXIT_FAILURE);
 			}

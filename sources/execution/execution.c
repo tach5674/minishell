@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 16:06:15 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:51:08 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,13 @@ static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 	{
 		if (extra_fd != -1)
 			close(extra_fd);
-		exit_code = execute_ast(ast, shell, true, -1);
+		exit_code = execute_ast(ast->left, shell, true, -1);
+		if (extra_fd != -1)
+			close(extra_fd);
+		if (ast->cmd->pipe_in != -1)
+			close(ast->cmd->pipe_in);
+		if (ast->cmd->pipe_out != -1)
+			close(ast->cmd->pipe_out);
 		free_shell(shell);
 		exit(exit_code);
 	}
@@ -104,7 +110,7 @@ int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 		return (0);
 	}
 	else if (ast->type == AST_SUBSHELL)
-		return (execute_subshell(ast->left, shell, wait, extra_fd));
+		return (execute_subshell(ast, shell, wait, extra_fd));
 	else if (ast->type == AST_PIPE)
 		return (execute_pipe(ast, shell, true));
 	return (0);

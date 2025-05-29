@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:36:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 15:06:48 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:53:29 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ void	free_ast(t_ast *ast)
 		free_ast(ast->right);
 	}
 	else if (ast->type == AST_SUBSHELL)
+	{
+		free_cmd(ast->cmd);
 		free_ast(ast->left);
+	}
 	free(ast);
 }

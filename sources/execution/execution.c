@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/28 13:23:52 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/28 14:17:56 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ void	execute_commands(t_shell *shell_data)
 			// 	if (WTERMSIG(status) == SIGINT)
 			// 		write(1, "\n", 1);
 			setup_signals();
-		}
+	}
 		free_ast(ast);
 	}
 	free_tokens(tokens_tmp);

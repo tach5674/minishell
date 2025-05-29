@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 17:51:08 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 18:40:48 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,22 @@ int		get_exit_code(int status)
 		return (128 + WTERMSIG(status));
 	else
 		return (EXIT_FAILURE);
+}
+
+void	set_in_subshell(t_ast *ast)
+{
+	if (ast->type == AST_COMMAND)
+		ast->cmd->in_subshell = true;
+	else if (ast->type == AST_AND || ast->type == AST_OR)
+	{
+		set_in_subshell(ast->left);
+		set_in_subshell(ast->right);	
+	}
+	else if (ast->type == AST_PIPE)
+	{
+		set_in_subshell(ast->left);
+		set_in_subshell(ast->right);
+	}
 }
 
 static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
@@ -36,8 +52,7 @@ static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 	}
 	if (pid == 0)
 	{
-		if (extra_fd != -1)
-			close(extra_fd);
+		set_in_subshell(ast->left);
 		exit_code = execute_ast(ast->left, shell, true, -1);
 		if (extra_fd != -1)
 			close(extra_fd);

@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 15:50:46 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 18:54:08 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	}
 	if (pid == 0)
 	{
+		cmd->in_subshell = true;
 		status = execute_builtin(cmd, shell, cmd_num, extra_fd);
 		free_shell(shell);
 		exit(status);

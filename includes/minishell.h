@@ -109,6 +109,7 @@ typedef struct s_cmd
 	t_redirection	**redirections;
 	int				pipe_in;
 	int				pipe_out;
+	bool			in_subshell;
 }					t_cmd;
 
 typedef struct s_ast
@@ -135,7 +136,6 @@ typedef struct s_shell
 	int				last_status_code;
 	char			*commands;
 	t_ast			*ast;
-	int				exit_code;
 }					t_shell;
 
 // execution

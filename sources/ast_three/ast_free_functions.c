@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:36:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 13:36:45 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:06:48 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ void	free_ast(t_ast *ast)
 		free_ast(ast->right);
 	}
 	else if (ast->type == AST_SUBSHELL)
-		free_ast(ast->subshell);
+		free_ast(ast->left);
 	free(ast);
 }

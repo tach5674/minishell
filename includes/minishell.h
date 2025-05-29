@@ -134,6 +134,8 @@ typedef struct s_shell
 	char			*shell_name;
 	int				last_status_code;
 	char			*commands;
+	t_ast			*ast;
+	int				exit_code;
 }					t_shell;
 
 // execution

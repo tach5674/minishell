@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/28 13:23:35 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:20:46 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ static void	sigint_handler(int sig)
 	rl_redisplay();
 }
 
+static void	exec_signal_handler(int sig)
+{
+	signal_status = sig;
+}
+
 void	setup_signals(void)
 {
 	signal(SIGINT, sigint_handler);
@@ -37,6 +42,6 @@ void	setup_signals_child(void)
 
 void	setup_signals_parent_exec(void)
 {
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, exec_signal_handler);
+    signal(SIGQUIT, exec_signal_handler);
 }

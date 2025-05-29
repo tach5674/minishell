@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:05 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 17:07:06 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:56:52 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_env(t_ht *env)
+int	ft_env(t_ht *env)
 {
 	ht_print(env);
+	return (0);
 }

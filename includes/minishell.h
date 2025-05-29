@@ -139,7 +139,6 @@ typedef struct s_shell
 // execution
 # include "execution.h"
 
-void				print_env(t_ht *env);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
 t_token_type		oper_type(const char *s, int *len);
@@ -151,11 +150,13 @@ void				free_ast(t_ast *ast);
 void				free_tokens(t_token *tokens);
 void				throw_err(int err_type);
 void				syntax_error(const char *token);
+
 int					ft_pwd(void);
+int					ft_echo(t_cmd *cmd);
+int					ft_exit(t_cmd *cmd, t_shell *shell_data);
+int					ft_env(t_ht *env);
 void				cleanup_heredoc_files(t_cmd *cmd);
 int					process_heredoc(const char *delimiter, char **out_filename);
-void				ft_echo(t_cmd *cmd);
-void				ft_exit(t_cmd *cmd);
 void				setup_signals(void);
 void				setup_signals_child(void);
 void				setup_signals_parent_exec(void);

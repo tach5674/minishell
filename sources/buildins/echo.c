@@ -3,16 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:17:06 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/20 21:52:00 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/29 01:25:00 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	has_n_flag(char *s)
+int handle_error(char *name)
+{
+	char    *msg;
+    
+    msg = ft_strjoin("minishell: ", name);
+    perror(msg);
+    free(msg);
+    return (EXIT_FAILURE);
+}
+
+static bool	has_n_flag(char *s)
 {
 	if (*s == '-')
 		++s;
@@ -23,17 +33,29 @@ bool	has_n_flag(char *s)
 	return (true);
 }
 
-void	ft_echo(t_cmd *cmd)
+int	ft_echo(t_cmd *cmd)
 {
-	bool	is_nl;
-	int		first_arg;
+	bool	has_newline;
+	int		i;
 
-	first_arg = 1;
-	is_nl = has_n_flag(cmd->args[first_arg]);
-	if (is_nl)
-		++first_arg;
-	while (cmd->args[first_arg])
-		printf("%s", cmd->args[first_arg++]);
-	if (is_nl)
-		write(1, "\n", 1);
+	i = 1;
+	if (!cmd->args[i])
+	{
+		if (printf("\n") == -1)
+			return (handle_error(cmd->name));
+	}
+	has_newline = has_n_flag(cmd->args[i]);
+	if (has_newline)
+		++i;
+	while (cmd->args[i])
+	{
+		if (printf("%s", cmd->args[i++]) == -1)
+			return (handle_error(cmd->name));
+	}
+	if (!has_newline)
+	{
+		if (printf("\n") == -1)
+			return (handle_error(cmd->name));
+	}
+	return (0);
 }

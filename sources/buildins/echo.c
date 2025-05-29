@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:17:06 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 14:08:45 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 19:28:52 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,19 @@ int	ft_echo(t_cmd *cmd)
 	i = 1;
 	has_newline = true;
 	if (!cmd->args[i])
-	{
 		if (printf("\n") == -1)
 			return (handle_error(cmd->name));
-	}
-	if (cmd->args[i])
-		has_newline = has_n_flag(cmd->args[i]);
+	has_newline = has_n_flag(cmd->args[i]);
 	if (has_newline)
 		++i;
+	if (cmd->args[i])
+		if (printf("%s", cmd->args[i++]) == -1)
+			return (handle_error(cmd->name));
 	while (cmd->args[i])
-	{
 		if (printf(" %s", cmd->args[i++]) == -1)
 			return (handle_error(cmd->name));
-	}
 	if (!has_newline)
-	{
 		if (printf("\n") == -1)
 			return (handle_error(cmd->name));
-	}
 	return (0);
 }

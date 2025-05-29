@@ -15,6 +15,7 @@
 		"tuple": "c",
 		"type_traits": "c",
 		"utility": "c",
-		"atomic": "c"
+		"atomic": "c",
+		"typeinfo": "c"
 	}
 }

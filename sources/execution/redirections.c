@@ -6,68 +6,54 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/27 21:28:14 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/28 23:30:50 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    exit_error(char *filename)
+void    exit_error(char *name)
 {
     char    *msg;
     
-    msg = ft_strjoin("minishell: ", filename);
+    msg = ft_strjoin("minishell: ", name);
     perror(msg);
     free(msg);
     exit(EXIT_FAILURE);
 }
 
-// void	heredoc_handler(char *limiter)
-// {
-// 	char		*heredoc_name;
-// 	char		*tmp;
-// 	static int	i;
-
-// 	heredoc_name = ft_strjoin
-// }
+void	open_dup_fd(t_redirection *redir, int redir_fd, int flags, mode_t mode)
+{
+	int	fd;
+	
+	fd = open(redir->target, flags, mode);
+	if (fd == -1)
+		exit_error(redir->target);
+	if (redir->type == REDIR_HEREDOC)
+	{
+		if (unlink(redir->target) == -1)
+			exit_error(redir->target);
+	}
+	if (dup2(fd, redir_fd) == -1)
+		exit_error(redir->target);
+	if (close(fd) == -1)
+		exit_error(redir->target);
+}
 
 void	redirect_files(t_redirection *redir)
 {
-	int		fd;
-
 	if (redir->type == REDIR_IN)
-	{
-		fd = open(redir->target, O_RDONLY);
-        if (fd == -1)
-            exit_error(redir->target);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
+		open_dup_fd(redir, STDIN_FILENO, O_RDONLY, 0);
 	else if (redir->type == REDIR_OUT)
-	{
-		fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-        if (fd == -1)
-            exit_error(redir->target);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+		open_dup_fd(redir, STDOUT_FILENO, 
+			O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (redir->type == REDIR_APPEND)
-	{
-		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0666);
-        if (fd == -1)
-            exit_error(redir->target);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	// else if (redir->type == REDIR_HEREDOC)
-	// {
-	// 	heredoc_handler(redir->target);
-	// 	fd = open("file.txt", O_CREAT | O_EXCL | O_WRONLY, 0600);
-    //     if (fd == -1)
-    //         exit_error(redir->target);
-	// 	dup2(fd, STDOUT_FILENO);
-	// 	close(fd);
-	// }
+		open_dup_fd(redir, STDOUT_FILENO, 
+			O_WRONLY | O_CREAT | O_APPEND, 0666);	
+	else if (redir->type == REDIR_HEREDOC)
+		open_dup_fd(redir, STDIN_FILENO, O_RDONLY, 0);
+	else
+		exit(EXIT_FAILURE);
 }
 
 void	apply_redirections(t_cmd *cmd, int extra_fd)

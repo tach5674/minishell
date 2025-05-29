@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 13:34:24 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:00:41 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ t_redirection *create_heredoc_redirection(const char *delimiter)
 		return (NULL);
 	}
 	redir->target = heredoc_path;
-    printf("%s\n", heredoc_path);
 	return (redir);
 }
 

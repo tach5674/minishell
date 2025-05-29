@@ -1953,7 +1953,7 @@ configure:7048: $? = 0
 configure:7048: result: yes
 configure:7074: checking for tgetent
 configure:7074: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccoPNu0S.o: in function `main':
+/usr/bin/ld: /tmp/cc9VVkto.o: in function `main':
 /home/spitak/c42/minishell/libraries/readline-8.2/conftest.c:123:(.text.startup+0xb): undefined reference to `tgetent'
 collect2: error: ld returned 1 exit status
 configure:7074: $? = 1
@@ -2248,7 +2248,7 @@ configure:7414: $? = 0
 configure:7414: result: yes
 configure:7421: checking for mbscasecmp
 configure:7421: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccpubk3E.o: in function `main':
+/usr/bin/ld: /tmp/ccW7stn3.o: in function `main':
 /home/spitak/c42/minishell/libraries/readline-8.2/conftest.c:128:(.text.startup+0xb): undefined reference to `mbscasecmp'
 collect2: error: ld returned 1 exit status
 configure:7421: $? = 1
@@ -2387,7 +2387,7 @@ configure: failed program was:
 configure:7421: result: no
 configure:7428: checking for mbscmp
 configure:7428: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/cc9s7oJ3.o: in function `main':
+/usr/bin/ld: /tmp/ccfQwTBG.o: in function `main':
 /home/spitak/c42/minishell/libraries/readline-8.2/conftest.c:128:(.text.startup+0xb): undefined reference to `mbscmp'
 collect2: error: ld returned 1 exit status
 configure:7428: $? = 1
@@ -2534,7 +2534,7 @@ configure:7442: $? = 0
 configure:7442: result: yes
 configure:7450: checking for mbschr
 configure:7450: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccwME0Nz.o: in function `main':
+/usr/bin/ld: /tmp/ccxJ8TSF.o: in function `main':
 /home/spitak/c42/minishell/libraries/readline-8.2/conftest.c:130:(.text.startup+0xb): undefined reference to `mbschr'
 collect2: error: ld returned 1 exit status
 configure:7450: $? = 1
@@ -2935,6 +2935,7 @@ config.status:951: creating shlib/Makefile
 config.status:951: creating readline.pc
 config.status:951: creating history.pc
 config.status:951: creating config.h
+config.status:1126: config.h is unchanged
 config.status:1140: executing stamp-h commands
 
 ## ---------------- ##

@@ -98,6 +98,7 @@ typedef struct s_redirection
 {
 	t_redir_type	type;
 	char			*target;
+	int				heredoc_fd;
 }					t_redirection;
 
 typedef struct s_cmd
@@ -154,7 +155,8 @@ int					ft_pwd(void);
 int					ft_echo(t_cmd *cmd);
 int					ft_exit(t_cmd *cmd, t_shell *shell_data);
 int					ft_env(t_ht *env);
-
+void				cleanup_heredoc_files(t_cmd *cmd);
+int					process_heredoc(const char *delimiter, char **out_filename);
 void				setup_signals(void);
 void				setup_signals_child(void);
 void				setup_signals_parent_exec(void);
@@ -167,8 +169,8 @@ t_ast				*parse_pipeline(t_token **tokens);
 t_cmd				*create_cmd_from_tokens(t_token *tokens);
 t_ast				*new_ast_node(t_ast_node_type type);
 t_cmd				*new_cmd_node(char *name);
-void				add_redirection(t_cmd *cmd, t_redir_type type,
-						char *target);
+void				add_redirection(t_cmd *cmd, t_redirection *redir);
+t_redirection 		*create_redirection(t_redir_type type, const char *target);
 void				add_arg(t_cmd *cmd, char *arg);
 t_token				*tokenize(char *line, int i);
 t_token				*ft_lstnew_token(t_token_type type, char *value);

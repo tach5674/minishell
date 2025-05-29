@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/27 12:21:24 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 13:34:24 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,41 +71,65 @@ void add_arg(t_cmd *cmd, char *arg)
     cmd->args = new_args;
 }
 
-void add_redirection(t_cmd *cmd, t_redir_type type, char *target)
+t_redirection *create_heredoc_redirection(const char *delimiter)
 {
-    t_redirection *redir;
-    t_redirection **new_array;
-    size_t i;
+	t_redirection	*redir;
+	char			*heredoc_path;
 
-    redir = malloc(sizeof(t_redirection));
-    if (redir == NULL)
-        return ;
-    redir->type = type;
-    redir->target = ft_strdup(target);
-    new_array = malloc(sizeof(t_redirection *) * (cmd->redir_count + 1));
-    if (new_array == NULL)
-        return;
-    i = 0;
-    while (i < cmd->redir_count)
-    {
-        new_array[i] = cmd->redirections[i];
-        i++;
-    }
-    new_array[i] = redir;
-    free(cmd->redirections);
-    cmd->redirections = new_array;
-    cmd->redir_count++;
+	redir = malloc(sizeof(t_redirection));
+	if (!redir)
+		return (NULL);
+	redir->type = REDIR_HEREDOC;
+	heredoc_path = NULL;
+	if (process_heredoc(delimiter, &heredoc_path) == -1)
+	{
+		ft_putstr_fd("heredoc error\n", 2);
+		free(redir);
+		return (NULL);
+	}
+	redir->target = heredoc_path;
+    printf("%s\n", heredoc_path);
+	return (redir);
 }
 
-
-t_redirection *new_redirection(t_redir_type type, char *target)
+t_redirection *create_redirection(t_redir_type type, const char *target)
 {
-    t_redirection *redir;
+	t_redirection *redir;
 
-    redir = malloc(sizeof(t_redirection));
-    if (redir == NULL)
-        return NULL;
-    redir->type = type;
-    redir->target = ft_strdup(target);
-    return (redir);
+	if (type == REDIR_HEREDOC)
+		return (create_heredoc_redirection(target));
+	redir = malloc(sizeof(t_redirection));
+	if (!redir)
+		return (NULL);
+	redir->type = type;
+	redir->target = ft_strdup(target);
+	if (!redir->target)
+	{
+		free(redir);
+		return (NULL);
+	}
+	return (redir);
+}
+
+void add_redirection(t_cmd *cmd, t_redirection *redir)
+{
+	t_redirection **new_array;
+	size_t i;
+
+	if (!redir)
+		return;
+
+	new_array = malloc(sizeof(t_redirection *) * (cmd->redir_count + 1));
+	if (!new_array)
+		return ;
+	i = 0;
+	while (i < cmd->redir_count)
+	{
+		new_array[i] = cmd->redirections[i];
+		i++;
+	}
+	new_array[i] = redir;
+	free(cmd->redirections);
+	cmd->redirections = new_array;
+	cmd->redir_count++;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:04:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/27 16:07:34 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/28 15:47:22 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
 			syntax_error("newline");
 		return (1);
 	}
-	add_redirection(cmd, type, next->value);
+	add_redirection(cmd, create_redirection(type, next->value));
 	*tmp = next;
 	return (0);
 }

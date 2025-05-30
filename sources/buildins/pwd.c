@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	ft_pwd(void)
+int	ft_pwd(t_cmd *cmd)
 {
 	char	cwd[PATH_MAX];
 
@@ -21,6 +21,7 @@ int	ft_pwd(void)
 		perror("getcwd() error");
 		return (EXIT_FAILURE);
 	}
-	printf("%s\n", cwd);
+	if (printf("%s\n", cwd) == -1)
+		handle_error(cmd->name);
 	return (0);
 }

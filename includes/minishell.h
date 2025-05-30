@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*								                                                   */
+/*									                                                */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -60,7 +60,7 @@
 // hash table
 # include "ht.h"
 
-extern int	signal_status;
+extern int			signal_status;
 
 typedef enum e_token_type
 {
@@ -141,7 +141,7 @@ typedef struct s_shell
 // execution
 # include "execution.h"
 
-void	setup_heredoc_signals(void);
+void				setup_heredoc_signals(void);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
 t_token_type		oper_type(const char *s, int *len);
@@ -154,10 +154,12 @@ void				free_tokens(t_token *tokens);
 void				throw_err(int err_type);
 void				syntax_error(const char *token);
 
-int					ft_pwd(void);
+int					ft_pwd(t_cmd *cmd);
 int					ft_echo(t_cmd *cmd);
 int					ft_exit(t_cmd *cmd, t_shell *shell_data);
-int					ft_env(t_ht *env);
+int					ft_env(t_cmd *cmd, t_ht *env);
+int					handle_error(char *name);
+
 void				cleanup_heredoc_files(t_cmd *cmd);
 int					process_heredoc(const char *delimiter, char **out_filename);
 void				setup_signals(void);
@@ -173,7 +175,7 @@ t_cmd				*create_cmd_from_tokens(t_token *tokens);
 t_ast				*new_ast_node(t_ast_node_type type);
 t_cmd				*new_cmd_node(char *name);
 void				add_redirection(t_cmd *cmd, t_redirection *redir);
-t_redirection 		*create_redirection(t_redir_type type, const char *target);
+t_redirection		*create_redirection(t_redir_type type, const char *target);
 void				add_arg(t_cmd *cmd, char *arg);
 t_token				*tokenize(char *line, int i);
 t_token				*ft_lstnew_token(t_token_type type, char *value);

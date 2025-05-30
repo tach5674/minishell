@@ -12,16 +12,6 @@
 
 #include "minishell.h"
 
-int handle_error(char *name)
-{
-	char    *msg;
-    
-    msg = ft_strjoin("minishell: ", name);
-    perror(msg);
-    free(msg);
-    return (EXIT_FAILURE);
-}
-
 static bool	has_n_flag(char *s)
 {
 	if (*s == '-')

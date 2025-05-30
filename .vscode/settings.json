@@ -18,5 +18,8 @@
 		"atomic": "c",
 		"typeinfo": "c",
 		"compare": "c"
+	},
+	"[c]": {
+		"editor.defaultFormatter": "keyhr.42-c-format"
 	}
 }

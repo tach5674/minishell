@@ -154,10 +154,11 @@ void				free_tokens(t_token *tokens);
 void				throw_err(int err_type);
 void				syntax_error(const char *token);
 
-int					ft_pwd(t_cmd *cmd);
+int					ft_pwd(t_cmd *cmd, t_ht *env);
 int					ft_echo(t_cmd *cmd);
 int					ft_exit(t_cmd *cmd, t_shell *shell_data);
 int					ft_env(t_cmd *cmd, t_ht *env);
+int					ft_cd(t_cmd *cmd, t_ht *env);
 int					handle_error(char *name);
 
 void				cleanup_heredoc_files(t_cmd *cmd);

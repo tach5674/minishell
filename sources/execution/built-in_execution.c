@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:02:04 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/30 18:10:54 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:47:38 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ static int  execute(t_cmd *cmd, t_shell *shell, int cmd_num)
 	else if (cmd_num == 2)
 		return (ft_env(cmd, shell->env));
     else if (cmd_num == 3)
-		return (ft_pwd(cmd));
+		return (ft_pwd(cmd, shell->env));
     else if (cmd_num == 4)
         return (ft_exit(cmd, shell));
+	else if (cmd_num == 5)
+        return (ft_cd(cmd, shell->env));
     else
         return (EXIT_FAILURE);
 }
@@ -67,6 +69,8 @@ int	check_if_builtin(char *name)
 		return (3);
     else if (ft_strcmp(name, "exit") == 0)
         return (4);
+	else if (ft_strcmp(name, "cd") == 0)
+        return (5);
 	else 
     // else if (ft_strcmp(name, "export") == 0)
     // 	return (ft_export(cmd));

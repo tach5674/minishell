@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 18:50:17 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/30 15:50:58 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ t_redirection *create_heredoc_redirection(const char *delimiter)
 		return (NULL);
 	redir->type = REDIR_HEREDOC;
 	heredoc_path = NULL;
+	setup_heredoc_signals();
 	if (process_heredoc(delimiter, &heredoc_path) == -1)
 	{
 		ft_putstr_fd("heredoc error\n", 2);

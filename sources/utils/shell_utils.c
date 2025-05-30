@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:42:54 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 16:58:18 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/30 14:25:12 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,4 @@ void	shell_init(t_shell *shell, char **envp)
 	shell->shell_name = "minishell";
 	shell->commands = NULL;
 	shell->ast = NULL;
-	shell->exit_code = -1;
 }

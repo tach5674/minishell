@@ -141,6 +141,7 @@ typedef struct s_shell
 // execution
 # include "execution.h"
 
+void	setup_heredoc_signals(void);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
 t_token_type		oper_type(const char *s, int *len);

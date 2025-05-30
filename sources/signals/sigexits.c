@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sigexits.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/28 15:20:46 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/30 16:15:38 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <sys/ioctl.h>
 
 int	signal_status;
 
@@ -38,6 +39,21 @@ void	setup_signals_child(void)
 {
     signal(SIGINT, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
+}
+
+void	sig_handler_hdoc(int sig)
+{
+	(void)sig;
+	signal_status = sig;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	// rl_replace_line("", 0);
+	// rl_on_new_line();
+}
+
+void	setup_heredoc_signals(void)
+{
+    signal(SIGINT, sig_handler_hdoc);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	setup_signals_parent_exec(void)

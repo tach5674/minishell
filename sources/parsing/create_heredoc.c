@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 13:51:46 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:17:09 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,16 @@ int	write_heredoc_to_file(const char *delimiter, const char *filename)
 		return (-1);
 	while (1)
 	{
-		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = readline(">");
 		if (!line)
-			break;
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
+		{
+			free(line);
+			close(fd_write);
+			return (-1);
+		}
+		if (signal_status == SIGINT || (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
 			&& (line[ft_strlen(delimiter)] == '\n' || line[ft_strlen(delimiter)] == '\0'))
+			)
 		{
 			free(line);
 			break;

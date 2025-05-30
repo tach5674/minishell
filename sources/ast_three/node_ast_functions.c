@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 14:00:41 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:50:58 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_ast *new_ast_node(t_ast_node_type type)
     node->left = NULL;
     node->right = NULL;
     node->subshell = NULL;
-
     return (node);
 }
 
@@ -44,6 +43,7 @@ t_cmd *new_cmd_node(char *name)
     cmd->redir_count = 0;
     cmd->pipe_in = -1;
     cmd->pipe_out = -1;
+	cmd->in_subshell = false;
     return (cmd);
 }
 
@@ -81,6 +81,7 @@ t_redirection *create_heredoc_redirection(const char *delimiter)
 		return (NULL);
 	redir->type = REDIR_HEREDOC;
 	heredoc_path = NULL;
+	setup_heredoc_signals();
 	if (process_heredoc(delimiter, &heredoc_path) == -1)
 	{
 		ft_putstr_fd("heredoc error\n", 2);

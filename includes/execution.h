@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:26:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/28 20:55:51 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 15:51:11 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	syntax_error_check(t_token *tokens);
 int		get_exit_code(int status);
 void    exit_error(char *filename);
 int	    check_if_builtin(char *cmd);
-int		execute_builtin(t_cmd *cmd, t_shell *shell_data, int cmd_num);
+int		execute_builtin(t_cmd *cmd, t_shell *shell_data, int cmd_num, int extra_fd);
 
 // has to be removed
 

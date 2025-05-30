@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/28 23:30:50 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/05/29 17:50:04 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,13 @@ void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type)
 		set_pipe_redirections(ast->right, fd, type);		
 	}
 	else if (ast->type == AST_SUBSHELL)
+	{
+		if (type == REDIR_IN)
+			ast->cmd->pipe_in = fd;
+		else
+			ast->cmd->pipe_out = fd;
 		set_pipe_redirections(ast->left, fd, type);
+	}
 	else if (ast->type == AST_PIPE)
 		set_pipe_redirections(ast->right, fd, type);
 }

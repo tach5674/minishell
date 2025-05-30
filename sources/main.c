@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 13:29:54 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:01:36 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
-
+	
+	// rl_catch_signals = 0;
 	shell = safe_malloc(sizeof(t_shell));
 	shell_init(shell, envp);
 	if (argc > 1 && argv)
@@ -25,18 +26,14 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		shell->commands = readline("\033[1;32mminishell$ \033[0m");
 		if (!shell->commands)
-		{
-			ft_putstr_fd("exit\n", 1);
 			break ;
-		}
 		if (*shell->commands)
 		{
 			add_history(shell->commands);
 			execute_commands(shell);
 		}
-		free(shell->commands);
 	}
-	rl_clear_history();
 	free_shell(shell);
+	ft_putstr_fd("exit\n", 1);
 	return (0);
 }

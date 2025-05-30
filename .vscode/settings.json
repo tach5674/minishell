@@ -16,6 +16,7 @@
 		"type_traits": "c",
 		"utility": "c",
 		"atomic": "c",
-		"typeinfo": "c"
+		"typeinfo": "c",
+		"compare": "c"
 	}
 }

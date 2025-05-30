@@ -109,6 +109,7 @@ typedef struct s_cmd
 	t_redirection	**redirections;
 	int				pipe_in;
 	int				pipe_out;
+	bool			in_subshell;
 }					t_cmd;
 
 typedef struct s_ast
@@ -134,11 +135,13 @@ typedef struct s_shell
 	char			*shell_name;
 	int				last_status_code;
 	char			*commands;
+	t_ast			*ast;
 }					t_shell;
 
 // execution
 # include "execution.h"
 
+void	setup_heredoc_signals(void);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
 t_token_type		oper_type(const char *s, int *len);

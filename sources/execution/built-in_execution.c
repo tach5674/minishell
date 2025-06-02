@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built-in_execution.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:02:04 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/30 18:47:38 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:32:11 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static int  execute(t_cmd *cmd, t_shell *shell, int cmd_num)
         return (ft_exit(cmd, shell));
 	else if (cmd_num == 5)
         return (ft_cd(cmd, shell->env));
+	else if (cmd_num == 6)
+        return (ft_export(cmd, shell->env));
     else
         return (EXIT_FAILURE);
 }
@@ -48,7 +50,14 @@ int    execute_builtin(t_cmd *cmd, t_shell *shell, int cmd_num, int extra_fd)
 	}
 	old_stdout = dup(STDOUT_FILENO);
 	old_stdin = dup(STDIN_FILENO);
-    apply_redirections(cmd, extra_fd);
+    if (apply_redirections(cmd, extra_fd) != 0)
+	{
+		dup2(old_stdout, STDOUT_FILENO);
+		close(old_stdout);
+		dup2(old_stdin, STDIN_FILENO);
+		close(old_stdin);
+		return (EXIT_FAILURE);
+	}
     exit_code = execute(cmd, shell, cmd_num);  
 	dup2(old_stdout, STDOUT_FILENO);
 	close(old_stdout);
@@ -71,6 +80,8 @@ int	check_if_builtin(char *name)
         return (4);
 	else if (ft_strcmp(name, "cd") == 0)
         return (5);
+	else if (ft_strcmp(name, "export") == 0)
+        return (6);
 	else 
     // else if (ft_strcmp(name, "export") == 0)
     // 	return (ft_export(cmd));

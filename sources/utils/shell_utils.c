@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:42:54 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 14:25:12 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:29:08 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	free_shell(t_shell *shell)
 
 void	shell_init(t_shell *shell, char **envp)
 {
+	tcgetattr(STDIN_FILENO, &shell->original_termios);
 	shell->shell_envp = envp;
 	shell->env = ht_init(envp);
 	shell->last_status_code = 0;

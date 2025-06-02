@@ -130,6 +130,7 @@ typedef struct s_token
 
 typedef struct s_shell
 {
+	struct termios	original_termios;
 	char			**shell_envp;
 	t_ht			*env;
 	char			*shell_name;
@@ -159,6 +160,7 @@ int					ft_echo(t_cmd *cmd);
 int					ft_exit(t_cmd *cmd, t_shell *shell_data);
 int					ft_env(t_cmd *cmd, t_ht *env);
 int					ft_cd(t_cmd *cmd, t_ht *env);
+int					ft_export(t_cmd *cmd, t_ht *env);
 int					handle_error(char *name);
 
 void				cleanup_heredoc_files(t_cmd *cmd);

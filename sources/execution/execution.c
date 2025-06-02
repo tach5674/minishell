@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 18:40:48 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/02 14:33:04 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ void	execute_commands(t_shell *shell)
 			setup_signals();
 			free_ast(shell->ast);
 			shell->ast = NULL;
+			tcsetattr(STDIN_FILENO, TCSANOW, &shell->original_termios);
 			return ;
 		}
 	}

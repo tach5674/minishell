@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:58:23 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 18:40:22 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:33:26 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 int	ft_pwd(t_cmd *cmd, t_ht *env)
 {
-	if (printf("%s\n", ht_get(env, "PWD")) == -1)
-		handle_error(cmd->name);
+	char	cwd[PATH_MAX];
+
+	(void)env;
+	if (getcwd(cwd, sizeof (cwd)) != NULL)
+		ft_putendl_fd(cwd, 1);
+	else
+		return (handle_error(cmd->name));
 	return (0);
 }

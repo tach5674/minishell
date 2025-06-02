@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 15:50:58 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:05:33 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,9 @@ t_redirection *create_heredoc_redirection(const char *delimiter)
 		return (NULL);
 	redir->type = REDIR_HEREDOC;
 	heredoc_path = NULL;
-	setup_heredoc_signals();
-	if (process_heredoc(delimiter, &heredoc_path) == -1)
+	if (process_heredoc(delimiter, &heredoc_path) != 0)
 	{
-		ft_putstr_fd("heredoc error\n", 2);
+		printf("chmo\n");
 		free(redir);
 		return (NULL);
 	}

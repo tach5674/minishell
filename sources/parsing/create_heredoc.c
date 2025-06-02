@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 16:17:09 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/02 13:06:04 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*make_heredoc_filename(int index)
+char	*create_heredoc_filename(void)
 {
-	char	*number_str;
-	char	*filename;
+	static int	index = 0;
+	char		*number_str;
+	char		*filename;
 
-	number_str = ft_itoa(index);
+	number_str = ft_itoa(index++);
 	if (!number_str)
 		return (NULL);
 	filename = ft_strjoin("/tmp/.heredoc", number_str);
@@ -27,48 +28,74 @@ char	*make_heredoc_filename(int index)
 
 int	write_heredoc_to_file(const char *delimiter, const char *filename)
 {
-	int		fd_write;
+	int		fd;
 	char	*line;
 
-	fd_write = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (fd_write < 0)
-		return (-1);
-	while (1)
+	fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (fd == -1)
+		return (1);
+	while (true)
 	{
-		line = readline(">");
+		ft_putstr_fd("> ", STDOUT_FILENO);
+		line = get_next_line(STDIN_FILENO);
 		if (!line)
+			break ;
+		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1))
 		{
 			free(line);
-			close(fd_write);
-			return (-1);
+			break ;
 		}
-		if (signal_status == SIGINT || (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
-			&& (line[ft_strlen(delimiter)] == '\n' || line[ft_strlen(delimiter)] == '\0'))
-			)
-		{
-			free(line);
-			break;
-		}
-		write(fd_write, line, ft_strlen(line));
+		ft_putstr_fd(line, fd);
 		free(line);
 	}
-	close(fd_write);
+	close(fd);
 	return (0);
 }
 
+int	run_heredoc_process(const char *delimiter, const char *filename)
+{
+	pid_t	process_id;
+	int		status;
+
+	process_id = fork();
+	if (process_id == -1)
+		return (false);
+	if (!process_id)
+	{
+		signal(SIGINT, SIG_DFL);
+		exit(write_heredoc_to_file(filename, delimiter));
+	}		
+	else
+	{
+		waitpid(process_id, &status, 0);
+		if (WIFSIGNALED(status))
+			return (false);
+		else if (WIFEXITED(status) && !(WEXITSTATUS(status)))
+			return (true);
+	}
+	return (false);
+}
 int	process_heredoc(const char *delimiter, char **out_filename)
 {
-	static int	index = 0;
 	char		*filename;
+	int			result;
+	struct stat	st;
 
-	filename = make_heredoc_filename(index++);
+	filename = create_heredoc_filename();
 	if (!filename)
 		return (-1);
-	if (write_heredoc_to_file(delimiter, filename) != 0)
+	result = run_heredoc_process(delimiter, filename);
+
+	if (result != 0)
 	{
+		if (stat(filename, &st) == 0)
+		{
+			unlink(filename);
+		}
 		free(filename);
 		return (-1);
 	}
+
 	*out_filename = filename;
 	return (0);
 }

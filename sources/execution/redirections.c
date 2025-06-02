@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 17:50:04 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/02 13:05:41 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void    exit_error(char *name)
     char    *msg;
     
     msg = ft_strjoin("minishell: ", name);
+	printf("chmo1\n");
     perror(msg);
     free(msg);
     exit(EXIT_FAILURE);

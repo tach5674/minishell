@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:26:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/02 12:15:59 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/02 19:10:49 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int 	apply_redirections(t_cmd *cmd, int extra_fd);
 void	set_pipe_redirections(t_ast *ast, int fd, t_redir_type type);
 bool	syntax_error_check(t_token *tokens);
 int		get_exit_code(int status);
-int    reutrn_error(char *filename);
+int     return_error(char *filename);
 int	    check_if_builtin(char *cmd);
 int		execute_builtin(t_cmd *cmd, t_shell *shell_data, int cmd_num, int extra_fd);
 

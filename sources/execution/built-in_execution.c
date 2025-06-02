@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:02:04 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/02 13:32:11 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/02 15:18:26 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static int  execute(t_cmd *cmd, t_shell *shell, int cmd_num)
         return (ft_cd(cmd, shell->env));
 	else if (cmd_num == 6)
         return (ft_export(cmd, shell->env));
+	else if (cmd_num == 7)
+        return (ft_unset(cmd, shell->env));
     else
         return (EXIT_FAILURE);
 }
@@ -82,6 +84,8 @@ int	check_if_builtin(char *name)
         return (5);
 	else if (ft_strcmp(name, "export") == 0)
         return (6);
+	else if (ft_strcmp(name, "unset") == 0)
+        return (7);
 	else 
     // else if (ft_strcmp(name, "export") == 0)
     // 	return (ft_export(cmd));

@@ -161,6 +161,7 @@ int					ft_exit(t_cmd *cmd, t_shell *shell_data);
 int					ft_env(t_cmd *cmd, t_ht *env);
 int					ft_cd(t_cmd *cmd, t_ht *env);
 int					ft_export(t_cmd *cmd, t_ht *env);
+int 				ft_unset(t_cmd * cmd, t_ht *env);
 int					handle_error(char *name);
 
 void				cleanup_heredoc_files(t_cmd *cmd);
@@ -186,5 +187,8 @@ void				ft_lstadd_back_token(t_token **lst, t_token *new);
 char				*read_prompt(void);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strndup(const char *s, size_t n);
+
+
+char				*ft_str_slash_join(char const *s1, char const *s2);
 
 #endif

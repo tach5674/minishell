@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:10 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/13 17:00:58 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/02 15:39:55 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,33 @@ char	*ft_strndup(const char *s, size_t n)
 	ft_memcpy(dup, s, len);
 	dup[len] = '\0';
 	return (dup);
+}
+
+char	*ft_str_slash_join(char const *s1, char const *s2)
+{
+	char	*res;
+	int		i;
+	int		j;
+
+	if (!s1 || !s2)
+		return (NULL);
+	i = 0;
+	j = 0;
+	res = malloc((ft_strlen(s1) + ft_strlen(s2) + 2));
+	if (!res)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		res[i] = s1[i];
+		++i;
+	}
+	res[i++] = '/';
+	while (s2[j] != '\0')
+	{
+		res[i] = s2[j];
+		++i;
+		++j;
+	}
+	res[i] = '\0';
+	return (res);
 }

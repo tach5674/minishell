@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:04:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/28 15:47:22 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:25:14 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
 {
 	t_token	*next;
+	t_redirection *redir;
 
 	next = (*tmp)->next;
 	if (!next || next->type != TOKEN_WORD)
@@ -23,12 +24,19 @@ int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
 			syntax_error(next->value);
 		else
 			syntax_error("newline");
-		return (1);
+		return (1); // ошибка
 	}
-	add_redirection(cmd, create_redirection(type, next->value));
+	redir = create_redirection(type, next->value, cmd->shell);
+	if (!redir)
+	{
+		// create_redirection вернул NULL — например, прерван heredoc
+		return (1); // ошибка, прекращаем построение
+	}
+	add_redirection(cmd, redir);
 	*tmp = next;
 	return (0);
 }
+
 
 void	handle_word_token(t_cmd *cmd, t_token *token)
 {
@@ -37,13 +45,13 @@ void	handle_word_token(t_cmd *cmd, t_token *token)
 	add_arg(cmd, token->value);
 }
 
-t_cmd	*create_cmd_from_tokens(t_token *tokens)
+t_cmd	*create_cmd_from_tokens(t_token *tokens, t_shell *shell)
 {
 	t_cmd	*cmd;
 	t_token	*tmp;
 
 	tmp = tokens;
-	cmd = new_cmd_node(NULL);
+	cmd = new_cmd_node(NULL, shell);
 	while (tmp && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_AND
 		&& tmp->type != TOKEN_OR && tmp->type != TOKEN_PAREN_RIGHT)
 	{

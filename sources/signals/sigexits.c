@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sigexits.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 16:15:38 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:15:54 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,14 @@ void	setup_signals_child(void)
     signal(SIGQUIT, SIG_DFL);
 }
 
-void	sig_handler_hdoc(int sig)
-{
-	(void)sig;
-	signal_status = sig;
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-	// rl_replace_line("", 0);
-	// rl_on_new_line();
-}
-
-void	setup_heredoc_signals(void)
-{
-    signal(SIGINT, sig_handler_hdoc);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 void	setup_signals_parent_exec(void)
 {
     signal(SIGINT, exec_signal_handler);
     signal(SIGQUIT, exec_signal_handler);
+}
+
+void	setup_signals_parent_heredoc(void)
+{
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
 }

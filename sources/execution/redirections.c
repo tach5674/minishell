@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
 /*   Updated: 2025/06/02 12:18:04 by mikayel          ###   ########.fr       */
@@ -26,14 +26,21 @@ int	open_dup_fd(t_redirection *redir, int redir_fd, int flags, mode_t mode)
 {
 	int	fd;
 	
+	if (!redir->target)
+	{
+		signal_status = 130;
+		exit(130);
+	}
 	fd = open(redir->target, flags, mode);
-	if (fd == -1)
-		return (-1);
-	if (redir->type == REDIR_HEREDOC)
-		unlink(redir->target);
-	dup2(fd, redir_fd);
-	close(fd);
-	return (fd);
+	if (fd == -1)	
+		exit_error(redir->target);
+	if (redir->type == REDIR_HEREDOC)		
+		if (unlink(redir->target) == -1)
+			exit_error(redir->target);
+	if (dup2(fd, redir_fd) == -1)
+		exit_error(redir->target);
+	if (close(fd) == -1)
+		exit_error(redir->target);
 }
 
 int	redirect_files(t_redirection *redir)

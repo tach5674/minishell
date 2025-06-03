@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 16:17:09 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:23:17 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*make_heredoc_filename(int index)
+char	*create_heredoc_filename(void)
 {
-	char	*number_str;
-	char	*filename;
+	static int	index = 0;
+	char		*number_str;
+	char		*filename;
 
-	number_str = ft_itoa(index);
+	number_str = ft_itoa(index++);
 	if (!number_str)
 		return (NULL);
 	filename = ft_strjoin("/tmp/.heredoc", number_str);
@@ -25,66 +26,87 @@ char	*make_heredoc_filename(int index)
 	return (filename);
 }
 
-int	write_heredoc_to_file(const char *delimiter, const char *filename)
+int	is_delimiter(char *line, const char *delimiter)
 {
-	int		fd_write;
-	char	*line;
+	size_t	len;
 
-	fd_write = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (fd_write < 0)
-		return (-1);
+	if (!line)
+		return (0);
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
+	if (ft_strcmp(line, delimiter) == 0)
+		return (1);
+	if (len > 0 && line[len - 1] == '\0')
+		line[len - 1] = '\n';
+	return (0);
+}
+
+void	print_heredoc_warning(const char *delimiter, int line_number)
+{
+	ft_putstr_fd("minishell: warning: here-document at line ", STDERR_FILENO);
+	ft_putnbr_fd(line_number, STDERR_FILENO);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", STDERR_FILENO);
+	ft_putstr_fd((char *)delimiter, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
+int	read_and_write_heredoc(int fd, const char *delimiter)
+{
+	char	*line;
+	int		line_number;
+
+	line_number = 1;
 	while (1)
 	{
-		line = readline(">");
+		// ft_putstr_fd("> ", STDOUT_FILENO);
+		// line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (!line)
 		{
-			free(line);
-			close(fd_write);
-			return (-1);
+			print_heredoc_warning(delimiter, line_number);
+			break ;
 		}
-		if (signal_status == SIGINT || (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
-			&& (line[ft_strlen(delimiter)] == '\n' || line[ft_strlen(delimiter)] == '\0'))
-			)
+		if (is_delimiter(line, delimiter))
 		{
 			free(line);
-			break;
+			break ;
 		}
-		write(fd_write, line, ft_strlen(line));
+		ft_putendl_fd(line, fd);
 		free(line);
+		line_number++;
 	}
-	close(fd_write);
+	close(fd);
+	return (0);
+}
+
+int	write_heredoc_to_file(const char *delimiter, const char *filename)
+{
+	int	fd;
+
+	fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (fd == -1)
+		return (1);
+	read_and_write_heredoc(fd, delimiter);
+	close(fd);
 	return (0);
 }
 
 int	process_heredoc(const char *delimiter, char **out_filename)
 {
-	static int	index = 0;
-	char		*filename;
+	char	*filename;
+	int		result;
 
-	filename = make_heredoc_filename(index++);
+	filename = create_heredoc_filename();
 	if (!filename)
-		return (-1);
-	if (write_heredoc_to_file(delimiter, filename) != 0)
+		return (1);
+	result = run_heredoc_process(delimiter, filename);
+	if (!result)
 	{
+		unlink(filename);
 		free(filename);
-		return (-1);
+		return (130); // SIGINT прерывание
 	}
 	*out_filename = filename;
 	return (0);
-}
-
-void	cleanup_heredoc_files(t_cmd *cmd)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < cmd->redir_count)
-	{
-		if (cmd->redirections[i]->type == REDIR_HEREDOC)
-		{
-			unlink(cmd->redirections[i]->target);
-			free(cmd->redirections[i]->target);
-		}
-		i++;
-	}
 }

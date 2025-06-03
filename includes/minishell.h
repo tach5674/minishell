@@ -18,9 +18,15 @@
 # define SYNTAX_ERROR 2
 # define INVALID_ARGUMENT_ERROR 3
 
+# ifndef ECHOCTL
+#  define ECHOCTL 0001000
+# endif
+
 # ifndef PATH_MAX
 #  define PATH_MAX 1024
 # endif
+
+#include <termios.h>
 
 // library
 # include "libft.h"
@@ -45,7 +51,7 @@
 
 // Работа с файлами и директориями
 # include <dirent.h>
-# include <sys/stat.h>
+# include <sys/stat.h>	
 
 // readline
 # include <readline/history.h>
@@ -101,6 +107,8 @@ typedef struct s_redirection
 	int				heredoc_fd;
 }					t_redirection;
 
+struct s_shell;
+
 typedef struct s_cmd
 {
 	char			*name;
@@ -109,6 +117,7 @@ typedef struct s_cmd
 	t_redirection	**redirections;
 	int				pipe_in;
 	int				pipe_out;
+	struct s_shell	*shell;
 	bool			in_subshell;
 }					t_cmd;
 
@@ -142,7 +151,6 @@ typedef struct s_shell
 // execution
 # include "execution.h"
 
-void				setup_heredoc_signals(void);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
 t_token_type		oper_type(const char *s, int *len);
@@ -156,6 +164,7 @@ void				throw_err(int err_type);
 void				syntax_error(const char *token);
 
 int					ft_pwd(t_cmd *cmd, t_ht *env);
+int					write_heredoc_to_file(const char *delimiter, const char *filename);
 int					ft_echo(t_cmd *cmd);
 int					ft_exit(t_cmd *cmd, t_shell *shell_data);
 int					ft_env(t_cmd *cmd, t_ht *env);
@@ -165,26 +174,27 @@ int 				ft_unset(t_cmd * cmd, t_ht *env);
 int					handle_error(char *name);
 
 void				cleanup_heredoc_files(t_cmd *cmd);
+bool				run_heredoc_process(const char *delimiter, const char *filename);
 int					process_heredoc(const char *delimiter, char **out_filename);
 void				setup_signals(void);
 void				setup_signals_child(void);
 void				setup_signals_parent_exec(void);
+void				setup_signals_parent_heredoc(void);
 void				shell_init(t_shell *shell, char **envp);
-t_ast				*parse(t_token **tokens);
-t_ast				*parse_subshell(t_token **tokens);
-t_ast				*parse_and_or(t_token **tokens);
-t_ast				*parse_command_or_subshell(t_token **tokens);
-t_ast				*parse_pipeline(t_token **tokens);
-t_cmd				*create_cmd_from_tokens(t_token *tokens);
+t_ast				*parse(t_token **tokens, t_shell *shell);
+t_ast				*parse_subshell(t_token **tokens, t_shell *shell);
+t_ast				*parse_and_or(t_token **tokens, t_shell *shell);
+t_ast				*parse_command_or_subshell(t_token **tokens, t_shell *shell);
+t_ast				*parse_pipeline(t_token **tokens, t_shell *shell);
+t_cmd				*create_cmd_from_tokens(t_token *tokens, t_shell *shell);
 t_ast				*new_ast_node(t_ast_node_type type);
-t_cmd				*new_cmd_node(char *name);
+t_cmd				*new_cmd_node(char *name, t_shell *shell);
 void				add_redirection(t_cmd *cmd, t_redirection *redir);
-t_redirection		*create_redirection(t_redir_type type, const char *target);
+t_redirection 		*create_redirection(t_redir_type type, const char *target, t_shell *shell);
 void				add_arg(t_cmd *cmd, char *arg);
 t_token				*tokenize(char *line, int i);
 t_token				*ft_lstnew_token(t_token_type type, char *value);
 void				ft_lstadd_back_token(t_token **lst, t_token *new);
-char				*read_prompt(void);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strndup(const char *s, size_t n);
 

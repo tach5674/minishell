@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:33 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/30 18:09:46 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:27:52 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,3 +78,20 @@ int	ht_print(t_ht *ht)
     }
     return (0);
 }
+
+// char    **ht_to_envp(t_ht *ht, char **envp)
+// {
+//     int i;
+// 	int	index;
+
+// 	index = 0;
+//     i = 0;
+//     while (i < ht->count)
+//     {
+// 		if (ht->buckets[index])
+// 		{
+			
+// 		}
+//         envp[i] = ft_str_char_join()
+//     }
+// }

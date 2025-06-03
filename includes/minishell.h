@@ -131,8 +131,8 @@ typedef struct s_token
 typedef struct s_shell
 {
 	struct termios	original_termios;
-	char			**shell_envp;
 	t_ht			*env;
+	char			**shell_envp;
 	char			*shell_name;
 	int				last_status_code;
 	char			*commands;
@@ -189,6 +189,6 @@ int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strndup(const char *s, size_t n);
 
 
-char				*ft_str_slash_join(char const *s1, char const *s2);
+char				*ft_str_char_join(char const *s1, char const *s2, char c);
 
 #endif

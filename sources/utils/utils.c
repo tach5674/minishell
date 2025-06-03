@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:10 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/02 15:39:55 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 12:16:44 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_strndup(const char *s, size_t n)
 	return (dup);
 }
 
-char	*ft_str_slash_join(char const *s1, char const *s2)
+char	*ft_str_char_join(char const *s1, char const *s2, char c)
 {
 	char	*res;
 	int		i;
@@ -73,7 +73,7 @@ char	*ft_str_slash_join(char const *s1, char const *s2)
 		res[i] = s1[i];
 		++i;
 	}
-	res[i++] = '/';
+	res[i++] = c;
 	while (s2[j] != '\0')
 	{
 		res[i] = s2[j];

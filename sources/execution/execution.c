@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 18:40:48 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 10:20:52 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,34 +131,37 @@ int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 	return (0);
 }
 
-void	execute_commands(t_shell *shell)
+void execute_commands(t_shell *shell)
 {
-	t_token *tokens;
-	t_token *tokens_tmp;
+    t_token *tokens;
+    t_token *tokens_tmp;
 
-	tokens = tokenize(shell->commands, 0);
-	free(shell->commands);
-	tokens_tmp = tokens;
-	if (!syntax_error_check(tokens))
-	{
-		shell->ast = parse(&tokens);
-		free_tokens(tokens_tmp);
-		if (shell->ast != NULL)
-		{
-			// print_ast(ast);
-			setup_signals_parent_exec();
-			shell->last_status_code = execute_ast(shell->ast, shell, true, -1);
-			// printf("%d\n", shell->last_status_code);
-			if (signal_status == SIGINT)
-				write(1, "\n", 1);
-			else if (signal_status == SIGQUIT)
-				write(1, "Quit (core dumped)\n", 19);
-			signal_status = 0;
-			setup_signals();
-			free_ast(shell->ast);
-			shell->ast = NULL;
-			return ;
-		}
-	}
-	free_tokens(tokens_tmp);
+    tokens = tokenize(shell->commands, 0);
+    free(shell->commands);
+    tokens_tmp = tokens;
+
+    if (syntax_error_check(tokens))
+    {
+        free_tokens(tokens_tmp);
+        return;
+    }
+
+    shell->ast = parse(&tokens, shell);
+    free_tokens(tokens_tmp);
+
+    if (shell->ast == NULL)
+        return;
+
+    setup_signals_parent_exec();
+    shell->last_status_code = execute_ast(shell->ast, shell, true, -1);
+
+    if (signal_status == SIGINT)
+        write(1, "\n", 1);
+    else if (signal_status == SIGQUIT)
+        write(1, "Quit (core dumped)\n", 19);
+    signal_status = 0;
+    setup_signals();
+
+    free_ast(shell->ast);
+    shell->ast = NULL;
 }

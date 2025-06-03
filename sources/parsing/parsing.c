@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 17:51:39 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 10:36:53 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ast	*parse_pipeline(t_token **tokens)
+t_ast	*parse_pipeline(t_token **tokens, t_shell *shell)
 {
 	t_ast	*left;
 	t_ast	*node;
 
-	left = parse_command_or_subshell(tokens);
+	left = parse_command_or_subshell(tokens, shell);
 	if (!left)
 		return (NULL);
 	while (*tokens && (*tokens)->type == TOKEN_PIPE)
@@ -30,7 +30,7 @@ t_ast	*parse_pipeline(t_token **tokens)
 		*tokens = (*tokens)->next;
 		node = new_ast_node(AST_PIPE);
 		node->left = left;
-		node->right = parse_command_or_subshell(tokens);
+		node->right = parse_command_or_subshell(tokens, shell);
 		if (!node->right)
 		{
 			syntax_error("newline");
@@ -41,16 +41,16 @@ t_ast	*parse_pipeline(t_token **tokens)
 	return (left);
 }
 
-t_ast	*parse_command_or_subshell(t_token **tokens)
+t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 {
 	t_ast	*node;
 
 	if (!*tokens)
 		return (NULL);
 	if ((*tokens)->type == TOKEN_PAREN_LEFT)
-		return (parse_subshell(tokens));
+		return (parse_subshell(tokens, shell));
 	node = new_ast_node(AST_COMMAND);
-	node->cmd = create_cmd_from_tokens(*tokens);
+	node->cmd = create_cmd_from_tokens(*tokens, shell);
 	if (!node->cmd)
 		return (free(node), NULL);
 	while (*tokens && (*tokens)->type != TOKEN_PIPE
@@ -60,13 +60,13 @@ t_ast	*parse_command_or_subshell(t_token **tokens)
 	return (node);
 }
 
-t_ast	*parse_and_or(t_token **tokens)
+t_ast	*parse_and_or(t_token **tokens, t_shell *shell)
 {
 	t_ast			*left;
 	t_ast			*node;
 	t_ast_node_type	type;
 
-	left = parse_pipeline(tokens);
+	left = parse_pipeline(tokens, shell);
 	if (!left)
 		return (NULL);
 	while (*tokens && ((*tokens)->type == TOKEN_AND
@@ -79,7 +79,7 @@ t_ast	*parse_and_or(t_token **tokens)
 		*tokens = (*tokens)->next;
 		node = new_ast_node(type);
 		node->left = left;
-		node->right = parse_pipeline(tokens);
+		node->right = parse_pipeline(tokens, shell);
 		if (!node->right)
 			return (free_ast(node), syntax_error("newline"), NULL);
 		left = node;
@@ -87,7 +87,7 @@ t_ast	*parse_and_or(t_token **tokens)
 	return (left);
 }
 
-t_ast	*parse_subshell(t_token **tokens)
+t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
 {
 	t_ast	*subshell_node;
 	t_ast	*child;
@@ -95,7 +95,7 @@ t_ast	*parse_subshell(t_token **tokens)
 	if (*tokens && (*tokens)->type == TOKEN_PAREN_LEFT)
 	{
 		*tokens = (*tokens)->next;
-		child = parse_and_or(tokens);
+		child = parse_and_or(tokens, shell);
 		if (!child)
 			return (NULL);
 		if (*tokens && (*tokens)->type == TOKEN_PAREN_RIGHT)
@@ -107,24 +107,18 @@ t_ast	*parse_subshell(t_token **tokens)
 			return (NULL);
 		}
 		subshell_node = new_ast_node(AST_SUBSHELL);
-		subshell_node->cmd = new_cmd_node(NULL);
+		subshell_node->cmd = new_cmd_node(NULL, shell);
 		subshell_node->left = child;
 		return (subshell_node);
 	}
 	return (NULL);
 }
 
-
-t_ast	*parse(t_token **tokens)
+t_ast	*parse(t_token **tokens, t_shell *shell)
 {
 	t_ast	*ast;
 
-	// if (*tokens && (*tokens)->type == TOKEN_PIPE)
-	// {
-	// 	syntax_error("|");
-	// 	return (NULL);
-	// }
-	ast = parse_and_or(tokens);
+	ast = parse_and_or(tokens, shell);
 	if (ast && *tokens)
 	{
 		syntax_error("unexpected token");

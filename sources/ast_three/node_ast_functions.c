@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/02 13:05:33 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:31:35 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,25 @@ t_ast *new_ast_node(t_ast_node_type type)
     return (node);
 }
 
-t_cmd *new_cmd_node(char *name)
+t_cmd *new_cmd_node(char *name, t_shell *shell)
 {
-    t_cmd *cmd;
+	t_cmd *cmd;
 
-    cmd = malloc(sizeof(t_cmd));
-    if (cmd == NULL)
-        return (NULL);
-    cmd->name = ft_strdup(name);
-    cmd->args = malloc(sizeof(char *));
-    if (cmd->args == NULL)
-        return (NULL);
-    cmd->args[0] = NULL;
-    cmd->redirections = NULL;
-    cmd->redir_count = 0;
-    cmd->pipe_in = -1;
-    cmd->pipe_out = -1;
+	cmd = malloc(sizeof(t_cmd));
+	if (cmd == NULL)
+		return (NULL);
+	cmd->name = ft_strdup(name);
+	cmd->args = malloc(sizeof(char *));
+	if (cmd->args == NULL)
+		return (NULL);
+	cmd->shell = shell;
+	cmd->args[0] = NULL;
+	cmd->redirections = NULL;
+	cmd->redir_count = 0;
+	cmd->pipe_in = -1;
+	cmd->pipe_out = -1;
 	cmd->in_subshell = false;
-    return (cmd);
+	return (cmd);
 }
 
 void add_arg(t_cmd *cmd, char *arg)
@@ -71,33 +72,36 @@ void add_arg(t_cmd *cmd, char *arg)
     cmd->args = new_args;
 }
 
-t_redirection *create_heredoc_redirection(const char *delimiter)
+t_redirection *create_heredoc_redirection(const char *delimiter, t_shell *shell)
 {
 	t_redirection	*redir;
 	char			*heredoc_path;
+	int				status;
 
+	status = process_heredoc(delimiter, &heredoc_path);
+	shell->last_status_code = status;
+	if (status == 130)
+		return (NULL); // пользователь прервал heredoc, прекратить
+
+	if (status != 0) // любая другая ошибка
+	{
+		ft_putstr_fd("heredoc error\n", STDERR_FILENO);
+		return (NULL);
+	}
 	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return (NULL);
 	redir->type = REDIR_HEREDOC;
-	heredoc_path = NULL;
-	if (process_heredoc(delimiter, &heredoc_path) != 0)
-	{
-		printf("chmo\n");
-		free(redir);
-		return (NULL);
-	}
 	redir->target = heredoc_path;
 	return (redir);
 }
 
-t_redirection *create_redirection(t_redir_type type, const char *target)
+t_redirection *create_redirection(t_redir_type type, const char *target, t_shell *shell)
 {
-	t_redirection *redir;
-
 	if (type == REDIR_HEREDOC)
-		return (create_heredoc_redirection(target));
-	redir = malloc(sizeof(t_redirection));
+		return (create_heredoc_redirection(target, shell));
+
+	t_redirection *redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return (NULL);
 	redir->type = type;
@@ -114,9 +118,6 @@ void add_redirection(t_cmd *cmd, t_redirection *redir)
 {
 	t_redirection **new_array;
 	size_t i;
-
-	if (!redir)
-		return;
 
 	new_array = malloc(sizeof(t_redirection *) * (cmd->redir_count + 1));
 	if (!new_array)

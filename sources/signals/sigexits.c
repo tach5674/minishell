@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 16:47:50 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:36:21 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,6 @@ void	setup_signals_child(void)
     signal(SIGQUIT, SIG_DFL);
 }
 
-// void	sig_handler_hdoc(int sig)
-// {
-// 	(void)sig;
-// 	signal_status = sig;
-// 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// }
-
-// void	setup_heredoc_signals(void)
-// {
-//     signal(SIGINT, sig_handler_hdoc);
-// 	signal(SIGQUIT, SIG_IGN);
-// }
 
 void	setup_signals_parent_exec(void)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 16:01:36 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:24:35 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
 	
-	// rl_catch_signals = 0;
 	shell = safe_malloc(sizeof(t_shell));
 	shell_init(shell, envp);
 	if (argc > 1 && argv)

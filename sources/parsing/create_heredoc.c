@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 12:20:44 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:23:17 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	is_delimiter(char *line, const char *delimiter)
 
 void	print_heredoc_warning(const char *delimiter, int line_number)
 {
-	ft_putstr_fd("\nminishell: warning: here-document at line ", STDERR_FILENO);
+	ft_putstr_fd("minishell: warning: here-document at line ", STDERR_FILENO);
 	ft_putnbr_fd(line_number, STDERR_FILENO);
 	ft_putstr_fd(" delimited by end-of-file (wanted `", STDERR_FILENO);
 	ft_putstr_fd((char *)delimiter, STDERR_FILENO);
@@ -59,8 +59,9 @@ int	read_and_write_heredoc(int fd, const char *delimiter)
 	line_number = 1;
 	while (1)
 	{
-		ft_putstr_fd("> ", STDOUT_FILENO);
-		line = get_next_line(STDIN_FILENO);
+		// ft_putstr_fd("> ", STDOUT_FILENO);
+		// line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (!line)
 		{
 			print_heredoc_warning(delimiter, line_number);
@@ -71,7 +72,7 @@ int	read_and_write_heredoc(int fd, const char *delimiter)
 			free(line);
 			break ;
 		}
-		ft_putstr_fd(line, fd);
+		ft_putendl_fd(line, fd);
 		free(line);
 		line_number++;
 	}

@@ -173,6 +173,7 @@ int					process_heredoc(const char *delimiter, char **out_filename);
 void				setup_signals(void);
 void				setup_signals_child(void);
 void				setup_signals_parent_exec(void);
+void				setup_signals_parent_heredoc(void);
 void				shell_init(t_shell *shell, char **envp);
 t_ast				*parse(t_token **tokens, t_shell *shell);
 t_ast				*parse_subshell(t_token **tokens, t_shell *shell);

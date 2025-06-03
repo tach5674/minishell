@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sigexits.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 10:36:21 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:15:54 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,14 @@ void	setup_signals_child(void)
     signal(SIGQUIT, SIG_DFL);
 }
 
-
 void	setup_signals_parent_exec(void)
 {
     signal(SIGINT, exec_signal_handler);
     signal(SIGQUIT, exec_signal_handler);
+}
+
+void	setup_signals_parent_heredoc(void)
+{
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/03 10:20:52 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/03 13:22:35 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ void execute_commands(t_shell *shell)
     shell->ast = parse(&tokens, shell);
     free_tokens(tokens_tmp);
 
+	// print_ast(shell->ast);
     if (shell->ast == NULL)
         return;
 

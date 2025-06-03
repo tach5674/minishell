@@ -200,5 +200,6 @@ char				*ft_strndup(const char *s, size_t n);
 
 
 char				*ft_str_char_join(char const *s1, char const *s2, char c);
+void				free_split(char **arr);
 
 #endif

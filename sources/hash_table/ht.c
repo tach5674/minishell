@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:33 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/03 12:27:52 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 15:15:19 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,34 @@ int	ht_print(t_ht *ht)
     return (0);
 }
 
-// char    **ht_to_envp(t_ht *ht, char **envp)
-// {
-//     int i;
-// 	int	index;
-
-// 	index = 0;
-//     i = 0;
-//     while (i < ht->count)
-//     {
-// 		if (ht->buckets[index])
-// 		{
-			
-// 		}
-//         envp[i] = ft_str_char_join()
-//     }
-// }
+char	**ht_to_envp(t_ht *ht)
+{
+    size_t		i;
+	size_t		j;
+	t_ht_item	*item;
+	char		**envp;
+	
+	envp = malloc((ht->count + 1) * sizeof(char *));
+	if (!envp)
+		return (NULL);
+    i = 0;
+	j = 0;
+    while (i < ht->size)
+    {
+		item = ht->buckets[i];
+		while (item)
+		{
+			envp[j] = ft_str_char_join(item->key, item->value, '=');
+			if (!envp[j])
+			{
+				free_split(envp);
+				return (NULL);
+			}
+			item = item->next;
+			j++;
+		}
+        i++;
+    }
+	envp[j] = NULL;
+	return (envp);
+}

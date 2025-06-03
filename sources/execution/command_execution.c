@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/02 12:00:58 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 15:46:08 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	char	*cmd_path;
 	pid_t		pid;
 	int		status;
+	char	**envp;
 	
-	cmd_path = take_correct_path(cmd->name, ht_get(shell->env, "PATH"));
 	pid = fork();
 	if (pid == -1)
 	{
@@ -73,14 +73,32 @@ int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	{
 		setup_signals_child();
 		if (apply_redirections(cmd, extra_fd) != 0)
+		{
+			free_shell(shell);
 			exit(EXIT_FAILURE);
-		execve(cmd_path, cmd->args, shell->shell_envp);
+		}
+		cmd_path = take_correct_path(cmd->name, ht_get(shell->env, "PATH"));
+		if (!cmd_path)
+		{
+			ft_putstr_fd(cmd->name, 2);
+			ft_putstr_fd(": command not found\n", 2);
+			free_shell(shell);
+			exit(127);
+		}
+		envp = ht_to_envp(shell->env);
+		if (!envp && errno)
+		{
+			perror("minishell: ");
+			free_shell(shell);
+			free(cmd_path);
+			exit(EXIT_FAILURE);
+		}
+		execve(cmd_path, cmd->args, envp);
+		perror("minishell: ");
 		free(cmd_path);
-		ft_putstr_fd("Command not found\n", 2);
 		free_shell(shell);
 		exit(127);
 	}
-	free(cmd_path);
 	if (wait == false)
 		return (0);
 	waitpid(pid, &status, 0);

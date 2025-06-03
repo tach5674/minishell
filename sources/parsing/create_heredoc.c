@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 13:23:17 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 15:59:19 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,25 @@ char	*create_heredoc_filename(void)
 	char		*number_str;
 	char		*filename;
 
-	number_str = ft_itoa(index++);
-	if (!number_str)
-		return (NULL);
-	filename = ft_strjoin("/tmp/.heredoc", number_str);
-	free(number_str);
-	return (filename);
+	while (1)
+	{
+		number_str = ft_itoa(index++);
+		if (!number_str)
+		{
+			perror("minishell: ");
+			return (NULL);
+		}
+		filename = ft_strjoin("/tmp/.heredoc", number_str);
+		if (!filename)
+		{
+			perror("minishell: ");
+			return (NULL);
+		}
+		free(number_str);
+		if (access(filename, F_OK) != 0)
+			return (filename);
+		free(filename);
+	}
 }
 
 int	is_delimiter(char *line, const char *delimiter)
@@ -84,7 +97,7 @@ int	write_heredoc_to_file(const char *delimiter, const char *filename)
 {
 	int	fd;
 
-	fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	fd = open(filename, O_CREAT | O_EXCL | O_WRONLY, 0644);
 	if (fd == -1)
 		return (1);
 	read_and_write_heredoc(fd, delimiter);

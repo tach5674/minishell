@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:00 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 18:10:07 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:11:39 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ bool					ht_resize(t_ht *ht);
 int						ht_print(t_ht *ht);
 void					ht_free(t_ht *ht);
 void					ht_free_node(t_ht_item *node);
+char					**ht_to_envp(t_ht *ht);
 
 #endif

@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*								                                                   */
+/*									                                                */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -66,7 +66,7 @@
 // hash table
 # include "ht.h"
 
-extern int	signal_status;
+extern int			signal_status;
 
 typedef enum e_token_type
 {
@@ -139,8 +139,9 @@ typedef struct s_token
 
 typedef struct s_shell
 {
-	char			**shell_envp;
+	struct termios	original_termios;
 	t_ht			*env;
+	char			**shell_envp;
 	char			*shell_name;
 	int				last_status_code;
 	char			*commands;
@@ -150,7 +151,6 @@ typedef struct s_shell
 // execution
 # include "execution.h"
 
-// void	setup_heredoc_signals(void);
 bool				is_operator(char c);
 bool				ft_isspace(char c);
 t_token_type		oper_type(const char *s, int *len);
@@ -162,11 +162,17 @@ void				free_ast(t_ast *ast);
 void				free_tokens(t_token *tokens);
 void				throw_err(int err_type);
 void				syntax_error(const char *token);
+
+int					ft_pwd(t_cmd *cmd, t_ht *env);
 int					write_heredoc_to_file(const char *delimiter, const char *filename);
-int					ft_pwd(void);
 int					ft_echo(t_cmd *cmd);
 int					ft_exit(t_cmd *cmd, t_shell *shell_data);
-int					ft_env(t_ht *env);
+int					ft_env(t_cmd *cmd, t_ht *env);
+int					ft_cd(t_cmd *cmd, t_ht *env);
+int					ft_export(t_cmd *cmd, t_ht *env);
+int 				ft_unset(t_cmd * cmd, t_ht *env);
+int					handle_error(char *name);
+
 void				cleanup_heredoc_files(t_cmd *cmd);
 bool				run_heredoc_process(const char *delimiter, const char *filename);
 int					process_heredoc(const char *delimiter, char **out_filename);
@@ -191,5 +197,8 @@ t_token				*ft_lstnew_token(t_token_type type, char *value);
 void				ft_lstadd_back_token(t_token **lst, t_token *new);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strndup(const char *s, size_t n);
+
+
+char				*ft_str_char_join(char const *s1, char const *s2, char c);
 
 #endif

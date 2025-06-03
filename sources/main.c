@@ -15,7 +15,7 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
-	
+
 	shell = safe_malloc(sizeof(t_shell));
 	shell_init(shell, envp);
 	if (argc > 1 && argv)

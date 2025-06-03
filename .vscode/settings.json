@@ -17,6 +17,10 @@
 		"utility": "c",
 		"atomic": "c",
 		"typeinfo": "c",
-		"compare": "c"
+		"compare": "c",
+		"execution.h": "c"
+	},
+	"[c]": {
+		"editor.defaultFormatter": "keyhr.42-c-format"
 	}
 }

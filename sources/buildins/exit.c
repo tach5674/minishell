@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 18:57:08 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/02 11:39:14 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ int		ft_exit(t_cmd *cmd, t_shell *shell)
 		}
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->args[1], 2);		
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd("numeric argument required\n", 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 		exit(clean_return_exit_code(shell, ft_atoi(cmd->args[1])));
 	}
 	exit(clean_return_exit_code(shell, 0));

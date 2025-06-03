@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:33 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/21 11:22:34 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/03 12:27:52 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,40 @@ char *ht_get(t_ht *ht, const char *key)
     return NULL;
 }
 
-void	ht_print(t_ht *ht)
+int	ht_print(t_ht *ht)
 {
     size_t		i = 0;
     t_ht_item	*node;
 
     if (!ht)
-        return;
+        return (1);
     while (i < ht->size)
     {
         node = ht->buckets[i];
         while (node)
         {
-            printf("%s=%s\n", node->key, node->value);
+            if (printf("%s=%s\n", node->key, node->value) == -1)
+                return (-1);
             node = node->next;
         }
         i++;
     }
+    return (0);
 }
+
+// char    **ht_to_envp(t_ht *ht, char **envp)
+// {
+//     int i;
+// 	int	index;
+
+// 	index = 0;
+//     i = 0;
+//     while (i < ht->count)
+//     {
+// 		if (ht->buckets[index])
+// 		{
+			
+// 		}
+//         envp[i] = ft_str_char_join()
+//     }
+// }

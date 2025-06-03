@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/29 18:54:08 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/02 12:00:58 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	if (pid == 0)
 	{
 		setup_signals_child();
-		apply_redirections(cmd, extra_fd);
+		if (apply_redirections(cmd, extra_fd) != 0)
+			exit(EXIT_FAILURE);
 		execve(cmd_path, cmd->args, shell->shell_envp);
 		free(cmd_path);
 		ft_putstr_fd("Command not found\n", 2);

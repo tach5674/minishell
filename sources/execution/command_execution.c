@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/03 15:46:08 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:33:41 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,33 +27,19 @@ void	free_split(char **arr)
 	free(arr);
 }
 
-static char	*take_correct_path(char *command, char *path)
+bool	add_last_arg_env(char **args, t_shell *shell)
 {
-	char	**paths;
-	int		i;
-	char	*tmp;
-	char	*tmp2;
+	int	i;
 
-	i = -1;
-	if (access(command, X_OK) == 0)
-		return (ft_strdup(command));
-	paths = ft_split(path, ':');
-	if (!paths)
-		return (NULL);
-	while (paths[++i] != NULL)
+	i = 1;
+	while (args[i])
+		i++;
+	if (ht_add(shell->env, "_", *args) == false)
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		tmp2 = ft_strjoin(tmp, command);
-		free(tmp);
-		if (access(tmp2, F_OK) != -1)
-		{
-			free_split(paths);
-			return (tmp2);
-		}
-		free(tmp2);
+		perror("minishell");
+		return (false);
 	}
-	free_split(paths);
-	return (NULL);
+	return (true);
 }
 
 int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
@@ -72,32 +58,30 @@ int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	if (pid == 0)
 	{
 		setup_signals_child();
+		if (add_last_arg_env(cmd->args, shell) == false)
+		{
+			free_shell(shell);
+			exit(EXIT_FAILURE);
+		}
 		if (apply_redirections(cmd, extra_fd) != 0)
 		{
 			free_shell(shell);
 			exit(EXIT_FAILURE);
 		}
-		cmd_path = take_correct_path(cmd->name, ht_get(shell->env, "PATH"));
-		if (!cmd_path)
-		{
-			ft_putstr_fd(cmd->name, 2);
-			ft_putstr_fd(": command not found\n", 2);
-			free_shell(shell);
-			exit(127);
-		}
+		cmd_path = get_path(cmd->name, shell);
 		envp = ht_to_envp(shell->env);
 		if (!envp && errno)
 		{
-			perror("minishell: ");
+			perror("minishell");
 			free_shell(shell);
 			free(cmd_path);
 			exit(EXIT_FAILURE);
 		}
 		execve(cmd_path, cmd->args, envp);
-		perror("minishell: ");
+		perror("minishell");
 		free(cmd_path);
 		free_shell(shell);
-		exit(127);
+		exit(126);
 	}
 	if (wait == false)
 		return (0);

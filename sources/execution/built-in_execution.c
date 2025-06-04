@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:02:04 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/02 15:18:26 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:53:16 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int    execute_builtin(t_cmd *cmd, t_shell *shell, int cmd_num, int extra_fd)
 	int	old_stdin;
 	int exit_code;
     
+	if (add_last_arg_env(cmd->args, shell) == false)
+		return (EXIT_FAILURE);
     if (cmd_num == 4 || cmd_num == 0)
 	{
 		if (cmd->pipe_out != -1)

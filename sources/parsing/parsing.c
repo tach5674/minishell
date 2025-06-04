@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 10:36:53 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:23:04 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,33 +60,6 @@ t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 	return (node);
 }
 
-t_ast	*parse_and_or(t_token **tokens, t_shell *shell)
-{
-	t_ast			*left;
-	t_ast			*node;
-	t_ast_node_type	type;
-
-	left = parse_pipeline(tokens, shell);
-	if (!left)
-		return (NULL);
-	while (*tokens && ((*tokens)->type == TOKEN_AND
-			|| (*tokens)->type == TOKEN_OR))
-	{
-		if ((*tokens)->type == TOKEN_AND)
-			type = AST_AND;
-		else
-			type = AST_OR;
-		*tokens = (*tokens)->next;
-		node = new_ast_node(type);
-		node->left = left;
-		node->right = parse_pipeline(tokens, shell);
-		if (!node->right)
-			return (free_ast(node), syntax_error("newline"), NULL);
-		left = node;
-	}
-	return (left);
-}
-
 t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
 {
 	t_ast	*subshell_node;
@@ -112,6 +85,33 @@ t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
 		return (subshell_node);
 	}
 	return (NULL);
+}
+
+t_ast	*parse_and_or(t_token **tokens, t_shell *shell)
+{
+	t_ast			*left;
+	t_ast			*node;
+	t_ast_node_type	type;
+
+	left = parse_pipeline(tokens, shell);
+	if (!left)
+		return (NULL);
+	while (*tokens && ((*tokens)->type == TOKEN_AND
+			|| (*tokens)->type == TOKEN_OR))
+	{
+		if ((*tokens)->type == TOKEN_AND)
+			type = AST_AND;
+		else
+			type = AST_OR;
+		*tokens = (*tokens)->next;
+		node = new_ast_node(type);
+		node->left = left;
+		node->right = parse_pipeline(tokens, shell);
+		if (!node->right)
+			return (free_ast(node), syntax_error("newline"), NULL);
+		left = node;
+	}
+	return (left);
 }
 
 t_ast	*parse(t_token **tokens, t_shell *shell)

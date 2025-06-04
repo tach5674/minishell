@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/02 14:33:04 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:29:58 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ void execute_commands(t_shell *shell)
 
     setup_signals_parent_exec();
     shell->last_status_code = execute_ast(shell->ast, shell, true, -1);
-
     if (signal_status == SIGINT)
         write(1, "\n", 1);
     else if (signal_status == SIGQUIT)

@@ -27,7 +27,6 @@ uname -v = #1 SMP Tue Nov 5 00:21:55 UTC 2024
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
-PATH: /home/mikayel/.local/bin/
 PATH: /home/mikayel/.vscode-server/bin/848b80aeb52026648a8ff9f7c45a9b0a80641e2e/bin/remote-cli/
 PATH: /usr/local/sbin/
 PATH: /usr/local/bin/
@@ -1957,7 +1956,7 @@ configure:7048: $? = 0
 configure:7048: result: yes
 configure:7074: checking for tgetent
 configure:7074: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccAghpO5.o: in function `main':
+/usr/bin/ld: /tmp/ccbu196T.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:123: undefined reference to `tgetent'
 collect2: error: ld returned 1 exit status
 configure:7074: $? = 1
@@ -2252,7 +2251,7 @@ configure:7414: $? = 0
 configure:7414: result: yes
 configure:7421: checking for mbscasecmp
 configure:7421: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/cc67Beqk.o: in function `main':
+/usr/bin/ld: /tmp/ccS8wpdE.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:128: undefined reference to `mbscasecmp'
 collect2: error: ld returned 1 exit status
 configure:7421: $? = 1
@@ -2391,7 +2390,7 @@ configure: failed program was:
 configure:7421: result: no
 configure:7428: checking for mbscmp
 configure:7428: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccaY9mx0.o: in function `main':
+/usr/bin/ld: /tmp/ccvXdiYd.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:128: undefined reference to `mbscmp'
 collect2: error: ld returned 1 exit status
 configure:7428: $? = 1
@@ -2538,7 +2537,7 @@ configure:7442: $? = 0
 configure:7442: result: yes
 configure:7450: checking for mbschr
 configure:7450: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccwVtrAD.o: in function `main':
+/usr/bin/ld: /tmp/ccGq07ej.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:130: undefined reference to `mbschr'
 collect2: error: ld returned 1 exit status
 configure:7450: $? = 1

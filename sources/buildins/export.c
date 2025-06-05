@@ -6,37 +6,51 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/02 13:52:15 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:43:32 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int add_if_valid(t_ht *env, char *str, char *name, int i)
+char	*append_to_val(t_ht *env, char *key, char *value)
+{
+	char *temp;
+
+	temp = ft_strjoin(ht_get(env, key), value);
+	free(value);
+	if (!temp)
+	{
+		free(key);
+		return (NULL);
+	}
+	return (temp);
+}
+
+static int add_if_valid(t_ht *env, char *str, char *name, int i, int check)
 {
     char *key;
 	char *value;
-
-	if (str[i] == '=')
+	
+	key = ft_substr(str, 0, i);
+	if (!key)
+		return (handle_error(name));
+	value = ft_substr(str, i + 1 + check, ft_strlen(str));
+	if (!value)
+		return (free(key), handle_error(name));
+	if (check && ht_get(env, key))
 	{
-		key = ft_substr(str, 0, i);
-		if (!key)
-			return (handle_error(name));
-		value = ft_substr(str, i + 1, ft_strlen(str));
+		value = append_to_val(env, key, value);
 		if (!value)
-		{
-			free(key);
 			return (handle_error(name));
-		}
-		if (ht_add(env, key, value) == false)
-		{
-			free(key);
-			free(value);
-			return (handle_error(name));
-		}
+	}
+	if (ht_add(env, key, value) == false)
+	{
 		free(key);
 		free(value);
+		return (handle_error(name));
 	}
+	free(key);
+	free(value);
 	return (0);
 }
 
@@ -49,6 +63,8 @@ static int	check_if_valid(char *str)
     i = 0;
     while (str[i] && str[i] != '=')
     {
+		if (str[i] == '+' && str[i + 1] == '=')
+			return (i + 1);
         if (!ft_isalnum(str[i]) && str[i] != '_')
             return (0);
 		i++;
@@ -74,5 +90,9 @@ int ft_export(t_cmd *cmd, t_ht *env)
 		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (EXIT_FAILURE);
 	}
-	return (add_if_valid(env, cmd->args[1], cmd->name, i));
+	if (cmd->args[1][i] == '=' && cmd->args[1][i - 1] == '+')
+		return (add_if_valid(env, cmd->args[1], cmd->name, i - 1, 1));
+	else if (cmd->args[1][i] == '=')
+		return (add_if_valid(env, cmd->args[1], cmd->name, i, 0));
+	return (0);
 }

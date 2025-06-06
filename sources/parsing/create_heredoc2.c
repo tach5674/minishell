@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 13:22:17 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 13:29:24 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,33 @@ bool	run_heredoc_process(const char *delimiter, const char *filename)
 	return (false);
 }
 
-void	cleanup_heredoc_files(t_cmd *cmd)
+int	add_heredoc_file(t_shell *shell, const char *filename)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < cmd->redir_count)
+	t_heredoc	*new_node = malloc(sizeof(t_heredoc));
+	if (!new_node)
+		return (perror("malloc"), 1);
+	new_node->filename = strdup(filename);
+	if (!new_node->filename)
 	{
-		if (cmd->redirections[i]->type == REDIR_HEREDOC)
-		{
-			unlink(cmd->redirections[i]->target);
-			free(cmd->redirections[i]->target);
-		}
-		i++;
+		free(new_node);
+		return (perror("strdup"), 1);
 	}
+	new_node->next = shell->heredocs;
+	shell->heredocs = new_node;
+	return (0);
+}
+
+void	cleanup_heredocs(t_shell *shell)
+{
+	t_heredoc	*tmp;
+
+	while (shell->heredocs)
+	{
+		tmp = shell->heredocs;
+		shell->heredocs = shell->heredocs->next;
+		unlink(tmp->filename);
+		free(tmp->filename);
+		free(tmp);
+	}
+	shell->heredocs = NULL;
 }

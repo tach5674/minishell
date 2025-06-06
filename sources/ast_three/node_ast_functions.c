@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 10:31:35 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:17:17 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_redirection *create_heredoc_redirection(const char *delimiter, t_shell *shell)
 		return (NULL);
 	redir->type = REDIR_HEREDOC;
 	redir->target = heredoc_path;
+	add_heredoc_file(shell, heredoc_path);
 	return (redir);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:26:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/04 15:55:17 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 14:04:57 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int		execute_builtin(t_cmd *cmd, t_shell *shell_data, int cmd_num, int extra_fd)
 char    *get_path(char *name, t_shell *shell);
 bool	add_last_arg_env(char **args, t_shell *shell);
 
+int     check_if_valid(char *str);
+bool    apply_expansions(char **args, t_shell *shell);
 // has to be removed
 
 void	print_ast_node(t_ast *node, int depth);

@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/05 16:43:32 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 13:25:49 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int add_if_valid(t_ht *env, char *str, char *name, int i, int check)
 	return (0);
 }
 
-static int	check_if_valid(char *str)
+int	check_if_valid(char *str)
 {
 	int i;
 	

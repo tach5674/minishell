@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/04 16:33:41 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 14:04:45 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,15 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	int	pid;
 	int	status;
 	
+	if (apply_expansions(cmd->args, shell) == false)
+		return (EXIT_FAILURE);
+	free(cmd->name);
+	cmd->name = ft_strdup(cmd->args[0]);
+	if (!cmd->name)
+	{
+		perror("minishell");
+		return (EXIT_FAILURE);
+	}
 	cmd_num = check_if_builtin(cmd->name);
     if (cmd_num == -1)
 		return (execute_in_child(cmd, shell, wait, extra_fd));

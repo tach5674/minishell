@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 13:29:24 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:39:04 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ bool	run_heredoc_process(const char *delimiter, const char *filename)
 	if (process_id == -1)
 		return (false);
 	if (process_id == 0)
-	{
-		
 		do_child_process(delimiter, filename);
-	}
 	else
 	{
 		waitpid(process_id, &status, 0);

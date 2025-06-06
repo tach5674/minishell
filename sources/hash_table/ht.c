@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:33 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/03 15:15:19 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 15:49:07 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,28 @@ int	ht_print(t_ht *ht)
     return (0);
 }
 
+
+bool item_to_envp(t_ht *ht, char **envp, t_ht_item *item, int j)
+{
+    if (ft_strcmp(item->key, "_") == 0)
+    {
+        free(item->value);
+        item->value = ft_strdup(ht_get(ht, "PATH"));
+        if (!item->value)
+        {
+            free_split(envp);
+            return (false);
+        }
+    }
+    envp[j] = ft_str_char_join(item->key, item->value, '=');
+    if (!envp[j])
+    {
+        free_split(envp);
+        return (false);
+    }
+    return (true);
+}
+
 char	**ht_to_envp(t_ht *ht)
 {
     size_t		i;
@@ -96,14 +118,10 @@ char	**ht_to_envp(t_ht *ht)
 		item = ht->buckets[i];
 		while (item)
 		{
-			envp[j] = ft_str_char_join(item->key, item->value, '=');
-			if (!envp[j])
-			{
-				free_split(envp);
-				return (NULL);
-			}
-			item = item->next;
-			j++;
+			if (item_to_envp(ht, envp, item, j) ==false)
+                return (NULL);
+            item = item->next;
+            j++;
 		}
         i++;
     }

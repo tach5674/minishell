@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 13:17:17 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:42:10 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ t_redirection *create_heredoc_redirection(const char *delimiter, t_shell *shell)
 	shell->last_status_code = status;
 	if (status == 130)
 		return (NULL); // пользователь прервал heredoc, прекратить
-
 	if (status != 0) // любая другая ошибка
 	{
 		ft_putstr_fd("heredoc error\n", STDERR_FILENO);

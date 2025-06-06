@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 13:08:43 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:54:56 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 	}
 	node->cmd = create_cmd_from_tokens(*tokens, shell);
 	if (!node->cmd)
-		return (perror("allocation error"), free_ast(node), NULL);
+		return (perror("allocation error hey"), free_ast(node), NULL);
 	while (*tokens && (*tokens)->type != TOKEN_PIPE
 		&& (*tokens)->type != TOKEN_AND && (*tokens)->type != TOKEN_OR
 		&& (*tokens)->type != TOKEN_PAREN_RIGHT)

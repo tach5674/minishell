@@ -137,16 +137,24 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+typedef struct s_heredoc
+{
+	char				*filename;
+	struct s_heredoc	*next;
+}						t_heredoc;
+
 typedef struct s_shell
 {
-	struct termios	original_termios;
-	t_ht			*env;
-	char			**shell_envp;
-	char			*shell_name;
-	int				last_status_code;
-	char			*commands;
-	t_ast			*ast;
-}					t_shell;
+	struct termios		original_termios;
+	t_ht				*env;
+	char				**shell_envp;
+	char				*shell_name;
+	int					last_status_code;
+	char				*commands;
+	t_heredoc			*heredocs; // список всех heredoc-файлов
+	t_ast				*ast;
+}						t_shell;
+
 
 // execution
 # include "execution.h"
@@ -162,7 +170,7 @@ void				free_ast(t_ast *ast);
 void				free_tokens(t_token *tokens);
 void				throw_err(int err_type);
 void				syntax_error(const char *token);
-
+int					add_heredoc_file(t_shell *shell, const char *filename);
 int					ft_pwd(t_cmd *cmd, t_ht *env);
 int					write_heredoc_to_file(const char *delimiter, const char *filename);
 int					ft_echo(t_cmd *cmd);
@@ -172,8 +180,7 @@ int					ft_cd(t_cmd *cmd, t_ht *env);
 int					ft_export(t_cmd *cmd, t_ht *env);
 int 				ft_unset(t_cmd * cmd, t_ht *env);
 int					handle_error(char *name);
-
-void				cleanup_heredoc_files(t_cmd *cmd);
+void				cleanup_heredocs(t_shell *shell);
 bool				run_heredoc_process(const char *delimiter, const char *filename);
 int					process_heredoc(const char *delimiter, char **out_filename);
 void				setup_signals(void);

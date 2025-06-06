@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/04 15:29:58 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 13:27:29 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,20 +139,12 @@ void execute_commands(t_shell *shell)
     tokens = tokenize(shell->commands, 0);
     free(shell->commands);
     tokens_tmp = tokens;
-
     if (syntax_error_check(tokens))
-    {
-        free_tokens(tokens_tmp);
-        return;
-    }
-
+        return (free_tokens(tokens_tmp));
     shell->ast = parse(&tokens, shell);
     free_tokens(tokens_tmp);
-
-	// print_ast(shell->ast);
     if (shell->ast == NULL)
         return;
-
     setup_signals_parent_exec();
     shell->last_status_code = execute_ast(shell->ast, shell, true, -1);
     if (signal_status == SIGINT)
@@ -161,7 +153,7 @@ void execute_commands(t_shell *shell)
         write(1, "Quit (core dumped)\n", 19);
     signal_status = 0;
     setup_signals();
-
     free_ast(shell->ast);
+	cleanup_heredocs(shell);
     shell->ast = NULL;
 }

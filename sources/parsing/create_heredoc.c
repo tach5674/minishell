@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 16:38:51 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 22:56:17 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,7 @@ int	process_heredoc(const char *delimiter, char **out_filename)
 	{
 		unlink(filename);
 		free(filename);
-		write(1, "\n", 1);
-		return (130); // SIGINT прерывание
+		return (result);
 	}
 	*out_filename = filename;
 	return (0);

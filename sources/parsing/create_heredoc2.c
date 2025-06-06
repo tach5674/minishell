@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 16:39:04 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/06 22:56:12 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void do_child_process(const char *delimiter, const char *filename)
 	exit(write_heredoc_to_file(delimiter, filename));
 }
 
-bool	run_heredoc_process(const char *delimiter, const char *filename)
+int	run_heredoc_process(const char *delimiter, const char *filename)
 {
 	pid_t	process_id;
 	int		status;
@@ -41,22 +41,22 @@ bool	run_heredoc_process(const char *delimiter, const char *filename)
 	setup_signals_parent_exec();
 	process_id = fork();
 	if (process_id == -1)
-		return (false);
+		return (EXIT_FAILURE);
 	if (process_id == 0)
 		do_child_process(delimiter, filename);
 	else
 	{
 		waitpid(process_id, &status, 0);
-		if (signal_status == SIGINT)
-			write(1, "\n", 1);
-		signal_status = 0;
 		setup_signals();
 		if (WIFSIGNALED(status))
-			return (false);
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
-			return (true); // ✅ Ctrl+D treated as valid
+		{
+			signal_status = WTERMSIG(status);
+			return (WTERMSIG(status) + 128);
+		}
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status)); // ✅ Ctrl+D treated as valid
 	}
-	return (false);
+	return (EXIT_FAILURE);
 }
 
 int	add_heredoc_file(t_shell *shell, const char *filename)

@@ -1,4 +1,4 @@
-prefix=/home/mikayel/mini/libraries/readline
+prefix=/home/mikayel/minishell/libraries/readline
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include

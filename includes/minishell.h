@@ -181,7 +181,7 @@ int					ft_export(t_cmd *cmd, t_ht *env);
 int 				ft_unset(t_cmd * cmd, t_ht *env);
 int					handle_error(char *name);
 void				cleanup_heredocs(t_shell *shell);
-bool				run_heredoc_process(const char *delimiter, const char *filename);
+int					run_heredoc_process(const char *delimiter, const char *filename);
 int					process_heredoc(const char *delimiter, char **out_filename);
 void				setup_signals(void);
 void				setup_signals_child(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 12:24:35 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/06 22:43:26 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ int	main(int argc, char *argv[], char *envp[])
 	setup_signals();
 	while (1)
 	{
+		if (signal_status == SIGINT)
+        	write(1, "\n", 1);
+    	else if (signal_status == SIGQUIT)
+       		write(1, "Quit (core dumped)\n", 19);
+    	signal_status = 0;
 		shell->commands = readline("\033[1;32mminishell$ \033[0m");
 		if (!shell->commands)
 			break ;
 		if (*shell->commands)
-		{
-			add_history(shell->commands);
 			execute_commands(shell);
-		}
 	}
 	free_shell(shell);
 	ft_putstr_fd("exit\n", 1);

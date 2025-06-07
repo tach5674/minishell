@@ -157,6 +157,7 @@ typedef struct s_shell
 
 
 // execution
+# include "expansion.h"
 # include "execution.h"
 
 bool				is_operator(char c);

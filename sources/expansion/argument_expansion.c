@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/10 14:55:48 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 15:25:17 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ bool	expand_arguments(char **str, t_shell *shell)
 		{
 			if ((*str)[i + 1] == '?')
 				len = place_non_empty(str, i + 2, i, shell->last_status_code);
+			if ((*str)[i + 1] == '0')
+				len = place_non_empty(str, i + 2, i, shell->shell_name);
 			else
 				len = expand_argument(str, i, shell->env);
 			if (len == -1)

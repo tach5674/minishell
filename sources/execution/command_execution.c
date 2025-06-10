@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/06 23:00:13 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 13:36:23 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	int	pid;
 	int	status;
 	
-	if (apply_expansions(cmd->args, shell->env) == false)
+	if (apply_expansions(cmd->args, shell) == false)
 		return (EXIT_FAILURE);
 	free(cmd->name);
 	cmd->name = ft_strdup(cmd->args[0]);

@@ -149,7 +149,7 @@ typedef struct s_shell
 	t_ht				*env;
 	char				**shell_envp;
 	char				*shell_name;
-	int					last_status_code;
+	char				*last_status_code;
 	char				*commands;
 	t_heredoc			*heredocs; // список всех heredoc-файлов
 	t_ast				*ast;

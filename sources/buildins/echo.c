@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:17:06 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/07 12:48:13 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 12:09:18 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@ static bool     has_n_flag(char *s)
 {
 	if (!s || !(*s))
 		return (false);
-	if (*s == '-')
-		++s;
-	while (*s && *s == 'n')
-		++s;
-	if (*s)
+	if (*s != '-')
 		return (false);
-	return (true);
+	s++;
+	if (*s != 'n')
+		return (false);
+	while (*s == 'n')
+		++s;
+	if (!(*s))
+		return (true);
+	return (false);
 }
 
 int     ft_echo(t_cmd *cmd)

@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 16:42:10 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 13:07:24 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ t_redirection *create_heredoc_redirection(const char *delimiter, t_shell *shell)
 	int				status;
 
 	status = process_heredoc(delimiter, &heredoc_path);
-	shell->last_status_code = status;
+	free(shell->last_status_code);
+	shell->last_status_code = ft_itoa(status);
+	if (!shell->last_status_code)
+		throw_err(MALLOC_ERROR);
 	if (status == 130)
 		return (NULL); // пользователь прервал heredoc, прекратить
 	if (status != 0) // любая другая ошибка

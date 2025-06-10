@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/06 22:43:19 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 13:40:32 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,8 @@ void execute_commands(t_shell *shell)
 {
     t_token *tokens;
     t_token *tokens_tmp;
-
+	int		exit_code;
+	
 	add_history(shell->commands);
     tokens = tokenize(shell->commands, 0);
     free(shell->commands);
@@ -150,7 +151,11 @@ void execute_commands(t_shell *shell)
     if (shell->ast == NULL)
         return;
     setup_signals_parent_exec();
-    shell->last_status_code = execute_ast(shell->ast, shell, true, -1);
+	exit_code = execute_ast(shell->ast, shell, true, -1);
+	free(shell->last_status_code);
+    shell->last_status_code = ft_itoa(exit_code);
+	if (!shell->last_status_code)
+		throw_err(MALLOC_ERROR);
     // if (signal_status == SIGINT)
     //     write(1, "\n", 1);
     // else if (signal_status == SIGQUIT)

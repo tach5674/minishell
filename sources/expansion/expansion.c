@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:20 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/07 12:26:45 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 12:57:54 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,19 @@ static bool	remove_quotes(char **str)
 	return (true);
 }
 
-bool    apply_expansions(char **args, t_ht *env)
+bool    apply_expansions(char **args, t_shell *shell)
 {
     int	i;
 
 	i = 0;
     while (args[i])
 	{
-		if (expand_tilde(&args[i], env) == false)
+		if (expand_tilde(&args[i], shell->env) == false)
 		{
 			perror("minishell");
 			return (false);
 		}
-		if (expand_arguments(&args[i], env) == false)
+		if (expand_arguments(&args[i], shell) == false)
 		{
 			perror("minishell");
 			return (false);

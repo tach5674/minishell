@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:49:05 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/30 18:12:14 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:05:15 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@ int	ft_env(t_cmd *cmd, t_ht *env)
 		return (EXIT_FAILURE);
 	}
 	if (ht_print(env) == -1)
-		return (handle_error(cmd->name));
+		return (handle_error("env: write error"));
 	return (0);
 }

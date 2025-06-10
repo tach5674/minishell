@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:42:32 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/02 19:23:22 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 14:04:34 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	cd_oldpwd(char *name, t_ht *env)
 	}
 	if (chdir(temp_path) == -1)
 		return (handle_error(name));
-	ft_putendl_fd(temp_path, 2);
+	if (printf("%s\n", temp_path) == -1)
+		return (handle_error("cd: write error"));
 	if (ht_add(env, "OLDPWD", ht_get(env, "PWD")) == false)
 		return (handle_error(name));
 	temp_path = getcwd(NULL, 0);

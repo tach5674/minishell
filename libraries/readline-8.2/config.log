@@ -28,6 +28,8 @@ uname -v = #1 SMP Tue Nov 5 00:21:55 UTC 2024
 /bin/universe          = unknown
 
 PATH: /home/mikayel/.local/bin/
+PATH: /home/mikayel/.local/bin/
+PATH: /home/mikayel/.local/bin/
 PATH: /home/mikayel/.vscode-server/bin/258e40fedc6cb8edf399a463ce3a9d32e7e1f6f3/bin/remote-cli/
 PATH: /usr/local/sbin/
 PATH: /usr/local/bin/
@@ -1957,7 +1959,7 @@ configure:7048: $? = 0
 configure:7048: result: yes
 configure:7074: checking for tgetent
 configure:7074: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/cc056bdy.o: in function `main':
+/usr/bin/ld: /tmp/ccwKG1cx.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:123: undefined reference to `tgetent'
 collect2: error: ld returned 1 exit status
 configure:7074: $? = 1
@@ -2252,7 +2254,7 @@ configure:7414: $? = 0
 configure:7414: result: yes
 configure:7421: checking for mbscasecmp
 configure:7421: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccTUfXJP.o: in function `main':
+/usr/bin/ld: /tmp/ccT96yFy.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:128: undefined reference to `mbscasecmp'
 collect2: error: ld returned 1 exit status
 configure:7421: $? = 1
@@ -2391,7 +2393,7 @@ configure: failed program was:
 configure:7421: result: no
 configure:7428: checking for mbscmp
 configure:7428: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/ccVUa0tr.o: in function `main':
+/usr/bin/ld: /tmp/ccWXl5Q6.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:128: undefined reference to `mbscmp'
 collect2: error: ld returned 1 exit status
 configure:7428: $? = 1
@@ -2538,7 +2540,7 @@ configure:7442: $? = 0
 configure:7442: result: yes
 configure:7450: checking for mbschr
 configure:7450: gcc -o conftest -g -O2   conftest.c  >&5
-/usr/bin/ld: /tmp/cc8P346A.o: in function `main':
+/usr/bin/ld: /tmp/cc0nP23n.o: in function `main':
 /home/mikayel/minishell/libraries/readline-8.2/conftest.c:130: undefined reference to `mbschr'
 collect2: error: ld returned 1 exit status
 configure:7450: $? = 1

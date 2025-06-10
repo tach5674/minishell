@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:58:23 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/02 18:41:11 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 14:07:22 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	ft_pwd(t_cmd *cmd, t_ht *env)
 
 	(void)env;
 	if (getcwd(cwd, sizeof (cwd)) != NULL)
-		ft_putendl_fd(cwd, 1);
+	{
+		if (printf("%s\n", cwd) == -1)
+			return (handle_error("pwd: write error"));
+	}
 	else
 		return (handle_error(cmd->name));
 	return (0);

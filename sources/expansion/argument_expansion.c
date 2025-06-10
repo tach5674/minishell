@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/10 13:53:29 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 14:55:48 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		place_non_empty(char **str, int i, int start, char *temp)
 		return (-1);
 	temp1 = ft_strjoin(temp, *str + i);
 	if (!temp1)
-		return (-1);
+		return (free(temp), -1);
 	free(temp);
 	free(*str);
 	*str = temp1;
@@ -36,7 +36,7 @@ int		place_argument(char **str, int i, int start, t_ht *env)
 	char	*temp;
 	char	*temp1;
 	
-	temp1 = ft_substr(*str, start + 1, i - 1);
+	temp1 = ft_substr(*str, start + 1, i - start - 1);
 	if (!temp1)
 		return (false);
 	temp = ht_get(env, temp1);
@@ -45,6 +45,8 @@ int		place_argument(char **str, int i, int start, t_ht *env)
 	{
 		(*str)[start] = '\0';
 		temp = ft_strjoin(*str, *str + i);
+		if (!temp)
+			return (-1);
 		free(*str);
 		*str = temp;
 		return (0);
@@ -66,7 +68,7 @@ int	expand_argument(char **str, int i, t_ht *env)
 	while ((*str)[i])
 	{
 		if (!ft_isalnum((*str)[i]) && (*str)[i] != '_')
-			break;
+			break ;
 		i++;
 	}
 	return (place_argument(str, i, start, env));

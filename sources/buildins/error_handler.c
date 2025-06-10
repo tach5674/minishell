@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 23:33:47 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/03 14:14:13 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 14:34:00 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int handle_error(char *name)
     msg = ft_strjoin("minishell: ", name);
     if (!msg)
     {
-        perror("minishell: ");
+        perror("minishell");
         return (EXIT_FAILURE);
     }
     perror(msg);

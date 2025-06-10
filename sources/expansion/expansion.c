@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:20 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/10 12:57:54 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 14:26:47 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ static int	remove_quote(char **str, int i, int *in_quotes)
 			return (-1);
 		temp1 = ft_strjoin(temp, *str + i + 1);
 		if (!temp1)
+		{
+			free(temp);
 			return (-1);
+		}
 		free(*str);
 		*str = temp1;
 		free(temp);
@@ -84,24 +87,44 @@ static bool	remove_quotes(char **str)
 	return (true);
 }
 
-bool    apply_expansions(char **args, t_shell *shell)
+bool    apply_expansions(t_cmd *cmd, t_shell *shell)
 {
-    int	i;
+    size_t	i;
 
 	i = 0;
-    while (args[i])
+    while (cmd->args[i])
 	{
-		if (expand_tilde(&args[i], shell->env) == false)
+		if (expand_tilde(&cmd->args[i], shell->env) == false)
 		{
 			perror("minishell");
 			return (false);
 		}
-		if (expand_arguments(&args[i], shell) == false)
+		if (expand_arguments(&cmd->args[i], shell) == false)
 		{
 			perror("minishell");
 			return (false);
 		}
-		if (remove_quotes(&args[i]) == false)
+		if (remove_quotes(&cmd->args[i]) == false)
+		{
+			perror("minishell");
+			return (false);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < cmd->redir_count)
+	{
+		if (expand_tilde(&cmd->redirections[i]->target, shell->env) == false)
+		{
+			perror("minishell");
+			return (false);
+		}
+		if (expand_arguments(&cmd->redirections[i]->target, shell) == false)
+		{
+			perror("minishell");
+			return (false);
+		}
+		if (remove_quotes(&cmd->redirections[i]->target) == false)
 		{
 			perror("minishell");
 			return (false);

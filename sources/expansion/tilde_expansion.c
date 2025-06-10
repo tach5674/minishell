@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:25 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/07 12:07:02 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/10 14:36:31 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	recreate_string_slash(char **str, t_ht *env, int i)
 			return (-1);
 		temp1 = ft_strjoin(temp, *str + i + 1);
 		if (!temp1)
-			return (-1);
+			return (free(temp), -1);
 		free(temp);
 		free(*str);
 		*str = temp1;

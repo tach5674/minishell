@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 17:25:30 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 17:55:44 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror(shell->shell_name);
+		perror("minishell");
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)

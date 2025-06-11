@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 03:15:24 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 18:05:31 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,10 +152,11 @@ void execute_commands(t_shell *shell)
         return;
     setup_signals_parent_exec();
 	exit_code = execute_ast(shell->ast, shell, true, -1);
-	free(shell->last_status_code);
+	if (shell->last_status_code)
+		free(shell->last_status_code);
     shell->last_status_code = ft_itoa(exit_code);
 	if (!shell->last_status_code)
-		throw_err(MALLOC_ERROR);
+		perror("minishell");
     // if (signal_status == SIGINT)
     //     write(1, "\n", 1);
     // else if (signal_status == SIGQUIT)

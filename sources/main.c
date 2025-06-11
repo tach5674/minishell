@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/11 13:10:52 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:38:10 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int argc, char *argv[], char *envp[])
 	setup_signals();
 	while (1)
 	{
+		errno = 0;
 		if (signal_status == SIGINT)
         	write(1, "\n", 1);
     	else if (signal_status == SIGQUIT)

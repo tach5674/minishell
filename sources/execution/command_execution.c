@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_execution.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/10 14:21:07 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 12:41:22 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,33 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	if (apply_expansions(cmd, shell) == false)
 		return (EXIT_FAILURE);
 	free(cmd->name);
+	if (!cmd->args || !cmd->args[0])
+	{
+		int tmp_stdout = dup(STDOUT_FILENO);
+		int tmp_stdin = dup(STDIN_FILENO);
+		int tmp_stderr = dup(STDERR_FILENO);
+	
+		if (apply_redirections(cmd, -1) == -1)
+		{
+			dup2(tmp_stdout, STDOUT_FILENO);
+			dup2(tmp_stdin, STDIN_FILENO);
+			dup2(tmp_stderr, STDERR_FILENO);
+			close(tmp_stdout);
+			close(tmp_stdin);
+			close(tmp_stderr);
+			return (EXIT_FAILURE);
+		}
+	
+		// Выполнять нечего — просто закрыть файлы и восстановить std*
+		dup2(tmp_stdout, STDOUT_FILENO);
+		dup2(tmp_stdin, STDIN_FILENO);
+		dup2(tmp_stderr, STDERR_FILENO);
+		close(tmp_stdout);
+		close(tmp_stdin);
+		close(tmp_stderr);
+	
+		return (EXIT_SUCCESS);
+	}
 	cmd->name = ft_strdup(cmd->args[0]);
 	if (!cmd->name)
 	{

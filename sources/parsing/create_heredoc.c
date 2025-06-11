@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/11 13:01:03 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:51:10 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*create_heredoc_filename(void)
 		}
 		free(number_str);
 		if (access(filename, F_OK) != 0)
-			return (filename);
+			return (errno = 0, filename);
 		free(filename);
 	}
 }
@@ -114,7 +114,7 @@ int	process_heredoc(const char *delimiter, char **out_filename)
 	if (!filename)
 		return (1);
 	result = run_heredoc_process(delimiter, filename);
-	if (result == EXIT_FAILURE)
+	if (result != 0)
 	{
 		unlink(filename);
 		free(filename);

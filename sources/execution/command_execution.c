@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_execution.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 12:41:22 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:25:30 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,15 @@ bool	add_last_arg_env(char **args, t_shell *shell)
 {
 	int	i;
 
-	i = 1;
+	if (!args || !(*args))
+	{
+		ht_unset(shell->env, "_");
+		return (true);
+	}
+	i = 0;
 	while (args[i])
 		i++;
-	if (ht_add(shell->env, "_", *args) == false)
+	if (ht_add(shell->env, "_", args[i - 1]) == false)
 	{
 		perror("minishell");
 		return (false);
@@ -63,12 +68,12 @@ int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 			free_shell(shell);
 			exit(EXIT_FAILURE);
 		}
-		if (apply_redirections(cmd, extra_fd) != 0)
+		if (apply_redirections(cmd, extra_fd) == -1)
 		{
 			free_shell(shell);
 			exit(EXIT_FAILURE);
 		}
-		cmd_path = get_path(cmd->name, shell);
+		cmd_path = get_path(cmd->args[0], shell);
 		envp = ht_to_envp(shell->env);
 		if (!envp && errno)
 		{
@@ -97,41 +102,41 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	
 	if (apply_expansions(cmd, shell) == false)
 		return (EXIT_FAILURE);
-	free(cmd->name);
-	if (!cmd->args || !cmd->args[0])
-	{
-		int tmp_stdout = dup(STDOUT_FILENO);
-		int tmp_stdin = dup(STDIN_FILENO);
-		int tmp_stderr = dup(STDERR_FILENO);
+	// free(cmd->args[0]);
+	// if (!cmd->args || !cmd->args[0])
+	// {
+	// 	int tmp_stdout = dup(STDOUT_FILENO);
+	// 	int tmp_stdin = dup(STDIN_FILENO);
+	// 	int tmp_stderr = dup(STDERR_FILENO);
 	
-		if (apply_redirections(cmd, -1) == -1)
-		{
-			dup2(tmp_stdout, STDOUT_FILENO);
-			dup2(tmp_stdin, STDIN_FILENO);
-			dup2(tmp_stderr, STDERR_FILENO);
-			close(tmp_stdout);
-			close(tmp_stdin);
-			close(tmp_stderr);
-			return (EXIT_FAILURE);
-		}
+	// 	if (apply_redirections(cmd, -1) == -1)
+	// 	{
+	// 		dup2(tmp_stdout, STDOUT_FILENO);
+	// 		dup2(tmp_stdin, STDIN_FILENO);
+	// 		dup2(tmp_stderr, STDERR_FILENO);
+	// 		close(tmp_stdout);
+	// 		close(tmp_stdin);
+	// 		close(tmp_stderr);
+	// 		return (EXIT_FAILURE);
+	// 	}
 	
-		// Выполнять нечего — просто закрыть файлы и восстановить std*
-		dup2(tmp_stdout, STDOUT_FILENO);
-		dup2(tmp_stdin, STDIN_FILENO);
-		dup2(tmp_stderr, STDERR_FILENO);
-		close(tmp_stdout);
-		close(tmp_stdin);
-		close(tmp_stderr);
+	// 	// Выполнять нечего — просто закрыть файлы и восстановить std*
+	// 	dup2(tmp_stdout, STDOUT_FILENO);
+	// 	dup2(tmp_stdin, STDIN_FILENO);
+	// 	dup2(tmp_stderr, STDERR_FILENO);
+	// 	close(tmp_stdout);
+	// 	close(tmp_stdin);
+	// 	close(tmp_stderr);
 	
-		return (EXIT_SUCCESS);
-	}
-	cmd->name = ft_strdup(cmd->args[0]);
-	if (!cmd->name)
-	{
-		perror("minishell");
-		return (EXIT_FAILURE);
-	}
-	cmd_num = check_if_builtin(cmd->name);
+	// 	return (EXIT_SUCCESS);
+	// }
+	// cmd->args[0] = ft_strdup(cmd->args[0]);
+	// if (errno && !cmd->args[0])
+	// {
+	// 	perror("minishell");
+	// 	return (EXIT_FAILURE);
+	// }
+	cmd_num = check_if_builtin(cmd->args[0]);
     if (cmd_num == -1)
 		return (execute_in_child(cmd, shell, wait, extra_fd));
 	if (cmd->pipe_in == -1 && cmd->pipe_out == -1)
@@ -139,7 +144,7 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror(cmd->name);
+		perror(cmd->args[0]);
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)

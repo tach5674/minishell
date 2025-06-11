@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 13:25:49 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 17:26:01 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int ft_export(t_cmd *cmd, t_ht *env)
 		return (EXIT_FAILURE);
 	}
 	if (cmd->args[1][i] == '=' && cmd->args[1][i - 1] == '+')
-		return (add_if_valid(env, cmd->args[1], cmd->name, i - 1, 1));
+		return (add_if_valid(env, cmd->args[1], cmd->args[0], i - 1, 1));
 	else if (cmd->args[1][i] == '=')
-		return (add_if_valid(env, cmd->args[1], cmd->name, i, 0));
+		return (add_if_valid(env, cmd->args[1], cmd->args[0], i, 0));
 	return (0);
 }

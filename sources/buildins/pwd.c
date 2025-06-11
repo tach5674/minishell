@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:58:23 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/10 14:07:22 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 17:26:04 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ int	ft_pwd(t_cmd *cmd, t_ht *env)
 			return (handle_error("pwd: write error"));
 	}
 	else
-		return (handle_error(cmd->name));
+		return (handle_error(cmd->args[0]));
 	return (0);
 }

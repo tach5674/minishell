@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:42:32 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/10 14:04:34 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 17:25:50 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int ft_cd(t_cmd *cmd, t_ht *env)
 			return (EXIT_FAILURE);
 		}
 		if (ft_strcmp(cmd->args[1], "-") == 0)
-			return (cd_oldpwd(cmd->name, env));
-		return (cd_directory(cmd->name, cmd->args[1], env));
+			return (cd_oldpwd(cmd->args[0], env));
+		return (cd_directory(cmd->args[0], cmd->args[1], env));
 	}
-	return (cd_home(cmd->name, env));
+	return (cd_home(cmd->args[0], env));
 }

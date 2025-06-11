@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:02:04 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/04 15:53:16 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/11 17:18:02 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int    execute_builtin(t_cmd *cmd, t_shell *shell, int cmd_num, int extra_fd)
 		return (EXIT_FAILURE);
     if (cmd_num == 4 || cmd_num == 0)
 	{
+		// printf("hey\n");
 		if (cmd->pipe_out != -1)
 			close(cmd->pipe_out);
 		if (cmd->pipe_in != -1)

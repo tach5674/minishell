@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:17:06 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/10 12:09:18 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:40:14 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool     has_n_flag(char *s)
+static bool	has_n_flag(char *s)
 {
 	if (!s || !(*s))
 		return (false);
@@ -28,10 +28,10 @@ static bool     has_n_flag(char *s)
 	return (false);
 }
 
-int     ft_echo(t_cmd *cmd)
+int	ft_echo(t_cmd *cmd)
 {
-	bool    has_newline;
-	int             i;
+	bool has_newline;
+	int i;
 
 	i = 1;
 	has_newline = has_n_flag(cmd->args[i]);

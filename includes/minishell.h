@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*									                                                */
+/*																			  */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -12,21 +12,6 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-# define PROGRAMM_ERROR 0
-# define MALLOC_ERROR 1
-# define SYNTAX_ERROR 2
-# define INVALID_ARGUMENT_ERROR 3
-
-# ifndef ECHOCTL
-#  define ECHOCTL 0001000
-# endif
-
-# ifndef PATH_MAX
-#  define PATH_MAX 1024
-# endif
-
-#include <termios.h>
 
 // library
 # include "libft.h"
@@ -51,7 +36,7 @@
 
 // Работа с файлами и директориями
 # include <dirent.h>
-# include <sys/stat.h>	
+# include <sys/stat.h>
 
 // readline
 # include <readline/history.h>
@@ -63,151 +48,19 @@
 # include <termcap.h>
 # include <termios.h>
 
-// hash table
+# include "structs.h"
+# include "shell.h"
+# include "utils.h"
+# include "signals.h"
+# include "tokenisation.h"
+# include "heredoc.h"
+# include "parsing.h"
+# include "ast.h"
+# include "built_in.h"
+# include "execution.h"
+# include "expansion.h"
 # include "ht.h"
 
-extern int			signal_status;
-
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_PIPE,         // |
-	TOKEN_AND,          // &&
-	TOKEN_OR,           // ||
-	TOKEN_REDIR_IN,     // <
-	TOKEN_REDIR_OUT,    // >
-	TOKEN_REDIR_APPEND, // >>
-	TOKEN_HEREDOC,      // <<
-	TOKEN_PAREN_LEFT,   // (
-	TOKEN_PAREN_RIGHT,  // )
-	TOKEN_EOF
-}					t_token_type;
-
-typedef enum e_ast_node_type
-{
-	AST_COMMAND, // обычная команда: echo, ls и т.д.
-	AST_PIPE,    // |
-	AST_AND,     // &&
-	AST_OR,      // ||
-	AST_SUBSHELL // ( ... )
-}					t_ast_node_type;
-
-typedef enum e_redir_type
-{
-	REDIR_IN,     // <
-	REDIR_OUT,    // >
-	REDIR_APPEND, // >>
-	REDIR_HEREDOC // <<
-}					t_redir_type;
-
-typedef struct s_redirection
-{
-	t_redir_type	type;
-	char			*target;
-	int				heredoc_fd;
-}					t_redirection;
-
-struct s_shell;
-
-typedef struct s_cmd
-{
-	char			*name;
-	char			**args;
-	size_t			redir_count;
-	t_redirection	**redirections;
-	int				pipe_in;
-	int				pipe_out;
-	struct s_shell	*shell;
-	bool			in_subshell;
-}					t_cmd;
-
-typedef struct s_ast
-{
-	t_ast_node_type	type;
-	t_cmd			*cmd;
-	struct s_ast	*left;
-	struct s_ast	*right;
-	struct s_ast	*subshell;
-}					t_ast;
-
-typedef struct s_token
-{
-	char			*value;
-	t_token_type	type;
-	struct s_token	*next;
-}					t_token;
-
-typedef struct s_heredoc
-{
-	char				*filename;
-	struct s_heredoc	*next;
-}						t_heredoc;
-
-typedef struct s_shell
-{
-	struct termios		original_termios;
-	t_ht				*env;
-	char				**shell_envp;
-	char				*shell_name;
-	char				*last_status_code;
-	char				*commands;
-	t_heredoc			*heredocs; // список всех heredoc-файлов
-	t_ast				*ast;
-}						t_shell;
-
-
-// execution
-# include "expansion.h"
-# include "execution.h"
-
-bool				is_operator(char c);
-bool				ft_isspace(char c);
-t_token_type		oper_type(const char *s, int *len);
-void				*safe_malloc(size_t bytes);
-void				free_ptr(void *ptr);
-void				free_shell(t_shell *shell);
-void				free_cmd(t_cmd *cmd);
-void				free_ast(t_ast *ast);
-void				free_tokens(t_token *tokens);
-void				throw_err(int err_type);
-void				syntax_error(const char *token);
-int					add_heredoc_file(t_shell *shell, const char *filename);
-int					ft_pwd(t_cmd *cmd, t_ht *env);
-int					write_heredoc_to_file(const char *delimiter, const char *filename);
-int					ft_echo(t_cmd *cmd);
-int					ft_exit(t_cmd *cmd, t_shell *shell_data);
-int					ft_env(t_cmd *cmd, t_ht *env);
-int					ft_cd(t_cmd *cmd, t_ht *env);
-int					ft_export(t_cmd *cmd, t_ht *env);
-int 				ft_unset(t_cmd * cmd, t_ht *env);
-int					handle_error(char *name);
-void				cleanup_heredocs(t_shell *shell);
-int					run_heredoc_process(const char *delimiter, const char *filename);
-int					process_heredoc(const char *delimiter, char **out_filename);
-void				setup_signals(void);
-void				setup_signals_child(void);
-void				setup_signals_parent_exec(void);
-void				setup_signals_parent_heredoc(void);
-void				shell_init(t_shell *shell, char **envp);
-t_ast				*parse(t_token **tokens, t_shell *shell);
-t_ast				*parse_subshell(t_token **tokens, t_shell *shell);
-t_ast				*parse_and_or(t_token **tokens, t_shell *shell);
-t_ast				*parse_command_or_subshell(t_token **tokens, t_shell *shell);
-t_ast				*parse_pipeline(t_token **tokens, t_shell *shell);
-t_cmd				*create_cmd_from_tokens(t_token *tokens, t_shell *shell);
-t_ast				*new_ast_node(t_ast_node_type type);
-t_cmd				*new_cmd_node(char *name, t_shell *shell);
-void				add_redirection(t_cmd *cmd, t_redirection *redir);
-t_redirection 		*create_redirection(t_redir_type type, const char *target, t_shell *shell);
-void				add_arg(t_cmd *cmd, char *arg);
-t_token				*tokenize(char *line, int i);
-t_token				*ft_lstnew_token(t_token_type type, char *value);
-void				ft_lstadd_back_token(t_token **lst, t_token *new);
-int					ft_strcmp(const char *s1, const char *s2);
-char				*ft_strndup(const char *s, size_t n);
-
-
-char				*ft_str_char_join(char const *s1, char const *s2, char c);
-void				free_split(char **arr);
+extern int		g_signal_status;
 
 #endif

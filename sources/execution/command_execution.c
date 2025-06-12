@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   command_execution.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 17:55:44 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 14:08:30 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_split(char **arr)
-{
-	int	i;
-
-	if (!arr)
-		return ;
-	i = 0;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
 
 bool	add_last_arg_env(char **args, t_shell *shell)
 {
@@ -102,40 +87,6 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	
 	if (apply_expansions(cmd, shell) == false)
 		return (EXIT_FAILURE);
-	// free(cmd->args[0]);
-	// if (!cmd->args || !cmd->args[0])
-	// {
-	// 	int tmp_stdout = dup(STDOUT_FILENO);
-	// 	int tmp_stdin = dup(STDIN_FILENO);
-	// 	int tmp_stderr = dup(STDERR_FILENO);
-	
-	// 	if (apply_redirections(cmd, -1) == -1)
-	// 	{
-	// 		dup2(tmp_stdout, STDOUT_FILENO);
-	// 		dup2(tmp_stdin, STDIN_FILENO);
-	// 		dup2(tmp_stderr, STDERR_FILENO);
-	// 		close(tmp_stdout);
-	// 		close(tmp_stdin);
-	// 		close(tmp_stderr);
-	// 		return (EXIT_FAILURE);
-	// 	}
-	
-	// 	// Выполнять нечего — просто закрыть файлы и восстановить std*
-	// 	dup2(tmp_stdout, STDOUT_FILENO);
-	// 	dup2(tmp_stdin, STDIN_FILENO);
-	// 	dup2(tmp_stderr, STDERR_FILENO);
-	// 	close(tmp_stdout);
-	// 	close(tmp_stdin);
-	// 	close(tmp_stderr);
-	
-	// 	return (EXIT_SUCCESS);
-	// }
-	// cmd->args[0] = ft_strdup(cmd->args[0]);
-	// if (errno && !cmd->args[0])
-	// {
-	// 	perror("minishell");
-	// 	return (EXIT_FAILURE);
-	// }
 	cmd_num = check_if_builtin(cmd->args[0]);
     if (cmd_num == -1)
 		return (execute_in_child(cmd, shell, wait, extra_fd));

@@ -3,33 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/10 13:07:24 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:16:11 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ast *new_ast_node(t_ast_node_type type)
+t_ast	*new_ast_node(t_ast_node_type type)
 {
-    t_ast *node;
+	t_ast	*node;
 
-    node = safe_malloc(sizeof(t_ast));
-    if (node == NULL)
-        return NULL;
-    node->type = type;
-    node->cmd = NULL;
-    node->left = NULL;
-    node->right = NULL;
-    node->subshell = NULL;
-    return (node);
+	node = safe_malloc(sizeof(t_ast));
+	if (node == NULL)
+		return (NULL);
+	node->type = type;
+	node->cmd = NULL;
+	node->left = NULL;
+	node->right = NULL;
+	node->subshell = NULL;
+	return (node);
 }
 
-t_cmd *new_cmd_node(char *name, t_shell *shell)
+t_cmd	*new_cmd_node(char *name, t_shell *shell)
 {
-	t_cmd *cmd;
+	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
 	if (cmd == NULL)
@@ -48,31 +48,31 @@ t_cmd *new_cmd_node(char *name, t_shell *shell)
 	return (cmd);
 }
 
-void add_arg(t_cmd *cmd, char *arg)
+void	add_arg(t_cmd *cmd, char *arg)
 {
-    size_t i;
-    char **new_args;
+	size_t	i;
+	char	**new_args;
 
-    i = 0;
-    while (cmd->args[i] != NULL)
-        i++;
-    new_args = malloc(sizeof(char *) * (i + 2));
-    if (new_args == NULL)
-        return;
-
-    i = 0;
-    while (cmd->args[i] != NULL)
-    {
-        new_args[i] = cmd->args[i];
-        i++;
-    }
-    new_args[i] = strdup(arg);
-    new_args[i + 1] = NULL;
-    free(cmd->args);
-    cmd->args = new_args;
+	i = 0;
+	while (cmd->args[i] != NULL)
+		i++;
+	new_args = malloc(sizeof(char *) * (i + 2));
+	if (new_args == NULL)
+		return ;
+	i = 0;
+	while (cmd->args[i] != NULL)
+	{
+		new_args[i] = cmd->args[i];
+		i++;
+	}
+	new_args[i] = strdup(arg);
+	new_args[i + 1] = NULL;
+	free(cmd->args);
+	cmd->args = new_args;
 }
 
-t_redirection *create_heredoc_redirection(const char *delimiter, t_shell *shell)
+t_redirection	*create_heredoc_redirection(const char *delimiter,
+		t_shell *shell)
 {
 	t_redirection	*redir;
 	char			*heredoc_path;
@@ -84,8 +84,8 @@ t_redirection *create_heredoc_redirection(const char *delimiter, t_shell *shell)
 	if (!shell->last_status_code)
 		throw_err(MALLOC_ERROR);
 	if (status == 130)
-		return (NULL); // пользователь прервал heredoc, прекратить
-	if (status != 0) // любая другая ошибка
+		return (NULL);
+	if (status != 0)
 	{
 		ft_putstr_fd("heredoc error\n", STDERR_FILENO);
 		return (NULL);
@@ -117,10 +117,10 @@ t_redirection *create_redirection(t_redir_type type, const char *target, t_shell
 	return (redir);
 }
 
-void add_redirection(t_cmd *cmd, t_redirection *redir)
+void	add_redirection(t_cmd *cmd, t_redirection *redir)
 {
-	t_redirection **new_array;
-	size_t i;
+	t_redirection	**new_array;
+	size_t			i;
 
 	new_array = malloc(sizeof(t_redirection *) * (cmd->redir_count + 1));
 	if (!new_array)

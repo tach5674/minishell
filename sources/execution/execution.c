@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 18:05:31 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:27:39 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int		get_exit_code(int status)
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 	{
-		signal_status = WTERMSIG(status);
+		g_signal_status = WTERMSIG(status);
 		return (128 + WTERMSIG(status));
 	}
 	else
@@ -157,11 +157,6 @@ void execute_commands(t_shell *shell)
     shell->last_status_code = ft_itoa(exit_code);
 	if (!shell->last_status_code)
 		perror("minishell");
-    // if (signal_status == SIGINT)
-    //     write(1, "\n", 1);
-    // else if (signal_status == SIGQUIT)
-    //     write(1, "Quit (core dumped)\n", 19);
-    // signal_status = 0;
     setup_signals();
     free_ast(shell->ast);
 	cleanup_heredocs(shell);

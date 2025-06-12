@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_free_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:36:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/29 17:53:29 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:04:05 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_redirections(t_redirection **redirs, size_t count)
 	size_t	i;
 
 	if (!redirs)
-		return;
+		return ;
 	i = 0;
 	while (i < count)
 	{
@@ -36,7 +36,7 @@ void	free_cmd(t_cmd *cmd)
 	size_t	i;
 
 	if (!cmd)
-		return;
+		return ;
 	free(cmd->name);
 	if (cmd->args)
 	{
@@ -52,10 +52,11 @@ void	free_cmd(t_cmd *cmd)
 void	free_ast(t_ast *ast)
 {
 	if (!ast)
-		return;
+		return ;
 	if (ast->type == AST_COMMAND)
 		free_cmd(ast->cmd);
-	else if (ast->type == AST_PIPE || ast->type == AST_AND || ast->type == AST_OR)
+	else if (ast->type == AST_PIPE || ast->type == AST_AND
+		|| ast->type == AST_OR)
 	{
 		free_ast(ast->left);
 		free_ast(ast->right);

@@ -6,13 +6,38 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:44:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/05/23 11:31:30 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:11:31 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*parse_word(const char *line, int *i)
+t_token_type	oper_type(const char *s, int *len)
+{
+	if (s[0] == '&' && s[1] == '&')
+		return (*len = 2, TOKEN_AND);
+	if (s[0] == '|' && s[1] == '|')
+		return (*len = 2, TOKEN_OR);
+	if (s[0] == '<' && s[1] == '<')
+		return (*len = 2, TOKEN_HEREDOC);
+	if (s[0] == '>' && s[1] == '>')
+		return (*len = 2, TOKEN_REDIR_APPEND);
+	if (s[0] == '|')
+		return (*len = 1, TOKEN_PIPE);
+	if (s[0] == '&')
+		return (*len = 1, TOKEN_AND);
+	if (s[0] == '<')
+		return (*len = 1, TOKEN_REDIR_IN);
+	if (s[0] == '>')
+		return (*len = 1, TOKEN_REDIR_OUT);
+	if (s[0] == '(')
+		return (*len = 1, TOKEN_PAREN_LEFT);
+	if (s[0] == ')')
+		return (*len = 1, TOKEN_PAREN_RIGHT);
+	return (*len = 0, TOKEN_EOF);
+}
+
+char	*parse_word(const char *line, int *i)
 {
 	int		start;
 	char	quote;
@@ -34,32 +59,4 @@ static char	*parse_word(const char *line, int *i)
 			(*i)++;
 	}
 	return (ft_substr(line, start, *i - start));
-}
-
-t_token	*tokenize(char *line, int i)
-{
-	int				len;
-	char			*word;
-	t_token			*list;
-	t_token_type	type;
-
-	list = NULL;
-	while (line[i])
-	{
-		if (ft_isspace(line[i]))
-			i++;
-		else if (is_operator(line[i]))
-		{
-			type = oper_type(&line[i], &len);
-			word = ft_substr(line, i, len);
-			ft_lstadd_back_token(&list, ft_lstnew_token(type, word));
-			i += len;
-		}
-		else
-		{
-			word = parse_word(line, &i);
-			ft_lstadd_back_token(&list, ft_lstnew_token(TOKEN_WORD, word));
-		}
-	}
-	return (list);
 }

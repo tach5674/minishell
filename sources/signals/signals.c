@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sigexits.c                                         :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/06 16:34:01 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:39:49 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/ioctl.h>
 
-int	signal_status;
+int	g_signal_status;
 
 static void	sigint_handler(int sig)
 {
@@ -24,31 +23,20 @@ static void	sigint_handler(int sig)
 	rl_redisplay();
 }
 
-// static void	exec_signal_handler(int sig)
-// {
-// 	signal_status = sig;
-// }
-
 void	setup_signals(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	setup_signals_child(void)	
+void	setup_signals_child(void)
 {
-    signal(SIGINT, SIG_DFL);
-    signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	setup_signals_parent_exec(void)
 {
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
-}
-
-void	setup_signals_parent_heredoc(void)
-{
-    signal(SIGINT, SIG_IGN);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }

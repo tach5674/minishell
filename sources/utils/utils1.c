@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:16:10 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/03 12:16:44 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 14:08:38 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 bool	ft_isspace(char c)
 {
 	return (c == ' ' || (c >= 9 && c <= 13));
-}
-
-void	free_ptr(void *ptr)
-{
-	free(ptr);
-	ptr = NULL;
 }
 
 int	ft_strcmp(const char *s1, const char *s2)
@@ -82,4 +76,19 @@ char	*ft_str_char_join(char const *s1, char const *s2, char c)
 	}
 	res[i] = '\0';
 	return (res);
+}
+
+void	free_split(char **arr)
+{
+	int	i;
+
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }

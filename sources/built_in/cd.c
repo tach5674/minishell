@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:42:32 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/11 17:25:50 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:40:09 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	cd_home(char *name, t_ht *env)
 {
-	char *temp_path;
-	
+	char	*temp_path;
+
 	temp_path = ht_get(env, "HOME");
 	if (!temp_path)
 	{
@@ -31,8 +31,8 @@ int	cd_home(char *name, t_ht *env)
 
 int	cd_oldpwd(char *name, t_ht *env)
 {
-	char *temp_path;
-	
+	char	*temp_path;
+
 	temp_path = ht_get(env, "OLDPWD");
 	if (!temp_path)
 	{
@@ -59,8 +59,8 @@ int	cd_oldpwd(char *name, t_ht *env)
 
 int	cd_directory(char *name, char *dir, t_ht *env)
 {
-	char *temp_path;
-	
+	char	*temp_path;
+
 	if (chdir(dir) == -1)
 		return (handle_error(name));
 	if (ht_add(env, "OLDPWD", ht_get(env, "PWD")) == false)
@@ -77,10 +77,10 @@ int	cd_directory(char *name, char *dir, t_ht *env)
 	return (0);
 }
 
-int ft_cd(t_cmd *cmd, t_ht *env)
+int	ft_cd(t_cmd *cmd, t_ht *env)
 {
-    if (cmd->args[1])
-    {
+	if (cmd->args[1])
+	{
 		if (cmd->args[2])
 		{
 			ft_putstr_fd("minishell: cd: too many arguments\n", 2);

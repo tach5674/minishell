@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/10 14:34:54 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:40:24 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ bool	is_numerical(const char *str)
 	return (true);
 }
 
-int		ft_exit(t_cmd *cmd, t_shell *shell)
+int	ft_exit(t_cmd *cmd, t_shell *shell)
 {
 	if (cmd->in_subshell == false)
 		ft_putstr_fd("exit\n", 1);

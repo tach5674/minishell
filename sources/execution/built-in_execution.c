@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built-in_execution.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 20:02:04 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 17:18:02 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 12:33:29 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int    execute_builtin(t_cmd *cmd, t_shell *shell, int cmd_num, int extra_fd)
     
 	if (add_last_arg_env(cmd->args, shell) == false)
 		return (EXIT_FAILURE);
-    if (cmd_num == 4 || cmd_num == 0)
+    if (cmd_num == 4)
 	{
 		// printf("hey\n");
 		if (cmd->pipe_out != -1)

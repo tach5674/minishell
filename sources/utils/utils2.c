@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handler.c                                    :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 23:33:47 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 16:57:11 by mikayel          ###   ########.fr       */
+/*   Created: 2025/06/12 14:08:00 by mzohraby          #+#    #+#             */
+/*   Updated: 2025/06/12 14:08:10 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int handle_error(char *name)
+void	*safe_malloc(size_t bytes)
 {
-	char    *msg;
-    
-    msg = ft_strjoin("minishell: ", name);
-    if (!msg)
-    {
-        perror("minishell");
-        return (EXIT_FAILURE);
-    }
-    perror(msg);
-    free(msg);
-    return (EXIT_FAILURE);
+	void	*malloced;
+
+	malloced = malloc(bytes);
+	if (!malloced)
+	{
+		throw_err(MALLOC_ERROR);
+		return (NULL);
+	}
+	return (malloced);
+}
+
+void	free_ptr(void *ptr)
+{
+	free(ptr);
+	ptr = NULL;
 }

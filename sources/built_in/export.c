@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/11 17:26:01 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 13:40:27 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*append_to_val(t_ht *env, char *key, char *value)
 {
-	char *temp;
+	char	*temp;
 
 	temp = ft_strjoin(ht_get(env, key), value);
 	free(value);
@@ -26,11 +26,11 @@ char	*append_to_val(t_ht *env, char *key, char *value)
 	return (temp);
 }
 
-static int add_if_valid(t_ht *env, char *str, char *name, int i, int check)
+static int	add_if_valid(t_ht *env, char *str, char *name, int i, int check)
 {
-    char *key;
-	char *value;
-	
+	char	*key;
+	char	*value;
+
 	key = ft_substr(str, 0, i);
 	if (!key)
 		return (handle_error(name));
@@ -56,27 +56,27 @@ static int add_if_valid(t_ht *env, char *str, char *name, int i, int check)
 
 int	check_if_valid(char *str)
 {
-	int i;
-	
-    if (ft_isdigit(*str) || *str == '=')
-        return (0);
-    i = 0;
-    while (str[i] && str[i] != '=')
-    {
+	int	i;
+
+	if (ft_isdigit(*str) || *str == '=')
+		return (0);
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
 		if (str[i] == '+' && str[i + 1] == '=')
 			return (i + 1);
-        if (!ft_isalnum(str[i]) && str[i] != '_')
-            return (0);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
 		i++;
-    }
+	}
 	return (i);
 }
 
-int ft_export(t_cmd *cmd, t_ht *env)
+int	ft_export(t_cmd *cmd, t_ht *env)
 {
-	int	i;
-	
-    if (!cmd->args[1])
+	int i;
+
+	if (!cmd->args[1])
 	{
 		if (ht_print(env) == -1)
 			return (handle_error("export: write error: "));

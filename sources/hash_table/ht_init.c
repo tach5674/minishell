@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:28 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 17:13:43 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 21:42:13 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,35 @@ static void	ht_init_add(t_ht *ht, char **envp, int i)
 	}
 }
 
+void	ht_init_path(t_ht *ht)
+{
+	char	*temp;
+
+	temp = ft_strjoin("PATH=", ht_get(ht,"PATH"));
+	if (!temp)
+	{
+		if (errno)
+		{
+			ht_free(ht);
+			throw_err(MALLOC_ERROR);
+		}
+		if (!ht_add(ht, "_", ""))
+		{
+			ht_free(ht);
+			throw_err(MALLOC_ERROR);
+		}
+	}
+	else
+	{
+		if (!ht_add(ht, "_", temp))
+		{
+			ht_free(ht);
+			throw_err(MALLOC_ERROR);
+		}
+	}
+	free(temp);
+}
+
 t_ht	*ht_init(char **envp)
 {
 	t_ht	*ht;
@@ -75,5 +104,6 @@ t_ht	*ht_init(char **envp)
 			i++;
 		}
 	}
+	ht_init_path(ht);
 	return (ht);
 }

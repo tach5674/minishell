@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:17:06 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:40:14 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:36:22 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static bool	has_n_flag(char *s)
 
 int	ft_echo(t_cmd *cmd)
 {
-	bool has_newline;
-	int i;
+	bool	has_newline;
+	int		i;
 
 	i = 1;
 	has_newline = has_n_flag(cmd->args[i]);

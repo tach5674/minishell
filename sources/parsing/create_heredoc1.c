@@ -1,43 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_heredoc.c                                   :+:      :+:    :+:   */
+/*   create_heredoc1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/11 17:51:10 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 17:33:15 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*create_heredoc_filename(void)
-{
-	static int	index = 0;
-	char		*number_str;
-	char		*filename;
-
-	while (1)
-	{
-		number_str = ft_itoa(index++);
-		if (!number_str)
-		{
-			perror("minishell: ");
-			return (NULL);
-		}
-		filename = ft_strjoin("/tmp/.heredoc", number_str);
-		if (!filename)
-		{
-			perror("minishell: ");
-			return (NULL);
-		}
-		free(number_str);
-		if (access(filename, F_OK) != 0)
-			return (errno = 0, filename);
-		free(filename);
-	}
-}
 
 int	is_delimiter(char *line, const char *delimiter)
 {
@@ -72,8 +45,6 @@ int	read_and_write_heredoc(int fd, const char *delimiter)
 	line_number = 1;
 	while (1)
 	{
-		// ft_putstr_fd("> ", STDOUT_FILENO);
-		// line = get_next_line(STDIN_FILENO);
 		line = readline("> ");
 		if (!line)
 		{

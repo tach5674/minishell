@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:05:38 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/12 14:18:28 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:58:30 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,26 @@ typedef struct s_shell
 	t_heredoc			*heredocs;
 	t_ast				*ast;
 }						t_shell;
+
+// Wildcards
+
+typedef struct s_match_state
+{
+	const char			*p;
+	const char			*s;
+	const char			*star;
+	const char			*ss;
+	char				quote;
+}						t_match_state;
+
+typedef struct s_expand_state
+{
+	const char			*pattern;
+	bool				show_hidden;
+	bool				only_dir;
+	int					*count;
+	char				***match_list;
+	int					*capacity;
+}						t_expand_state;
 
 #endif

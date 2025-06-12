@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/11 17:47:56 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 17:28:00 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ t_ast	*parse_and_or(t_token **tokens, t_shell *shell)
 		node->left = left;
 		node->right = parse_pipeline(tokens, shell);
 		if (!node->right)
-		return (perror("allocation error"), free_ast(node), NULL);
+			return (perror("allocation error"), free_ast(node), NULL);
 		left = node;
 	}
 	return (left);

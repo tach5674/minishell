@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:58:23 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/11 17:26:04 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 17:35:29 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_pwd(t_cmd *cmd, t_ht *env)
 	char	cwd[PATH_MAX];
 
 	(void)env;
-	if (getcwd(cwd, sizeof (cwd)) != NULL)
+	if (getcwd(cwd, sizeof(cwd)) != NULL)
 	{
 		if (printf("%s\n", cwd) == -1)
 			return (handle_error("pwd: write error"));

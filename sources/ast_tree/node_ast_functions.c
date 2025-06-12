@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:16:11 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:20:21 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,40 +71,14 @@ void	add_arg(t_cmd *cmd, char *arg)
 	cmd->args = new_args;
 }
 
-t_redirection	*create_heredoc_redirection(const char *delimiter,
+t_redirection	*create_redirection(t_redir_type type, const char *target,
 		t_shell *shell)
 {
 	t_redirection	*redir;
-	char			*heredoc_path;
-	int				status;
 
-	status = process_heredoc(delimiter, &heredoc_path);
-	free(shell->last_status_code);
-	shell->last_status_code = ft_itoa(status);
-	if (!shell->last_status_code)
-		throw_err(MALLOC_ERROR);
-	if (status == 130)
-		return (NULL);
-	if (status != 0)
-	{
-		ft_putstr_fd("heredoc error\n", STDERR_FILENO);
-		return (NULL);
-	}
-	redir = malloc(sizeof(t_redirection));
-	if (!redir)
-		return (NULL);
-	redir->type = REDIR_HEREDOC;
-	redir->target = heredoc_path;
-	add_heredoc_file(shell, heredoc_path);
-	return (redir);
-}
-
-t_redirection *create_redirection(t_redir_type type, const char *target, t_shell *shell)
-{
 	if (type == REDIR_HEREDOC)
 		return (create_heredoc_redirection(target, shell));
-
-	t_redirection *redir = malloc(sizeof(t_redirection));
+	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return (NULL);
 	redir->type = type;

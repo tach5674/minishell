@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tilde_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:25 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/10 14:36:31 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 17:58:47 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	recreate_string(char **str, t_ht *env, int i, char *path)
 {
 	char	*temp;
 	int		len;
-	
+
 	len = 0;
 	temp = ht_get(env, path);
 	if (temp)
@@ -75,10 +75,10 @@ static int	expand_tilde_helper(char **str, int i, t_ht *env)
 
 bool	expand_tilde(char **str, t_ht *env)
 {
-	int	in_quotes;
-	int	i;
-	int	len;
-	
+	char	in_quotes;
+	int		i;
+	int		len;
+
 	i = 0;
 	in_quotes = 0;
 	while ((*str)[i])
@@ -86,7 +86,7 @@ bool	expand_tilde(char **str, t_ht *env)
 		if (check_if_quotes(*str, &in_quotes, i))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		else if ((*str)[i] == '~' && in_quotes == 0)
 		{

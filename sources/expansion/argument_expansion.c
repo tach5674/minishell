@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   argument_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/11 03:18:32 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 18:05:29 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		place_non_empty(char **str, int i, int start, char *temp)
+int	place_non_empty(char **str, int i, int start, char *temp)
 {
-	int	len;
-	char *temp1;
+	int		len;
+	char	*temp1;
 
 	len = ft_strlen(temp);
 	(*str)[start] = '\0';
@@ -31,11 +31,11 @@ int		place_non_empty(char **str, int i, int start, char *temp)
 	return (len);
 }
 
-int		place_argument(char **str, int i, int start, t_ht *env)
+int	place_argument(char **str, int i, int start, t_ht *env)
 {
 	char	*temp;
 	char	*temp1;
-	
+
 	temp1 = ft_substr(*str, start + 1, i - start - 1);
 	if (!temp1)
 		return (false);
@@ -57,14 +57,14 @@ int		place_argument(char **str, int i, int start, t_ht *env)
 
 int	expand_argument(char **str, int i, t_ht *env)
 {
-	int		start;
+	int	start;
 
 	start = i;
 	i++;
 	if (ft_isdigit((*str)[i]))
 		return (place_argument(str, i + 1, start, env));
 	if (!ft_isalnum((*str)[i]) && (*str)[i] != '_')
-		return (1); 
+		return (1);
 	while ((*str)[i])
 	{
 		if (!ft_isalnum((*str)[i]) && (*str)[i] != '_')
@@ -76,20 +76,16 @@ int	expand_argument(char **str, int i, t_ht *env)
 
 bool	expand_arguments(char **str, t_shell *shell)
 {
-	int	in_quotes;
-	int	i;
-	int	len;
-	
+	char	in_quotes;
+	int		i;
+	int		len;
+
 	i = 0;
 	in_quotes = 0;
 	while ((*str)[i])
 	{
-		if (check_if_quotes(*str, &in_quotes, i))
-		{
-			i++;
-			continue;
-		}
-		else if ((*str)[i] == '$' && in_quotes != 1)
+		check_if_quotes(*str, &in_quotes, i);
+		if ((*str)[i] == '$' && in_quotes != '\'')
 		{
 			if ((*str)[i + 1] == '?')
 				len = place_non_empty(str, i + 2, i, shell->last_status_code);

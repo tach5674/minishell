@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:50:11 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/12 14:19:39 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 18:08:16 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,9 @@ void	syntax_error(const char *token);
 
 void	free_ptr(void *ptr);
 void	*safe_malloc(size_t bytes);
+void	cleanup_heredocs(t_shell *shell);
+
+void	swap(char **match_list, int i, int j);
+void	sorter(char **match_list, int count);
 
 #endif

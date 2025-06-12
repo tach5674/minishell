@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:28 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/10 14:31:40 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 17:13:43 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,30 @@ static void	ht_init_add(t_ht *ht, char **envp, int i)
 	}
 }
 
-t_ht *ht_init(char **envp)
+t_ht	*ht_init(char **envp)
 {
-    t_ht	*ht;
+	t_ht	*ht;
 	int		i;
-	
+
 	ht = malloc(sizeof(t_ht));
-    if (!ht)
-        throw_err(MALLOC_ERROR);
-    ht->size = INITIAL_SIZE;
-    ht->count = 0;
-    ht->buckets = ft_calloc(ht->size, sizeof(t_ht_item *));
-    if (!ht->buckets)
-    {
-        ht_free(ht);
-        throw_err(MALLOC_ERROR);
-    }
-    if (envp)
-    {
-        i = 0;
-        while (envp[i])
-        {
+	if (!ht)
+		throw_err(MALLOC_ERROR);
+	ht->size = INITIAL_SIZE;
+	ht->count = 0;
+	ht->buckets = ft_calloc(ht->size, sizeof(t_ht_item *));
+	if (!ht->buckets)
+	{
+		ht_free(ht);
+		throw_err(MALLOC_ERROR);
+	}
+	if (envp)
+	{
+		i = 0;
+		while (envp[i])
+		{
 			ht_init_add(ht, envp, i);
-            i++;
-        }
-    }
-    return ht;
+			i++;
+		}
+	}
+	return (ht);
 }

@@ -6,13 +6,40 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:53:43 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:33:24 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void do_child_process(const char *delimiter, const char *filename)
+char	*create_heredoc_filename(void)
+{
+	static int	index = 0;
+	char		*number_str;
+	char		*filename;
+
+	while (1)
+	{
+		number_str = ft_itoa(index++);
+		if (!number_str)
+		{
+			perror("minishell: ");
+			return (NULL);
+		}
+		filename = ft_strjoin("/tmp/.heredoc", number_str);
+		if (!filename)
+		{
+			perror("minishell: ");
+			return (NULL);
+		}
+		free(number_str);
+		if (access(filename, F_OK) != 0)
+			return (errno = 0, filename);
+		free(filename);
+	}
+}
+
+void	do_child_process(const char *delimiter, const char *filename)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
@@ -47,7 +74,9 @@ int	run_heredoc_process(const char *delimiter, const char *filename)
 
 int	add_heredoc_file(t_shell *shell, const char *filename)
 {
-	t_heredoc	*new_node = malloc(sizeof(t_heredoc));
+	t_heredoc	*new_node;
+
+	new_node = malloc(sizeof(t_heredoc));
 	if (!new_node)
 		return (perror("malloc"), 1);
 	new_node->filename = strdup(filename);
@@ -61,17 +90,30 @@ int	add_heredoc_file(t_shell *shell, const char *filename)
 	return (0);
 }
 
-void	cleanup_heredocs(t_shell *shell)
+t_redirection	*create_heredoc_redirection(const char *delimiter,
+		t_shell *shell)
 {
-	t_heredoc	*tmp;
+	t_redirection	*redir;
+	char			*heredoc_path;
+	int				status;
 
-	while (shell->heredocs)
+	status = process_heredoc(delimiter, &heredoc_path);
+	free(shell->last_status_code);
+	shell->last_status_code = ft_itoa(status);
+	if (!shell->last_status_code)
+		throw_err(MALLOC_ERROR);
+	if (status == 130)
+		return (NULL);
+	if (status != 0)
 	{
-		tmp = shell->heredocs;
-		shell->heredocs = shell->heredocs->next;
-		unlink(tmp->filename);
-		free(tmp->filename);
-		free(tmp);
+		ft_putstr_fd("heredoc error\n", STDERR_FILENO);
+		return (NULL);
 	}
-	shell->heredocs = NULL;
+	redir = malloc(sizeof(t_redirection));
+	if (!redir)
+		return (NULL);
+	redir->type = REDIR_HEREDOC;
+	redir->target = heredoc_path;
+	add_heredoc_file(shell, heredoc_path);
+	return (redir);
 }

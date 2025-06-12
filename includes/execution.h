@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:26:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 16:35:45 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:10:09 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,4 @@ void		exit_error(t_shell *shell, char *cmd_path, int exit_code);
 int			execute_last_pipe(t_ast *ast, t_shell *shell, int pipefd,
 				bool last_pipe);
 void		set_in_subshell(t_ast *ast);
-
-// has to be removed
-
-void		print_ast_node(t_ast *node, int depth);
-void		print_ast(t_ast *ast);
-const char	*token_type_str(t_token_type type);
-void		print_tokens(t_token *list);
-
 #endif

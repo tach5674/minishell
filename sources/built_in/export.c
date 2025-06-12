@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:40:27 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:41:05 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,28 +26,28 @@ char	*append_to_val(t_ht *env, char *key, char *value)
 	return (temp);
 }
 
-static int	add_if_valid(t_ht *env, char *str, char *name, int i, int check)
+static int	add_if_valid(t_ht *env, char **args, int i, int check)
 {
 	char	*key;
 	char	*value;
 
-	key = ft_substr(str, 0, i);
+	key = ft_substr(args[1], 0, i);
 	if (!key)
-		return (handle_error(name));
-	value = ft_substr(str, i + 1 + check, ft_strlen(str));
+		return (handle_error(args[0]));
+	value = ft_substr(args[1], i + 1 + check, ft_strlen(args[1]));
 	if (!value)
-		return (free(key), handle_error(name));
+		return (free(key), handle_error(args[0]));
 	if (check && ht_get(env, key))
 	{
 		value = append_to_val(env, key, value);
 		if (!value)
-			return (handle_error(name));
+			return (handle_error(args[0]));
 	}
 	if (ht_add(env, key, value) == false)
 	{
 		free(key);
 		free(value);
-		return (handle_error(name));
+		return (handle_error(args[0]));
 	}
 	free(key);
 	free(value);
@@ -74,7 +74,7 @@ int	check_if_valid(char *str)
 
 int	ft_export(t_cmd *cmd, t_ht *env)
 {
-	int i;
+	int	i;
 
 	if (!cmd->args[1])
 	{
@@ -91,8 +91,8 @@ int	ft_export(t_cmd *cmd, t_ht *env)
 		return (EXIT_FAILURE);
 	}
 	if (cmd->args[1][i] == '=' && cmd->args[1][i - 1] == '+')
-		return (add_if_valid(env, cmd->args[1], cmd->args[0], i - 1, 1));
+		return (add_if_valid(env, cmd->args, i - 1, 1));
 	else if (cmd->args[1][i] == '=')
-		return (add_if_valid(env, cmd->args[1], cmd->args[0], i, 0));
+		return (add_if_valid(env, cmd->args, i, 0));
 	return (0);
 }

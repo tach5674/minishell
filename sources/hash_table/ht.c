@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:33 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 16:01:42 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:15:28 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,10 @@ bool	item_to_envp(t_ht *ht, char **envp, t_ht_item *item, int j)
 
 char	**ht_to_envp(t_ht *ht)
 {
-	size_t i;
-	size_t j;
-	t_ht_item *item;
-	char **envp;
+	size_t		i;
+	size_t		j;
+	t_ht_item	*item;
+	char		**envp;
 
 	envp = malloc((ht->count + 1) * sizeof(char *));
 	if (!envp)

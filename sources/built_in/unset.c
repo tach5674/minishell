@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:08:43 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/02 15:12:06 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 17:36:53 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_unset(t_cmd * cmd, t_ht *env)
+int	ft_unset(t_cmd *cmd, t_ht *env)
 {
-    int i;
+	int	i;
 
-    i = 1;
-    while (cmd->args[i])
-        ht_unset(env, cmd->args[i++]);
-    return (0);
+	i = 1;
+	while (cmd->args[i])
+		ht_unset(env, cmd->args[i++]);
+	return (0);
 }

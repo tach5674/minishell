@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:37:02 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/04 16:34:12 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/12 16:11:37 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    check_access(char *name, t_shell *shell)
+void	check_access(char *name, t_shell *shell)
 {
-    struct stat statbuf;
-    
-    if (access(name, F_OK) == -1)
-    {
-        return_error(name);
-        free_shell(shell);
-        exit(127);
-    }
-    if (access(name, X_OK) == -1)
-    {
-        return_error(name);
-        free_shell(shell);
-        exit(126);
-    }
-    if (stat(name, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
-    {
-        ft_putstr_fd("minishell: ", 2);
-        ft_putstr_fd(name, 2);
-        ft_putstr_fd(": is a directory\n", 2);
-        free_shell(shell);
-        exit(126);
-    }
+	struct stat	statbuf;
+
+	if (access(name, F_OK) == -1)
+	{
+		handle_error(name);
+		free_shell(shell);
+		exit(127);
+	}
+	if (access(name, X_OK) == -1)
+	{
+		handle_error(name);
+		free_shell(shell);
+		exit(126);
+	}
+	if (stat(name, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(": is a directory\n", 2);
+		free_shell(shell);
+		exit(126);
+	}
 }
 
 char	*take_correct_path(char *command, char *path, t_shell *shell)
@@ -53,47 +53,43 @@ char	*take_correct_path(char *command, char *path, t_shell *shell)
 	while (paths[++i] != NULL)
 	{
 		tmp = ft_str_char_join(paths[i], command, '/');
-        if (!tmp)
-        {
-            free_split(paths);
-            free_shell(shell);
-            perror("minishell");
-            exit(EXIT_FAILURE);
-        }
-		if (access(tmp, F_OK) != -1)
+		if (!tmp)
 		{
 			free_split(paths);
-			return (tmp);
+			perror("minishell");
+			exit_error(shell, NULL, EXIT_FAILURE);
 		}
+		if (access(tmp, F_OK) != -1)
+			return (free_split(paths), tmp);
 		free(tmp);
 	}
 	free_split(paths);
 	return (NULL);
 }
 
-char    *get_path(char *name, t_shell *shell)
+char	*get_path(char *name, t_shell *shell)
 {
-    char    *path;
-    
-    if (ft_strchr(name, '/'))
-    {
-        check_access(name, shell);
-        path = ft_strdup(name);
-        if (!path)
-        {
-            perror("minishell");
-            free_shell(shell);
-            exit(EXIT_FAILURE);
-        }
-        return (path);
-    }
-    path = take_correct_path(name, ht_get(shell->env, "PATH"), shell);
-    if (!path)
-    {
-        ft_putstr_fd(name, 2);
-        ft_putstr_fd(": command not found\n", 2);
-        free_shell(shell);
-        exit(127);
-    }
-    return (path);
+	char	*path;
+
+	if (ft_strchr(name, '/'))
+	{
+		check_access(name, shell);
+		path = ft_strdup(name);
+		if (!path)
+		{
+			perror("minishell");
+			free_shell(shell);
+			exit(EXIT_FAILURE);
+		}
+		return (path);
+	}
+	path = take_correct_path(name, ht_get(shell->env, "PATH"), shell);
+	if (!path)
+	{
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(": command not found\n", 2);
+		free_shell(shell);
+		exit(127);
+	}
+	return (path);
 }

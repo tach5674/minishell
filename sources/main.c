@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 14:27:20 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/12 16:28:00 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		errno = 0;
 		if (g_signal_status == SIGINT)
-        	write(1, "\n", 1);
-    	else if (g_signal_status == SIGQUIT)
-       		write(1, "Quit (core dumped)\n", 19);
-    	g_signal_status = 0;
-		shell->commands = readline("\001\033[1;32m\002minishell$ \001\033[0m\002");
+			write(1, "\n", 1);
+		else if (g_signal_status == SIGQUIT)
+			write(1, "Quit (core dumped)\n", 19);
+		g_signal_status = 0;
+		shell->commands = readline(
+				"\001\033[1;32m\002minishell$ \001\033[0m\002");
 		if (!shell->commands)
 			break ;
 		if (*shell->commands)
@@ -37,6 +38,5 @@ int	main(int argc, char *argv[], char *envp[])
 		tcsetattr(STDIN_FILENO, TCSANOW, &shell->original_termios);
 	}
 	free_shell(shell);
-	ft_putstr_fd("exit\n", 1);
-	return (0);
+	return (ft_putstr_fd("exit\n", 1), 0);
 }

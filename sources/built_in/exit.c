@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 18:46:57 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 19:04:14 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,16 @@ static bool	is_numerical(const char *str)
 
 int	ft_exit(t_cmd *cmd, t_shell *shell)
 {
+	int	check;
+
+	check = 0;
 	if (cmd->in_subshell == false)
 		ft_putstr_fd("exit\n", 1);
 	if (cmd->args[1])
 	{
-		if (is_numerical(cmd->args[1]))
+		if (cmd->args[1][0] == '+')
+			check = 1;
+		if (is_numerical(cmd->args[1] + 1))
 		{
 			if (cmd->args[2])
 			{

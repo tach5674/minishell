@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 19:04:14 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 22:19:37 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,18 @@ static int	clean_return_exit_code(t_shell *shell, int exit_code)
 static bool	is_numerical(const char *str)
 {
 	if (*str == '-')
+	{
 		str++;
+		if (ft_strcmp(str, "9223372036854775808") > 0)
+			return (false);
+	}
+	else if (*str == '+' || ft_isdigit(*str))
+	{
+		if (*str == '+')
+			str++;
+		if (ft_strcmp(str, "9223372036854775807") > 0)
+			return (false);
+	}
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
@@ -33,16 +44,11 @@ static bool	is_numerical(const char *str)
 
 int	ft_exit(t_cmd *cmd, t_shell *shell)
 {
-	int	check;
-
-	check = 0;
 	if (cmd->in_subshell == false)
 		ft_putstr_fd("exit\n", 1);
 	if (cmd->args[1])
 	{
-		if (cmd->args[1][0] == '+')
-			check = 1;
-		if (is_numerical(cmd->args[1] + 1))
+		if (is_numerical(cmd->args[1]))
 		{
 			if (cmd->args[2])
 			{

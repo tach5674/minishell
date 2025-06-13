@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:50:11 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/12 18:08:16 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:34:16 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_str_char_join(char const *s1, char const *s2, char c);
 void	free_split(char **arr);
 
 void	throw_err(int err_type);
-void	syntax_error(const char *token);
+void	syntax_error(char *token);
 
 void	free_ptr(void *ptr);
 void	*safe_malloc(size_t bytes);

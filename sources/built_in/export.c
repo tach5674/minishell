@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 12:31:10 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:57:45 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,24 +75,31 @@ static int	check_if_valid(char *str)
 int	ft_export(t_cmd *cmd, t_ht *env)
 {
 	int	i;
-
+	int	j;
+	int	exit_code;
+	
+	exit_code = 0;
 	if (!cmd->args[1])
 	{
 		if (ht_print(env) == -1)
 			return (handle_error("export: write error: "));
 		return (0);
 	}
-	i = check_if_valid(cmd->args[1]);
-	if (i == 0)
+	j = 0;
+	while (cmd->args[++j])
 	{
-		ft_putstr_fd("minishell: export: `", 2);
-		ft_putstr_fd(cmd->args[1], 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		return (EXIT_FAILURE);
+		i = check_if_valid(cmd->args[j]);
+		if (i == 0)
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd->args[1], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (EXIT_FAILURE);
+		}
+		if (cmd->args[j][i] == '=' && cmd->args[j][i - 1] == '+')
+			exit_code += add_if_valid(env, cmd->args, i - 1, 1);
+		else if (cmd->args[j][i] == '=')
+			exit_code += add_if_valid(env, cmd->args, i, 0);
 	}
-	if (cmd->args[1][i] == '=' && cmd->args[1][i - 1] == '+')
-		return (add_if_valid(env, cmd->args, i - 1, 1));
-	else if (cmd->args[1][i] == '=')
-		return (add_if_valid(env, cmd->args, i, 0));
-	return (0);
+	return (exit_code > 0);
 }

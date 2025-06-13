@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_execution.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:54:38 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:34:19 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	execute_cmd(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
 	int	pid;
 	int	status;
 
+	// if (!ft_strcmp(cmd->args[0], "\"\"") || !ft_strcmp(cmd->args[0], "''"))
+	// 	return (ft_putstr_fd(": command not found\n", 2), 127);
 	if (apply_expansions(cmd, shell) == false)
 		return (EXIT_FAILURE);
 	if (add_last_arg_env(cmd->args, shell) == false)

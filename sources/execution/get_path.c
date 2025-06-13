@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 18:52:10 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:40:23 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static char	*take_correct_path(char *command, char *path, t_shell *shell)
 	char	*tmp;
 
 	i = -1;
-	if (access(command, X_OK) == 0)
-		return (ft_strdup(command));
+	if (!ft_strcmp(command, ".") || !ft_strcmp(command, "..") || !ft_strcmp(command, "")) //????
+		return (NULL);
 	paths = ft_split(path, ':');
 	if (!paths)
 		return (NULL);
@@ -59,7 +59,7 @@ static char	*take_correct_path(char *command, char *path, t_shell *shell)
 			perror("minishell");
 			exit_error(shell, NULL, EXIT_FAILURE);
 		}
-		if (access(tmp, F_OK) != -1)
+		if (access(tmp, F_OK | X_OK) != -1)
 			return (free_split(paths), tmp);
 		free(tmp);
 	}

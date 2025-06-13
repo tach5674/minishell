@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 18:41:29 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:29:24 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,14 @@ void	execute_commands(t_shell *shell)
 		return ;
 	tokens_tmp = tokens;
 	if (syntax_error_check(tokens))
+	{
+		if (shell->last_status_code)
+			free(shell->last_status_code);
+		shell->last_status_code = ft_itoa(2);
+		if (!shell->last_status_code)
+			perror("minishell");		
 		return (free_tokens(tokens_tmp));
+	}
 	shell->ast = parse(&tokens, shell);
 	free_tokens(tokens_tmp);
 	if (shell->ast == NULL)

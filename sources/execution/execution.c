@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:54:50 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:41:29 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,13 @@ static int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 	}
 	else if (ast->type == AST_OR)
 	{
-		if (execute_ast(ast->left, shell, wait, extra_fd) != 0)
+		exit_code = execute_ast(ast->left, shell, wait, extra_fd);
+		if (g_signal_status == SIGQUIT)
+		{
+			write(1, "Quit (core dumped)\n", 19);
+			g_signal_status = 0;
+		}
+		if (exit_code != 0 && exit_code != 130)
 			return (execute_ast(ast->right, shell, wait, extra_fd));
 		return (0);
 	}

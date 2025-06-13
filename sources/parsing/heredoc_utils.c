@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_heredoc2.c                                  :+:      :+:    :+:   */
+/*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 12:49:47 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:06:31 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	print_heredoc_warning(const char *delimiter, int line_number)
 	ft_putstr_fd("')\n", STDERR_FILENO);
 }
 
-int	read_and_write_heredoc(int fd, const char *delimiter)
+int	read_and_write_heredoc(int fd, const char *delimiter, t_shell *shell)
 {
 	char	*line;
 	int		line_number;
@@ -56,6 +56,8 @@ int	read_and_write_heredoc(int fd, const char *delimiter)
 			free(line);
 			break ;
 		}
+		if (!shell->is_heredoc_need_to_expand)
+			expand_arguments(&line, shell, true);
 		ft_putendl_fd(line, fd);
 		free(line);
 		line_number++;
@@ -89,18 +91,13 @@ t_redirection	*create_heredoc_redirection(const char *delimiter,
 	char			*heredoc_path;
 	int				status;
 
-	status = process_heredoc(delimiter, &heredoc_path);
+	status = process_heredoc(delimiter, &heredoc_path, shell);
 	free(shell->last_status_code);
 	shell->last_status_code = ft_itoa(status);
 	if (!shell->last_status_code)
-		throw_err(MALLOC_ERROR);
-	if (status == 130)
-		return (NULL);
+		perror("minishell");
 	if (status != 0)
-	{
-		ft_putstr_fd("heredoc error\n", STDERR_FILENO);
 		return (NULL);
-	}
 	redir = malloc(sizeof(t_redirection));
 	if (!redir)
 		return (NULL);

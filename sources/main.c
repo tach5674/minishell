@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 13:10:23 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:04:48 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	reset(t_shell *shell)
 	free_ast(shell->ast);
 	cleanup_heredocs(shell);
 	shell->ast = NULL;
+	shell->is_heredoc_need_to_expand = false;
 }
 
 int	main(int argc, char *argv[], char *envp[])

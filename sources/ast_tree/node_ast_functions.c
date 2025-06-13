@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_ast_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 14:30:34 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:53:49 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:28:16 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	add_arg(t_cmd *cmd, char *arg)
 	cmd->args = new_args;
 }
 
-t_redirection	*create_redirection(t_redir_type type, const char *target,
+t_redirection	*create_redirection(t_redir_type type, char *target,
 		t_shell *shell)
 {
 	t_redirection	*redir;

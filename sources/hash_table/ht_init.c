@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:15 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:56:17 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:10:32 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	ht_init_add(t_ht *ht, char **envp, int i)
 	}
 }
 
-void	ht_init_path(t_ht *ht)
+static void	ht_init_path(t_ht *ht)
 {
 	char	*temp;
 
@@ -66,15 +66,40 @@ void	ht_init_path(t_ht *ht)
 			throw_err(MALLOC_ERROR);
 		}
 	}
-	else
+	if (!ht_add(ht, "_", temp))
 	{
-		if (!ht_add(ht, "_", temp))
+		ht_free(ht);
+		free(temp);
+		throw_err(MALLOC_ERROR);
+	}
+	free(temp);
+}
+
+static void	ht_init_shlvl(t_ht *ht)
+{
+	char	*value;
+
+	if (ht_get(ht, "SHLVL"))
+	{
+		value = ft_itoa(ft_atoi(ht_get(ht, "SHLVL")) + 1);
+		if (!value)
 		{
 			ht_free(ht);
 			throw_err(MALLOC_ERROR);
 		}
+		if (!ht_add(ht, "SHLVL", value))
+		{
+			ht_free(ht);
+			free(value);
+			throw_err(MALLOC_ERROR);
+		}
+		free(value);
 	}
-	free(temp);
+	else if (!ht_add(ht, "SHLVL", "1"))
+	{
+		ht_free(ht);
+		throw_err(MALLOC_ERROR);
+	}
 }
 
 t_ht	*ht_init(char **envp)
@@ -97,11 +122,9 @@ t_ht	*ht_init(char **envp)
 	{
 		i = 0;
 		while (envp[i])
-		{
-			ht_init_add(ht, envp, i);
-			i++;
-		}
+			ht_init_add(ht, envp, i++);
 	}
 	ht_init_path(ht);
+	ht_init_shlvl(ht);
 	return (ht);
 }

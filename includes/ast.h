@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:59:00 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/13 12:23:45 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:21:08 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			free_ast(t_ast *ast);
 t_ast			*new_ast_node(t_ast_node_type type);
 t_cmd			*new_cmd_node(char *name, t_shell *shell);
 void			add_arg(t_cmd *cmd, char *arg);
-t_redirection	*create_redirection(t_redir_type type, const char *target,
+t_redirection	*create_redirection(t_redir_type type, char *target,
 					t_shell *shell);
 void			add_redirection(t_cmd *cmd, t_redirection *redir);
 

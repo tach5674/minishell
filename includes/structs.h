@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:05:38 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/12 18:58:30 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:03:22 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_shell
 	char				*commands;
 	t_heredoc			*heredocs;
 	t_ast				*ast;
+	bool				is_heredoc_need_to_expand;
 }						t_shell;
 
 // Wildcards

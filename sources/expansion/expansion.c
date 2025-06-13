@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:36 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:55:41 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:10:40 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static bool	expand_commands(t_cmd *cmd, t_shell *shell)
 	{
 		if (expand_tilde(&cmd->args[i], shell->env) == false)
 			return (perror("minishell"), false);
-		if (expand_arguments(&cmd->args[i], shell) == false)
+		if (expand_arguments(&cmd->args[i], shell, false) == false)
 			return (perror("minishell"), false);
 		if (expand_wildcards(cmd, &i) == false)
 			return (perror("minishell"), false);
@@ -54,7 +54,8 @@ static bool	expand_redirections(t_cmd *cmd, t_shell *shell)
 	{
 		if (expand_tilde(&cmd->redirections[i]->target, shell->env) == false)
 			return (perror("minishell"), false);
-		if (expand_arguments(&cmd->redirections[i]->target, shell) == false)
+		if (expand_arguments(&cmd->redirections[i]->target, shell,
+				false) == false)
 			return (perror("minishell"), false);
 		if (expand_wildcards_redir(&cmd->redirections[i]->target) == false)
 		{

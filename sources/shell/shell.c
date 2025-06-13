@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:42:54 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 14:25:50 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:03:59 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,6 @@ void	shell_init(t_shell *shell, char **envp)
 	shell->shell_name = "minishell";
 	shell->commands = NULL;
 	shell->heredocs = NULL;
+	shell->is_heredoc_need_to_expand = false;
 	shell->ast = NULL;
 }

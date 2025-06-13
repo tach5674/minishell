@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 12:44:12 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:10:21 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ static t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 	node->cmd = create_cmd_from_tokens(*tokens, shell);
 	if (!node->cmd)
 	{
-		if (ft_strcmp(shell->last_status_code, "130"))
+		if (ft_strcmp(shell->last_status_code, "130")
+			&& ft_strcmp(shell->last_status_code, "2"))
 			perror("allocation error hey");
 		return (free_ast(node), NULL);
 	}

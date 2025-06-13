@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:06:11 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/13 12:56:10 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:59:13 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 bool	check_if_quotes(char *str, char *in_quotes, int i);
 bool	expand_tilde(char **str, t_ht *env);
-bool	expand_arguments(char **str, t_shell *shell);
+bool	expand_arguments(char **str, t_shell *shell, bool check);
 char	**wildcard_expand(const char *pattern, int *count, bool show_hidden,
 			bool only_dir);
 bool	apply_expansions(t_cmd *cmd, t_shell *shell);

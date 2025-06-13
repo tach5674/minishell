@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argument_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:30 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:55:31 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 17:29:01 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	expand_argument(char **str, int i, t_ht *env)
 	return (place_argument(str, i, start, env));
 }
 
-bool	expand_arguments(char **str, t_shell *shell)
+bool	expand_arguments(char **str, t_shell *shell, bool check)
 {
 	char	in_quotes;
 	int		i;
@@ -85,7 +85,7 @@ bool	expand_arguments(char **str, t_shell *shell)
 	while ((*str)[i])
 	{
 		check_if_quotes(*str, &in_quotes, i);
-		if ((*str)[i] == '$' && in_quotes != '\'')
+		if ((*str)[i] == '$' && (in_quotes != '\'' || check))
 		{
 			if ((*str)[i + 1] == '?')
 				len = place_non_empty(str, i + 2, i, shell->last_status_code);

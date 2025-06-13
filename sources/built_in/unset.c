@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:18 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:54:20 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:45:56 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ int	ft_unset(t_cmd *cmd, t_ht *env)
 
 	i = 1;
 	while (cmd->args[i])
-		ht_unset(env, cmd->args[i++]);
+	{
+		if (ft_strcmp(cmd->args[i], "_"))
+			ht_unset(env, cmd->args[i]);
+		i++;
+	}
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:55:07 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 18:52:10 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	check_access(char *name, t_shell *shell)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(name, 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		ft_putstr_fd(": Is a directory\n", 2);
 		free_shell(shell);
 		exit(126);
 	}

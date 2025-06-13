@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/10 17:09:17 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/13 12:57:33 by mzohraby         ###   ########.fr       */
+/*   Created: 2025/06/13 14:55:58 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/06/13 14:55:59 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <dirent.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 static void	set_flags(char *str, bool *only_dir, bool *show_hidden)
 {

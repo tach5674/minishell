@@ -71,11 +71,11 @@ static int	add_heredoc_file(t_shell *shell, const char *filename)
 	new_node = malloc(sizeof(t_heredoc));
 	if (!new_node)
 		return (perror("malloc"), 1);
-	new_node->filename = strdup(filename);
+	new_node->filename = ft_strdup(filename);
 	if (!new_node->filename)
 	{
 		free(new_node);
-		return (perror("strdup"), 1);
+		return (perror("minishell"), 1);
 	}
 	new_node->next = shell->heredocs;
 	shell->heredocs = new_node;

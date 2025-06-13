@@ -37,7 +37,7 @@ static bool	add_matching_entry(t_expand_state *state, struct dirent *ent)
 	if (state->only_dir)
 		new_entry = ft_strjoin(ent->d_name, "/");
 	else
-		new_entry = strdup(ent->d_name);
+		new_entry = ft_strdup(ent->d_name);
 	if (!new_entry)
 		return (false);
 	(*(state->match_list))[(*state->count)++] = new_entry;
@@ -51,7 +51,7 @@ static char	**create_default_match(const char *pattern, int *count)
 	match_list = malloc(sizeof(char *));
 	if (!match_list)
 		return (NULL);
-	match_list[0] = strdup(pattern);
+	match_list[0] = ft_strdup(pattern);
 	if (!match_list[0])
 	{
 		free(match_list);

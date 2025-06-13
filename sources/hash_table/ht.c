@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:27 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:56:29 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/13 15:52:29 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,8 @@ int	ht_print(t_ht *ht)
 	return (0);
 }
 
-bool	item_to_envp(t_ht *ht, char **envp, t_ht_item *item, int j)
+static bool	item_to_envp(char **envp, t_ht_item *item, int j)
 {
-	if (ft_strcmp(item->key, "_") == 0)
-	{
-		free(item->value);
-		item->value = ft_strdup(ht_get(ht, "PATH"));
-		if (!item->value)
-		{
-			free_split(envp);
-			return (false);
-		}
-	}
 	envp[j] = ft_str_char_join(item->key, item->value, '=');
 	if (!envp[j])
 	{
@@ -118,7 +108,7 @@ char	**ht_to_envp(t_ht *ht)
 		item = ht->buckets[i];
 		while (item)
 		{
-			if (item_to_envp(ht, envp, item, j) == false)
+			if (item_to_envp(envp, item, j) == false)
 				return (perror("minishell"), NULL);
 			item = item->next;
 			j++;

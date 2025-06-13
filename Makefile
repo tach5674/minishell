@@ -3,7 +3,7 @@ NAME = minishell
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror #-g -O0 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -O0 -fsanitize=address
 
 # Directories
 SRCS_DIR = sources

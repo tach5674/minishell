@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:00 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:37:06 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:35:19 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define HT_H
 
 # include "minishell.h"
+
+# define LOAD_FACTOR 0.75
+# define INITIAL_SIZE 64
 
 unsigned long	ht_hash(const char *key);
 t_ht			*ht_init(char **envp);

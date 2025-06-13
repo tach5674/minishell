@@ -6,11 +6,29 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:25 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 17:58:47 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:33:59 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	check_if_valid(char *str)
+{
+	int	i;
+
+	if (ft_isdigit(*str) || *str == '=')
+		return (0);
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if (str[i] == '+' && str[i + 1] == '=')
+			return (i + 1);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
+	return (i);
+}
 
 static int	recreate_string(char **str, t_ht *env, int i, char *path)
 {

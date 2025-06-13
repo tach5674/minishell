@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ht_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:28 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 21:42:13 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:35:14 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#define INITIAL_SIZE 64
 
 static void	ht_init_error(t_ht *ht, char *key, char *value)
 {
@@ -54,7 +52,7 @@ void	ht_init_path(t_ht *ht)
 {
 	char	*temp;
 
-	temp = ft_strjoin("PATH=", ht_get(ht,"PATH"));
+	temp = ft_strjoin("PATH=", ht_get(ht, "PATH"));
 	if (!temp)
 	{
 		if (errno)

@@ -6,13 +6,14 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 12:41:01 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 15:36:40 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:52:13 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_dup_fd(t_redirection *redir, int redir_fd, int flags, mode_t mode)
+static int	open_dup_fd(t_redirection *redir, int redir_fd, int flags,
+		mode_t mode)
 {
 	int	fd;
 
@@ -26,7 +27,7 @@ int	open_dup_fd(t_redirection *redir, int redir_fd, int flags, mode_t mode)
 	return (fd);
 }
 
-int	redirect_files(t_redirection *redir)
+static int	redirect_files(t_redirection *redir)
 {
 	if (redir->type == REDIR_IN)
 		return (open_dup_fd(redir, STDIN_FILENO, O_RDONLY, 0));

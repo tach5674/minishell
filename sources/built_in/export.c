@@ -6,13 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 17:41:05 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:31:10 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*append_to_val(t_ht *env, char *key, char *value)
+static char	*append_to_val(t_ht *env, char *key, char *value)
 {
 	char	*temp;
 
@@ -54,7 +54,7 @@ static int	add_if_valid(t_ht *env, char **args, int i, int check)
 	return (0);
 }
 
-int	check_if_valid(char *str)
+static int	check_if_valid(char *str)
 {
 	int	i;
 

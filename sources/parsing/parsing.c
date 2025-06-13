@@ -6,13 +6,18 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 17:28:00 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:44:12 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ast	*parse_pipeline(t_token **tokens, t_shell *shell)
+static t_ast	*parse_pipeline(t_token **tokens, t_shell *shell);
+static t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell);
+static t_ast	*parse_subshell(t_token **tokens, t_shell *shell);
+static t_ast	*parse_and_or(t_token **tokens, t_shell *shell);
+
+static t_ast	*parse_pipeline(t_token **tokens, t_shell *shell)
 {
 	t_ast	*left;
 	t_ast	*node;
@@ -37,7 +42,7 @@ t_ast	*parse_pipeline(t_token **tokens, t_shell *shell)
 	return (left);
 }
 
-t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
+static t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 {
 	t_ast	*node;
 
@@ -65,7 +70,7 @@ t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 	return (node);
 }
 
-t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
+static t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
 {
 	t_ast	*subshell_node;
 	t_ast	*child;
@@ -92,7 +97,7 @@ t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
 	return (NULL);
 }
 
-t_ast	*parse_and_or(t_token **tokens, t_shell *shell)
+static t_ast	*parse_and_or(t_token **tokens, t_shell *shell)
 {
 	t_ast			*left;
 	t_ast			*node;

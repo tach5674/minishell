@@ -6,11 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:50 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 16:34:24 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 13:09:07 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd);
 
 static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait,
 		int extra_fd)
@@ -41,7 +43,8 @@ static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait,
 	return (get_exit_code(status));
 }
 
-int	execute_last_pipe(t_ast *ast, t_shell *shell, int pipefd, bool last_pipe)
+static int	execute_last_pipe(t_ast *ast, t_shell *shell, int pipefd,
+		bool last_pipe)
 {
 	int	exit_code;
 	int	status;
@@ -78,7 +81,7 @@ static int	execute_pipe(t_ast *ast, t_shell *shell, bool last_pipe)
 	return (pipefd[0]);
 }
 
-int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
+static int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 {
 	int	exit_code;
 
@@ -113,6 +116,8 @@ void	execute_commands(t_shell *shell)
 	add_history(shell->commands);
 	tokens = tokenize(shell->commands, 0);
 	free(shell->commands);
+	if (!tokens && errno)
+		return ;
 	tokens_tmp = tokens;
 	if (syntax_error_check(tokens))
 		return (free_tokens(tokens_tmp));
@@ -128,7 +133,4 @@ void	execute_commands(t_shell *shell)
 	if (!shell->last_status_code)
 		perror("minishell");
 	setup_signals();
-	free_ast(shell->ast);
-	cleanup_heredocs(shell);
-	shell->ast = NULL;
 }

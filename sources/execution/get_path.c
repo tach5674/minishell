@@ -6,13 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:37:02 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 16:11:37 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:29:07 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	check_access(char *name, t_shell *shell)
+static void	check_access(char *name, t_shell *shell)
 {
 	struct stat	statbuf;
 
@@ -38,7 +38,7 @@ void	check_access(char *name, t_shell *shell)
 	}
 }
 
-char	*take_correct_path(char *command, char *path, t_shell *shell)
+static char	*take_correct_path(char *command, char *path, t_shell *shell)
 {
 	char	**paths;
 	int		i;

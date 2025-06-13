@@ -6,13 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 19:00:10 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 16:05:18 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:51:52 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	add_last_arg_env(char **args, t_shell *shell)
+static bool	add_last_arg_env(char **args, t_shell *shell)
 {
 	int	i;
 
@@ -32,7 +32,8 @@ bool	add_last_arg_env(char **args, t_shell *shell)
 	return (true);
 }
 
-int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait, int extra_fd)
+static int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait,
+		int extra_fd)
 {
 	char	*cmd_path;
 	pid_t	pid;

@@ -6,13 +6,11 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:22:20 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 17:16:10 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:35:06 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#define LOAD_FACTOR 0.75
 
 static bool	create_item(t_ht_item **new_item, const char *key,
 		const char *value)

@@ -6,19 +6,19 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:40:24 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:33:19 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	clean_return_exit_code(t_shell *shell, int exit_code)
+static int	clean_return_exit_code(t_shell *shell, int exit_code)
 {
 	free_shell(shell);
 	return (exit_code);
 }
 
-bool	is_numerical(const char *str)
+static bool	is_numerical(const char *str)
 {
 	if (*str == '-')
 		str++;

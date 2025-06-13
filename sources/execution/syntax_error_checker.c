@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_checking.c                                  :+:      :+:    :+:   */
+/*   syntax_error_checker.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 19:51:47 by mikayel           #+#    #+#             */
-/*   Updated: 2025/05/27 20:30:16 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/13 13:28:46 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ static bool	double_operand_syntax_check(t_token *tokens,
 			syntax_error(tokens->value);
 			return (true);
 		}
+	}
+	if ((tokens->type == TOKEN_PIPE || tokens->type == TOKEN_AND
+			|| tokens->type == TOKEN_OR) && !tokens->next)
+	{
+		syntax_error("newline");
+		return (true);
 	}
 	return (false);
 }

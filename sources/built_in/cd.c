@@ -6,13 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:42:32 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/12 17:35:59 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:32:36 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cd_home(char *name, t_ht *env)
+static int	cd_home(char *name, t_ht *env)
 {
 	char	*temp_path;
 
@@ -29,7 +29,7 @@ int	cd_home(char *name, t_ht *env)
 	return (0);
 }
 
-int	cd_oldpwd(char *name, t_ht *env)
+static int	cd_oldpwd(char *name, t_ht *env)
 {
 	char	*temp_path;
 
@@ -57,7 +57,7 @@ int	cd_oldpwd(char *name, t_ht *env)
 	return (0);
 }
 
-int	cd_directory(char *name, char *dir, t_ht *env)
+static int	cd_directory(char *name, char *dir, t_ht *env)
 {
 	char	*temp_path;
 

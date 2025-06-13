@@ -6,13 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:09 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 18:05:29 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:53:07 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	place_non_empty(char **str, int i, int start, char *temp)
+static int	place_non_empty(char **str, int i, int start, char *temp)
 {
 	int		len;
 	char	*temp1;
@@ -31,7 +31,7 @@ int	place_non_empty(char **str, int i, int start, char *temp)
 	return (len);
 }
 
-int	place_argument(char **str, int i, int start, t_ht *env)
+static int	place_argument(char **str, int i, int start, t_ht *env)
 {
 	char	*temp;
 	char	*temp1;
@@ -55,7 +55,7 @@ int	place_argument(char **str, int i, int start, t_ht *env)
 		return (place_non_empty(str, i, start, temp));
 }
 
-int	expand_argument(char **str, int i, t_ht *env)
+static int	expand_argument(char **str, int i, t_ht *env)
 {
 	int	start;
 

@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:03:20 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/12 17:58:18 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:53:51 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	check_if_quotes(char *str, char *in_quotes, int i)
 	return (false);
 }
 
-bool	expand_commands(t_cmd *cmd, t_shell *shell)
+static bool	expand_commands(t_cmd *cmd, t_shell *shell)
 {
 	size_t	i;
 
@@ -45,7 +45,7 @@ bool	expand_commands(t_cmd *cmd, t_shell *shell)
 	return (true);
 }
 
-bool	expand_redirections(t_cmd *cmd, t_shell *shell)
+static bool	expand_redirections(t_cmd *cmd, t_shell *shell)
 {
 	size_t	i;
 

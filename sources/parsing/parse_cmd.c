@@ -6,13 +6,13 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:04:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 17:28:26 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:44:55 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
+static int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
 {
 	t_token			*next;
 	t_redirection	*redir;
@@ -34,7 +34,7 @@ int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type)
 	return (0);
 }
 
-void	handle_word_token(t_cmd *cmd, t_token *token)
+static void	handle_word_token(t_cmd *cmd, t_token *token)
 {
 	if (!cmd->name)
 		cmd->name = ft_strdup(token->value);

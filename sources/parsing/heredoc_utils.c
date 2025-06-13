@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_heredoc1.c                                  :+:      :+:    :+:   */
+/*   create_heredoc2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 17:33:15 by mzohraby         ###   ########.fr       */
+/*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
+/*   Updated: 2025/06/13 12:49:47 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_delimiter(char *line, const char *delimiter)
+static int	is_delimiter(char *line, const char *delimiter)
 {
 	size_t	len;
 
@@ -28,7 +28,7 @@ int	is_delimiter(char *line, const char *delimiter)
 	return (0);
 }
 
-void	print_heredoc_warning(const char *delimiter, int line_number)
+static void	print_heredoc_warning(const char *delimiter, int line_number)
 {
 	ft_putstr_fd("minishell: warning: here-document at line ", STDERR_FILENO);
 	ft_putnbr_fd(line_number, STDERR_FILENO);
@@ -64,33 +64,48 @@ int	read_and_write_heredoc(int fd, const char *delimiter)
 	return (0);
 }
 
-int	write_heredoc_to_file(const char *delimiter, const char *filename)
+static int	add_heredoc_file(t_shell *shell, const char *filename)
 {
-	int	fd;
+	t_heredoc	*new_node;
 
-	fd = open(filename, O_CREAT | O_EXCL | O_WRONLY, 0644);
-	if (fd == -1)
-		return (1);
-	read_and_write_heredoc(fd, delimiter);
-	close(fd);
+	new_node = malloc(sizeof(t_heredoc));
+	if (!new_node)
+		return (perror("malloc"), 1);
+	new_node->filename = strdup(filename);
+	if (!new_node->filename)
+	{
+		free(new_node);
+		return (perror("strdup"), 1);
+	}
+	new_node->next = shell->heredocs;
+	shell->heredocs = new_node;
 	return (0);
 }
 
-int	process_heredoc(const char *delimiter, char **out_filename)
+t_redirection	*create_heredoc_redirection(const char *delimiter,
+		t_shell *shell)
 {
-	char	*filename;
-	int		result;
+	t_redirection	*redir;
+	char			*heredoc_path;
+	int				status;
 
-	filename = create_heredoc_filename();
-	if (!filename)
-		return (1);
-	result = run_heredoc_process(delimiter, filename);
-	if (result != 0)
+	status = process_heredoc(delimiter, &heredoc_path);
+	free(shell->last_status_code);
+	shell->last_status_code = ft_itoa(status);
+	if (!shell->last_status_code)
+		throw_err(MALLOC_ERROR);
+	if (status == 130)
+		return (NULL);
+	if (status != 0)
 	{
-		unlink(filename);
-		free(filename);
-		return (result);
+		ft_putstr_fd("heredoc error\n", STDERR_FILENO);
+		return (NULL);
 	}
-	*out_filename = filename;
-	return (0);
+	redir = malloc(sizeof(t_redirection));
+	if (!redir)
+		return (NULL);
+	redir->type = REDIR_HEREDOC;
+	redir->target = heredoc_path;
+	add_heredoc_file(shell, heredoc_path);
+	return (redir);
 }

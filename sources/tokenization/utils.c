@@ -6,69 +6,11 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:42:15 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/12 13:32:49 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/13 13:14:33 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_token	*ft_lstnew_token(t_token_type type, char *value)
-{
-	t_token	*nnode;
-
-	nnode = (t_token *)malloc(sizeof(t_token));
-	if (!nnode)
-		return (NULL);
-	nnode->type = type;
-	nnode->value = value;
-	nnode->next = NULL;
-	return (nnode);
-}
-
-t_token	*tokenize(char *line, int i)
-{
-	int				len;
-	char			*word;
-	t_token			*list;
-	t_token_type	type;
-
-	list = NULL;
-	while (line[i])
-	{
-		if (ft_isspace(line[i]))
-			i++;
-		else if (is_operator(line[i]))
-		{
-			type = oper_type(&line[i], &len);
-			word = ft_substr(line, i, len);
-			ft_lstadd_back_token(&list, ft_lstnew_token(type, word));
-			i += len;
-		}
-		else
-		{
-			word = parse_word(line, &i);
-			ft_lstadd_back_token(&list, ft_lstnew_token(TOKEN_WORD, word));
-		}
-	}
-	return (list);
-}
-
-void	ft_lstadd_back_token(t_token **lst, t_token *new_token)
-{
-	t_token	*lstcpy;
-
-	if (!lst || !new_token)
-		return ;
-	if (!*lst)
-	{
-		*lst = new_token;
-		return ;
-	}
-	lstcpy = *lst;
-	while (lstcpy->next)
-		lstcpy = lstcpy->next;
-	lstcpy->next = new_token;
-}
 
 bool	is_operator(char c)
 {
@@ -87,4 +29,29 @@ void	free_tokens(t_token *tokens)
 		free(tokens);
 		tokens = tmp;
 	}
+}
+
+t_token_type	oper_type(const char *s, int *len)
+{
+	if (s[0] == '&' && s[1] == '&')
+		return (*len = 2, TOKEN_AND);
+	if (s[0] == '|' && s[1] == '|')
+		return (*len = 2, TOKEN_OR);
+	if (s[0] == '<' && s[1] == '<')
+		return (*len = 2, TOKEN_HEREDOC);
+	if (s[0] == '>' && s[1] == '>')
+		return (*len = 2, TOKEN_REDIR_APPEND);
+	if (s[0] == '|')
+		return (*len = 1, TOKEN_PIPE);
+	if (s[0] == '&')
+		return (*len = 1, TOKEN_AND);
+	if (s[0] == '<')
+		return (*len = 1, TOKEN_REDIR_IN);
+	if (s[0] == '>')
+		return (*len = 1, TOKEN_REDIR_OUT);
+	if (s[0] == '(')
+		return (*len = 1, TOKEN_PAREN_LEFT);
+	if (s[0] == ')')
+		return (*len = 1, TOKEN_PAREN_RIGHT);
+	return (*len = 0, TOKEN_EOF);
 }

@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:05:38 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/13 17:03:22 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 10:50:00 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,13 @@ typedef struct s_expand_state
 	char				***match_list;
 	int					*capacity;
 }						t_expand_state;
+
+typedef struct s_export_state
+{
+	int	i;
+	int	j;
+	int	return_code;
+	int	exit_code;
+}						t_export_state;
 
 #endif

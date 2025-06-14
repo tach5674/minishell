@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:41 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:56:47 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:57:08 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	g_signal_status;
 
 static void	sigint_handler(int sig)
 {
-	(void)sig;
+	g_signal_status = sig;
 	rl_replace_line("", 0);
 	write(1, "\n", 1);
 	rl_on_new_line();

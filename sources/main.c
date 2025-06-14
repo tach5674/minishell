@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 16:03:57 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:58:33 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char *argv[], char *envp[])
 		reset(shell);
 		shell->commands = readline(
 				"\001\033[1;32m\002minishell$ \001\033[0m\002");
+		check_interactive_sigint(shell);
 		if (!shell->commands)
 			break ;
 		if (*shell->commands)

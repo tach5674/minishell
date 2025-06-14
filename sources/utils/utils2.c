@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:08:00 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 14:38:59 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:58:00 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,17 @@ void	print_quit(void)
 {
 	write(1, "Quit (core dumped)\n", 19);
 	g_signal_status = 0;
+}
+
+void	check_interactive_sigint(t_shell *shell)
+{
+	if (g_signal_status == SIGINT)
+	{
+		if (shell->last_status_code)
+			free(shell->last_status_code);
+		shell->last_status_code = ft_itoa(130);
+		if (!shell->last_status_code)
+			perror("minishell");
+		g_signal_status = 0;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:50:11 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/13 20:34:16 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/14 10:51:05 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	free_ptr(void *ptr);
 void	*safe_malloc(size_t bytes);
 void	cleanup_heredocs(t_shell *shell);
 
-void	swap(char **match_list, int i, int j);
 void	sorter(char **match_list, int count);
 
 #endif

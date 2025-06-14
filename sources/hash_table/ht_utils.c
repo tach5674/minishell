@@ -6,7 +6,7 @@
 /*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:21 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:56:23 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:25:14 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,24 @@ void	ht_free(t_ht *ht)
 	}
 	free(ht->buckets);
 	free(ht);
+}
+
+int	print_export_line(char *str)
+{
+	char	*equal_pos;
+
+	equal_pos = ft_strchr(str, '=');
+	if (equal_pos)
+	{
+		*equal_pos = '\0';
+		if (printf("declare -x %s=\"%s\"\n", str, equal_pos + 1) == -1)
+			return (-1);
+		*equal_pos = '=';
+	}
+	else
+	{
+		if (printf("declare -x %s\n", str) == -1)
+			return (-1);
+	}
+	return (0);
 }

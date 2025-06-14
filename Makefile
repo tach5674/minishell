@@ -57,7 +57,8 @@ SRCS = \
 	$(SRCS_DIR)/tokenization/utils.c \
 	$(SRCS_DIR)/utils/error_utils.c \
 	$(SRCS_DIR)/utils/utils1.c \
-	$(SRCS_DIR)/utils/utils2.c
+	$(SRCS_DIR)/utils/utils2.c \
+	$(SRCS_DIR)/utils/sorting.c
 
 # Object files (same structure in OBJS_DIR)
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

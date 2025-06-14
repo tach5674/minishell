@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 21:57:45 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/14 11:25:20 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,28 @@ static int	check_if_valid(char *str)
 	return (i);
 }
 
+static int	ht_print_export_default(t_ht *ht)
+{
+	char	**htcpy;
+	size_t	i;
+
+	if (!ht)
+		return (1);
+	htcpy = ht_to_envp(ht);
+	if (!htcpy)
+		return (1);
+	sorter(htcpy, ht->count);
+	i = 0;
+	while (i < ht->count)
+	{
+		if (print_export_line(htcpy[i]) == -1)
+			return (-1);
+		i++;
+	}
+	free_list(htcpy, ht->count);
+	return (0);
+}
+
 int	ft_export(t_cmd *cmd, t_ht *env)
 {
 	int	i;
@@ -81,7 +103,7 @@ int	ft_export(t_cmd *cmd, t_ht *env)
 	exit_code = 0;
 	if (!cmd->args[1])
 	{
-		if (ht_print(env) == -1)
+		if (ht_print_export_default(env) == -1)
 			return (handle_error("export: write error: "));
 		return (0);
 	}

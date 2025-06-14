@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:00 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 12:35:19 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:25:36 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ int				ht_print(t_ht *ht);
 void			ht_free(t_ht *ht);
 void			ht_free_node(t_ht_item *node);
 char			**ht_to_envp(t_ht *ht);
-
+int             print_export_line(char *str);
 #endif

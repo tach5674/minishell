@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 16:40:21 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 17:10:25 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	check_if_valid(char *str)
 {
 	int	i;
 
-	if (ft_isdigit(*str) || *str == '=')
+	if (ft_isdigit(*str) || *str == '=' || *str == '+')
 		return (0);
 	i = 0;
 	while (str[i] && str[i] != '=')

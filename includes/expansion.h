@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:06:11 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/13 16:59:13 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:37:57 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ bool	expand_wildcards_redir(char **str);
 bool	resize_list(char ***list, int *capacity);
 void	free_list(char **arr, int n);
 int		matches(const char *p, const char *s);
+void	print_error_expansions(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 18:06:21 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 11:51:09 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:47:19 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ bool	append_to_arguments(t_cmd *cmd, char **match_list, size_t i, int count)
 		old_size++;
 	new_args = malloc((old_size + count + 1) * sizeof(char *));
 	if (!new_args)
-		return (false);
+		return (perror("minishell"), false);
 	j = -1;
 	while (++j < i)
 		new_args[j] = cmd->args[j];

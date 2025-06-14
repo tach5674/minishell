@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 11:51:02 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:46:59 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ bool	expand_wildcards(t_cmd *cmd, size_t *i)
 	match_list = wildcard_expand((cmd->args[*i]), &count, show_hidden,
 			only_dir);
 	if (!match_list)
-		return (false);
+		return (perror("minihsell"), false);
 	if (append_to_arguments(cmd, match_list, *i, count) == false)
 		return (free(match_list), false);
 	*i += count - 1;
@@ -69,7 +69,7 @@ bool	expand_wildcards_redir(char **str)
 	set_flags(*str, &only_dir, &show_hidden);
 	match_list = wildcard_expand(*str, &count, show_hidden, only_dir);
 	if (!match_list)
-		return (false);
+		return (perror("minishell"), false);
 	if (count > 1)
 	{
 		ft_putstr_fd("minishell: *: ambigous redirect\n", 2);

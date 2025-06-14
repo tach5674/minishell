@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 18:10:08 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:02:12 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*create_heredoc_filename(void)
 		}
 		free(number_str);
 		if (access(filename, F_OK) != 0)
-			return (errno = 0, filename);
+			return (filename);
 		free(filename);
 	}
 }

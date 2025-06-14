@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:04:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 20:38:29 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/14 14:43:34 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static int	handle_redirect(t_token **tmp, t_cmd *cmd, t_redir_type type,
 	if (!next || next->type != TOKEN_WORD)
 	{
 		if (next)
-			syntax_error(next->value);
+			syntax_error(next->value, shell);
 		else
-			syntax_error("newline");
+			syntax_error("newline", shell);
 		if (shell->last_status_code)
 			free(shell->last_status_code);
 		shell->last_status_code = ft_itoa(2);

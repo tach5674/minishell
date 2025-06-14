@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 14:08:00 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 10:53:18 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/14 14:38:59 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,10 @@ void	cleanup_heredocs(t_shell *shell)
 		free(tmp);
 	}
 	shell->heredocs = NULL;
+}
+
+void	print_quit(void)
+{
+	write(1, "Quit (core dumped)\n", 19);
+	g_signal_status = 0;
 }

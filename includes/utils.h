@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:50:11 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 10:51:05 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:39:38 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@ char	*ft_str_char_join(char const *s1, char const *s2, char c);
 void	free_split(char **arr);
 
 void	throw_err(int err_type);
-void	syntax_error(char *token);
+void	syntax_error(char *token, t_shell *shell);
+void	ht_init_error(t_ht *ht, char *key, char *value);
 
 void	free_ptr(void *ptr);
 void	*safe_malloc(size_t bytes);
 void	cleanup_heredocs(t_shell *shell);
 
 void	sorter(char **match_list, int count);
+void	print_quit(void);
 
 #endif

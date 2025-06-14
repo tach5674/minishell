@@ -1,21 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell.h                                            :+:      :+:    :+:   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/12 13:47:34 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 14:19:15 by mzohraby         ###   ########.fr       */
+/*   Created: 2025/06/14 15:37:19 by mzohraby          #+#    #+#             */
+/*   Updated: 2025/06/14 15:37:48 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHELL_H
-# define SHELL_H
+#include "minishell.h"
 
-# include "minishell.h"
+void	print_error_expansions(char *str)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": ambigous redirect\n", 2);
+}
 
-void	shell_init(t_shell *shell, char **envp);
-void	free_shell(t_shell *shell);
-
-#endif
+bool	check_if_quotes(char *str, char *in_quotes, int i)
+{
+	if (str[i] == '\'' || str[i] == '"')
+	{
+		if (*in_quotes == 0)
+			*in_quotes = str[i];
+		else if (*in_quotes == str[i])
+			*in_quotes = 0;
+		return (true);
+	}
+	return (false);
+}

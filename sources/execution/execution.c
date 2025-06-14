@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 20:29:24 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/14 15:42:08 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,7 @@ static int	execute_ast(t_ast *ast, t_shell *shell, bool wait, int extra_fd)
 	{
 		exit_code = execute_ast(ast->left, shell, wait, extra_fd);
 		if (g_signal_status == SIGQUIT)
-		{
-			write(1, "Quit (core dumped)\n", 19);
-			g_signal_status = 0;
-		}
+			print_quit();
 		if (exit_code != 0 && exit_code != 130)
 			return (execute_ast(ast->right, shell, wait, extra_fd));
 		return (0);
@@ -122,18 +119,11 @@ void	execute_commands(t_shell *shell)
 	add_history(shell->commands);
 	tokens = tokenize(shell->commands, 0);
 	free(shell->commands);
-	if (!tokens && errno)
+	if (!tokens)
 		return ;
 	tokens_tmp = tokens;
-	if (syntax_error_check(tokens))
-	{
-		if (shell->last_status_code)
-			free(shell->last_status_code);
-		shell->last_status_code = ft_itoa(2);
-		if (!shell->last_status_code)
-			perror("minishell");		
+	if (syntax_error_check(tokens, shell))
 		return (free_tokens(tokens_tmp));
-	}
 	shell->ast = parse(&tokens, shell);
 	free_tokens(tokens_tmp);
 	if (shell->ast == NULL)

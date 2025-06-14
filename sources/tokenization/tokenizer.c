@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 17:44:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 13:34:33 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:02:06 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static bool	tokenize_helper(t_token **list, char *line, int *i)
 	char	*word;
 
 	word = parse_word(line, i);
-	if (!add_back_token(list, ft_lstnew_token(TOKEN_WORD, word)) && errno)
+	if (!add_back_token(list, ft_lstnew_token(TOKEN_WORD, word)))
 		return (perror("minishell"), free_tokens(*list), false);
 	return (true);
 }
@@ -93,7 +93,7 @@ t_token	*tokenize(char *line, int i)
 		{
 			type = oper_type(&line[i], &len);
 			word = ft_substr(line, i, len);
-			if (!add_back_token(&list, ft_lstnew_token(type, word)) && errno)
+			if (!add_back_token(&list, ft_lstnew_token(type, word)))
 				return (perror("minishell"), free_tokens(list), NULL);
 			i += len;
 		}

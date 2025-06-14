@@ -6,21 +6,11 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:15 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 13:45:13 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:40:52 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	ht_init_error(t_ht *ht, char *key, char *value)
-{
-	if (key)
-		free(key);
-	if (value)
-		free(value);
-	ht_free(ht);
-	throw_err(MALLOC_ERROR);
-}
 
 static void	ht_init_add(t_ht *ht, char **envp, int i)
 {
@@ -55,7 +45,7 @@ static void	ht_init_path(t_ht *ht)
 	temp = ft_strjoin("PATH=", ht_get(ht, "PATH"));
 	if (!temp)
 	{
-		if (errno)
+		if (ht_get(ht, "PATH"))
 		{
 			ht_free(ht);
 			throw_err(MALLOC_ERROR);

@@ -1,9 +1,12 @@
 # Project
 NAME = minishell
 
+# Authors
+AUTHORS = ggevorgi & mzohraby
+
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -O0 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 
 # Directories
 SRCS_DIR = sources
@@ -16,7 +19,7 @@ INCLUDES = -I./includes -I$(LIBFT_DIR)
 # Libs
 LIBS = -L$(LIBFT_DIR) -lft -lreadline -lncurses
 
-# Source files (explicitly listed)
+# Source files
 SRCS = \
 	$(SRCS_DIR)/main.c \
 	$(SRCS_DIR)/ast_tree/ast_free_functions.c \
@@ -26,6 +29,7 @@ SRCS = \
 	$(SRCS_DIR)/built_in/env.c \
 	$(SRCS_DIR)/built_in/exit.c \
 	$(SRCS_DIR)/built_in/export.c \
+	$(SRCS_DIR)/built_in/export_utils.c \
 	$(SRCS_DIR)/built_in/pwd.c \
 	$(SRCS_DIR)/built_in/unset.c \
 	$(SRCS_DIR)/execution/built-in_execution.c \
@@ -37,6 +41,7 @@ SRCS = \
 	$(SRCS_DIR)/execution/syntax_error_checker.c \
 	$(SRCS_DIR)/expansion/argument_expansion.c \
 	$(SRCS_DIR)/expansion/expansion.c \
+	$(SRCS_DIR)/expansion/expansion_utils.c \
 	$(SRCS_DIR)/expansion/matches.c \
 	$(SRCS_DIR)/expansion/process_matches.c \
 	$(SRCS_DIR)/expansion/remove_quotes.c \
@@ -60,32 +65,55 @@ SRCS = \
 	$(SRCS_DIR)/utils/utils2.c \
 	$(SRCS_DIR)/utils/sorting.c
 
-# Object files (same structure in OBJS_DIR)
+# Object files
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 
+# Colors
+GREEN	= \033[38;2;109;173;126m
+DARK_GREEN	= \033[38;2;63;166;90m
+YELLOW	= \033[33m
+RED		= \033[31m
+RESET	= \033[0m
+BLUE	= \033[34m
+CYAN	= \033[36m
+PURPLE	= \033[35m
+
 # Build
-all: $(LIBFT_DIR)/libft.a $(NAME)
+all: lib $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBS)
+	@printf "\n$(DARK_GREEN)"
+	@printf "				$(DARK_GREEN)    ███▄ ▄███▓██▓███▄    █ ██▓ ██████ ██░ ██▓█████ ██▓    ██▓    $(GREEN)\n"
+	@printf "				$(DARK_GREEN)   ▓██▒▀█▀ ██▓██▒██ ▀█   █▓██▒██    ▒▓██░ ██▓█   ▀▓██▒   ▓██▒    $(GREEN)\n"
+	@printf "				$(DARK_GREEN)   ▓██    ▓██▒██▓██  ▀█ ██▒██░ ▓██▄  ▒██▀▀██▒███  ▒██░   ▒██░    $(GREEN)\n"
+	@printf "				$(DARK_GREEN)   ▒██    ▒██░██▓██▒  ▐▌██░██░ ▒   ██░▓█ ░██▒▓█  ▄▒██░   ▒██░    $(GREEN)\n"
+	@printf "				$(DARK_GREEN)   ▒██▒   ░██░██▒██░   ▓██░██▒██████▒░▓█▒░██░▒████░██████░██████▒$(GREEN)\n"
+	@printf "\n"
+	@printf "\n$(GREEN)🚀 Successfully built $(NAME) by $(AUTHORS)$(RESET)\n"
+	@printf "$(YELLOW)💻 Type './minishell' to start your shell experience!$(RESET)\n\n"
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c Makefile
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@printf "$(PURPLE)🔧 Compiling: $(CYAN)%-50s$(PURPLE) ➜ $(GREEN)%s$(RESET)\n" "$<" "$@"
 
-# Libft
-$(LIBFT_DIR)/libft.a:
-	$(MAKE) -C $(LIBFT_DIR)
+# Libft - silent build
+lib:
+	@make -s -C $(LIBFT_DIR)
+	@printf "$(YELLOW)📚 Libft compiled successfully$(RESET)\n"
 
 # Clean
 clean:
-	@$(RM) -r $(OBJS_DIR)
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@rm -rf $(OBJS_DIR)
+	@make -s -C $(LIBFT_DIR) clean
+	@printf "$(RED)🧹 Cleaned up object files$(RESET)\n"
 
 fclean: clean
-	@$(RM) $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@rm -f $(NAME)
+	@make -s -C $(LIBFT_DIR) fclean
+	@printf "$(RED)🔥 Full clean complete$(RESET)\n"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all lib clean fclean re

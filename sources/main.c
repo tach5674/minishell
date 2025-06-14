@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 13:03:43 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:03:57 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void	reset(t_shell *shell)
 {
-	errno = 0;
 	if (g_signal_status == SIGINT)
 		write(1, "\n", 1);
 	else if (g_signal_status == SIGQUIT)
@@ -37,6 +36,7 @@ int	main(int argc, char *argv[], char *envp[])
 	setup_signals();
 	while (1)
 	{
+		reset(shell);
 		shell->commands = readline(
 				"\001\033[1;32m\002minishell$ \001\033[0m\002");
 		if (!shell->commands)
@@ -46,7 +46,6 @@ int	main(int argc, char *argv[], char *envp[])
 		else
 			free(shell->commands);
 		tcsetattr(STDIN_FILENO, TCSANOW, &shell->original_termios);
-		reset(shell);
 	}
 	free_shell(shell);
 	return (ft_putstr_fd("exit\n", 1), 0);

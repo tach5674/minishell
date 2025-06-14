@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built-in_execution.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:28 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 21:34:54 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/14 14:22:00 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	execute_builtin(t_cmd *cmd, t_shell *shell, int cmd_num, int extra_fd)
 
 int	check_if_builtin(char *name)
 {
-	if (!name|| ft_strcmp(name, ":") == 0)
+	if (!name || ft_strcmp(name, ":") == 0)
 		return (0);
 	else if (ft_strcmp(name, "echo") == 0)
 		return (1);

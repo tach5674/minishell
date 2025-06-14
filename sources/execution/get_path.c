@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 21:40:23 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/14 14:36:24 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@ static void	check_access(char *name, t_shell *shell)
 	}
 }
 
+static bool	check(char *command)
+{
+	if (!ft_strcmp(command, ".") || !ft_strcmp(command, "..")
+		|| !ft_strcmp(command, ""))
+		return (true);
+	return (false);
+}
+
 static char	*take_correct_path(char *command, char *path, t_shell *shell)
 {
 	char	**paths;
@@ -45,7 +53,7 @@ static char	*take_correct_path(char *command, char *path, t_shell *shell)
 	char	*tmp;
 
 	i = -1;
-	if (!ft_strcmp(command, ".") || !ft_strcmp(command, "..") || !ft_strcmp(command, "")) //????
+	if (check(command))
 		return (NULL);
 	paths = ft_split(path, ':');
 	if (!paths)

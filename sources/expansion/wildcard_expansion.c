@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_expansion.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:58 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:55:59 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:51:02 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ bool	expand_wildcards(t_cmd *cmd, size_t *i)
 	if (!match_list)
 		return (false);
 	if (append_to_arguments(cmd, match_list, *i, count) == false)
-		return (false);
+		return (free(match_list), false);
 	*i += count - 1;
-	return (true);
+	return (free(match_list), true);
 }
 
 bool	expand_wildcards_redir(char **str)

@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 18:06:21 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/12 18:51:24 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:51:09 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	append_to_arguments(t_cmd *cmd, char **match_list, size_t i, int count)
 	new_args[j] = NULL;
 	free(cmd->args);
 	cmd->args = new_args;
-	return (free(match_list), true);
+	return (true);
 }
 
 bool	contains_wildcard(char *str)

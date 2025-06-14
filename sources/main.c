@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 17:04:48 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 13:03:43 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	main(int argc, char *argv[], char *envp[])
 			break ;
 		if (*shell->commands)
 			execute_commands(shell);
+		else
+			free(shell->commands);
 		tcsetattr(STDIN_FILENO, TCSANOW, &shell->original_termios);
 		reset(shell);
 	}

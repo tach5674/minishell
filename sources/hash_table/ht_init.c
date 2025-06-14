@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:15 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 18:10:32 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 13:45:13 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static void	ht_init_path(t_ht *ht)
 			ht_free(ht);
 			throw_err(MALLOC_ERROR);
 		}
+		return ;
 	}
 	if (!ht_add(ht, "_", temp))
 	{
@@ -102,6 +103,19 @@ static void	ht_init_shlvl(t_ht *ht)
 	}
 }
 
+static void	ht_init_pwd(t_ht *ht)
+{
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		throw_err(0);
+	if (!ht_add(ht, "PWD", cwd))
+	{
+		ht_free(ht);
+		throw_err(MALLOC_ERROR);
+	}
+}
+
 t_ht	*ht_init(char **envp)
 {
 	t_ht	*ht;
@@ -126,5 +140,6 @@ t_ht	*ht_init(char **envp)
 	}
 	ht_init_path(ht);
 	ht_init_shlvl(ht);
+	ht_init_pwd(ht);
 	return (ht);
 }

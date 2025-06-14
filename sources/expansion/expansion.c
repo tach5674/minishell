@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:36 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 16:19:09 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 21:49:59 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ static bool	expand_commands(t_cmd *cmd, t_shell *shell)
 	i = 0;
 	while (cmd->args[i])
 	{
+		if (expand_tilde(&cmd->args[i], shell->env) == false)
+			return (perror("minishell"), false);
 		if (cmd->args[i][0] == '$' && cmd->args[i][1] != '?'
 			&& cmd->args[i][1] != '0' && cmd->args[i][1])
 		{
@@ -79,8 +81,6 @@ static bool	expand_commands(t_cmd *cmd, t_shell *shell)
 			else if (check == 1)
 				continue ;
 		}
-		if (expand_tilde(&cmd->args[i], shell->env) == false)
-			return (perror("minishell"), false);
 		if (expand_arguments(&cmd->args[i], shell, false) == false)
 			return (perror("minishell"), false);
 		if (expand_wildcards(cmd, &i) == false)
@@ -98,6 +98,8 @@ static bool	expand_redirections(t_cmd *cmd, t_shell *shell)
 	i = 0;
 	while (i < cmd->redir_count)
 	{
+		if (expand_tilde(&cmd->redirections[i]->target, shell->env) == false)
+			return (perror("minishell"), false);
 		if (cmd->redirections[i]->target[0] == '$'
 			&& cmd->redirections[i]->target[1] != '?'
 			&& cmd->redirections[i]->target[1] != '0'
@@ -106,8 +108,6 @@ static bool	expand_redirections(t_cmd *cmd, t_shell *shell)
 			if (expand_empty_redir(cmd->redirections[i]->target, shell->env))
 				return (false);
 		}
-		if (expand_tilde(&cmd->redirections[i]->target, shell->env) == false)
-			return (perror("minishell"), false);
 		if (expand_arguments(&cmd->redirections[i]->target, shell,
 				false) == false)
 			return (perror("minishell"), false);

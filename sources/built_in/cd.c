@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:42:32 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/13 12:32:36 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:49:00 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ static int	cd_oldpwd(char *name, t_ht *env)
 		return (handle_error(name));
 	temp_path = getcwd(NULL, 0);
 	if (!temp_path)
-		return (handle_error(name));
-	if (ht_add(env, "PWD", temp_path) == false)
 	{
-		free(temp_path);
-		return (handle_error(name));
+		ft_putstr_fd("pwd: error retrieving current directory: getcwd: "
+			"cannot access parent directories: No such file or directory\n", 2);
+		return (0);
 	}
+	if (ht_add(env, "PWD", temp_path) == false)
+		return (free(temp_path), handle_error(name));
 	free(temp_path);
 	return (0);
 }
@@ -67,7 +68,11 @@ static int	cd_directory(char *name, char *dir, t_ht *env)
 		return (handle_error(name));
 	temp_path = getcwd(NULL, 0);
 	if (!temp_path)
-		return (handle_error(name));
+	{
+		ft_putstr_fd("pwd: error retrieving current directory: getcwd: "
+			"cannot access parent directories: No such file or directory\n", 2);
+		return (0);
+	}
 	if (ht_add(env, "PWD", temp_path) == false)
 	{
 		free(temp_path);

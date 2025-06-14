@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 14:50:56 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:40:21 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ static int	ft_export_helper(t_export_state *state, t_cmd *cmd, t_ht *env)
 		if (state->return_code != 0)
 			return (state->return_code);
 	}
+	state->return_code = 0;
 	return (0);
 }
 

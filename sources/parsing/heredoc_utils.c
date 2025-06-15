@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:35:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 18:06:31 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:17:57 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	read_and_write_heredoc(int fd, const char *delimiter, t_shell *shell)
 			free(line);
 			break ;
 		}
-		if (!shell->is_heredoc_need_to_expand)
+		if (shell->heredoc_need_to_expand)
 			expand_arguments(&line, shell, true);
 		ft_putendl_fd(line, fd);
 		free(line);

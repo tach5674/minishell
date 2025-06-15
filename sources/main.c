@@ -6,7 +6,7 @@
 /*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/20 17:17:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 20:58:33 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/15 15:20:14 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	reset(t_shell *shell)
 	free_ast(shell->ast);
 	cleanup_heredocs(shell);
 	shell->ast = NULL;
-	shell->is_heredoc_need_to_expand = false;
+	shell->heredoc_need_to_expand = true;
 }
 
 int	main(int argc, char *argv[], char *envp[])

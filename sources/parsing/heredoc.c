@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:27:19 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 16:02:12 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:17:23 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ int	process_heredoc(const char *delimiter, char **out_filename, t_shell *shell)
 	lim = ft_strdup(delimiter);
 	if (!lim)
 		return (EXIT_FAILURE);
-	shell->is_heredoc_need_to_expand = remove_quotes(&lim);
+	if (ft_strchr(delimiter, '\'') || ft_strchr(delimiter, '"'))
+		shell->heredoc_need_to_expand = false;
+	if (remove_quotes(&lim) == false)
+		return (EXIT_FAILURE);
 	filename = create_heredoc_filename();
 	if (!filename)
 		return (EXIT_FAILURE);

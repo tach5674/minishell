@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:05:38 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 10:50:00 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:17:34 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ typedef struct s_shell
 	char				*commands;
 	t_heredoc			*heredocs;
 	t_ast				*ast;
-	bool				is_heredoc_need_to_expand;
+	bool				heredoc_need_to_expand;
 }						t_shell;
 
 // Wildcards

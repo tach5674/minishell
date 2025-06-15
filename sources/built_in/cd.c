@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:42:32 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/14 16:49:00 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/15 15:26:52 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	cd_oldpwd(char *name, t_ht *env)
 	temp_path = getcwd(NULL, 0);
 	if (!temp_path)
 	{
-		ft_putstr_fd("pwd: error retrieving current directory: getcwd: "
+		ft_putstr_fd("cd: error retrieving current directory: getcwd: "
 			"cannot access parent directories: No such file or directory\n", 2);
 		return (0);
 	}
@@ -69,7 +69,7 @@ static int	cd_directory(char *name, char *dir, t_ht *env)
 	temp_path = getcwd(NULL, 0);
 	if (!temp_path)
 	{
-		ft_putstr_fd("pwd: error retrieving current directory: getcwd: "
+		ft_putstr_fd("cd: error retrieving current directory: getcwd: "
 			"cannot access parent directories: No such file or directory\n", 2);
 		return (0);
 	}

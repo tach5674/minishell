@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 17:06:48 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 17:10:25 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:11:49 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,12 @@ static int	ft_export_helper(t_export_state *state, t_cmd *cmd, t_ht *env)
 	else if (cmd->args[state->j][state->i] == '=')
 	{
 		state->return_code = add_if_valid(env, cmd->args, state, 0);
+		if (state->return_code != 0)
+			return (state->return_code);
+	}
+	else if (!cmd->args[state->j][state->i])
+	{
+		state->return_code = add_no_value(env, cmd->args, state);
 		if (state->return_code != 0)
 			return (state->return_code);
 	}

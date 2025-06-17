@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:05:38 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/15 15:17:34 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/17 11:59:13 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_ht_item
 	char				*key;
 	char				*value;
 	struct s_ht_item	*next;
+	bool				only_exported;
 }						t_ht_item;
 
 typedef struct s_ht

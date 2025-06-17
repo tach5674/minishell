@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 14:22:23 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:47:42 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	execute_in_child(t_cmd *cmd, t_shell *shell, bool wait,
 		if (apply_redirections(cmd, extra_fd) == EXIT_FAILURE)
 			exit_error(shell, NULL, EXIT_FAILURE);
 		cmd_path = get_path(cmd->args[0], shell);
-		envp = ht_to_envp(shell->env);
+		envp = ht_to_envp(shell->env, false);
 		if (!envp)
 			exit_error(shell, cmd_path, EXIT_FAILURE);
 		execve(cmd_path, cmd->args, envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sorting.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 10:49:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 11:02:56 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:14:33 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,23 @@ static void	swap(char **a, char **b)
 	*b = tmp;
 }
 
-static int	ft_strcmp_bash(const char *s1, const char *s2)
-{
-	int		i;
-	char	c1;
-	char	c2;
+// static int	ft_strcmp_bash(const char *s1, const char *s2)
+// {
+// 	int		i;
+// 	char	c1;
+// 	char	c2;
 
-	i = 0;
-	while (s1[i] && s2[i])
-	{
-		c1 = s1[i];
-		c2 = s2[i];
-		if (ft_tolower(c1) != ft_tolower(c2))
-			return (ft_tolower(c1) - ft_tolower(c2));
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+// 	i = 0;
+// 	while (s1[i] && s2[i])
+// 	{
+// 		c1 = s1[i];
+// 		c2 = s2[i];
+// 		if (ft_tolower(c1) != ft_tolower(c2))
+// 			return (ft_tolower(c1) - ft_tolower(c2));
+// 		i++;
+// 	}
+// 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+// }
 
 static int	partition(char **arr, int low, int high)
 {
@@ -50,7 +50,7 @@ static int	partition(char **arr, int low, int high)
 	j = low;
 	while (j < high)
 	{
-		if (ft_strcmp_bash(arr[j], pivot) <= 0)
+		if (ft_strcmp(arr[j], pivot) <= 0)
 		{
 			i++;
 			swap(&arr[i], &arr[j]);

@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:00 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 15:33:24 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:47:03 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@
 unsigned long	ht_hash(const char *key);
 t_ht			*ht_init(char **envp);
 bool			ht_add(t_ht *ht, const char *key, const char *value);
+bool			ht_add_no_value(t_ht *ht, const char *key);
 void			ht_unset(t_ht *ht, const char *key);
 char			*ht_get(t_ht *ht, const char *key);
 bool			ht_resize(t_ht *ht);
 int				ht_print(t_ht *ht);
 void			ht_free(t_ht *ht);
 void			ht_free_node(t_ht_item *node);
-char			**ht_to_envp(t_ht *ht);
+char			**ht_to_envp(t_ht *ht, bool export);
 int				print_export_line(char *str);
 #endif

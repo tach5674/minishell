@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:27 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 15:52:29 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:14:03 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ int	ht_print(t_ht *ht)
 		node = ht->buckets[i];
 		while (node)
 		{
+			if (node->only_exported == true)
+			{
+				node = node->next;
+				continue ;
+			}
 			if (printf("%s=%s\n", node->key, node->value) == -1)
 				return (-1);
 			node = node->next;
@@ -82,6 +87,16 @@ int	ht_print(t_ht *ht)
 
 static bool	item_to_envp(char **envp, t_ht_item *item, int j)
 {
+	if (item->only_exported)
+	{
+		envp[j] = ft_strdup(item->key);
+		if (!envp[j])
+		{
+			free_split(envp);
+			return (false);
+		}
+		return (true);
+	}
 	envp[j] = ft_str_char_join(item->key, item->value, '=');
 	if (!envp[j])
 	{
@@ -91,7 +106,7 @@ static bool	item_to_envp(char **envp, t_ht_item *item, int j)
 	return (true);
 }
 
-char	**ht_to_envp(t_ht *ht)
+char	**ht_to_envp(t_ht *ht, bool export)
 {
 	size_t		i;
 	size_t		j;
@@ -108,6 +123,11 @@ char	**ht_to_envp(t_ht *ht)
 		item = ht->buckets[i];
 		while (item)
 		{
+			if (item->only_exported == true && export == false)
+			{
+				item = item->next;
+				continue ;
+			}
 			if (item_to_envp(envp, item, j) == false)
 				return (perror("minishell"), NULL);
 			item = item->next;

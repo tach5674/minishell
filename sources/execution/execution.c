@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 15:42:08 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:16:52 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait,
 	if (pid == 0)
 	{
 		set_in_subshell(ast->left);
-		exit_code = execute_ast(ast->left, shell, true, -1);
+		exit_code = execute_ast(ast->left, shell, wait, -1);
 		if (extra_fd != -1)
 			close(extra_fd);
 		if (ast->cmd->pipe_in != -1)

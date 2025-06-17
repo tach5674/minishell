@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 17:29:47 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 22:19:37 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/17 18:04:26 by ggevorgi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ static bool	is_numerical(const char *str)
 	if (*str == '-')
 	{
 		str++;
-		if (ft_strcmp(str, "9223372036854775808") > 0)
+		if (ft_strlen(str) > 19 || ft_strcmp(str, "9223372036854775808") > 0)
 			return (false);
 	}
 	else if (*str == '+' || ft_isdigit(*str))
 	{
 		if (*str == '+')
 			str++;
-		if (ft_strcmp(str, "9223372036854775807") > 0)
+		if (ft_strlen(str) > 19 || ft_strcmp(str, "9223372036854775807") > 0)
 			return (false);
 	}
 	while (*str)

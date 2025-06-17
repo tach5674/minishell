@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:27 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/17 15:14:03 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:50:41 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,18 +106,14 @@ static bool	item_to_envp(char **envp, t_ht_item *item, int j)
 	return (true);
 }
 
-char	**ht_to_envp(t_ht *ht, bool export)
+char	**ht_to_envp(t_ht *ht, bool export, size_t i, size_t j)
 {
-	size_t		i;
-	size_t		j;
 	t_ht_item	*item;
 	char		**envp;
 
 	envp = malloc((ht->count + 1) * sizeof(char *));
 	if (!envp)
 		return (perror("minishell"), NULL);
-	i = 0;
-	j = 0;
 	while (i < ht->size)
 	{
 		item = ht->buckets[i];

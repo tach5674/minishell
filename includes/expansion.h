@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 12:06:11 by mikayel           #+#    #+#             */
-/*   Updated: 2025/06/14 15:37:57 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:57:56 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,13 @@ bool	resize_list(char ***list, int *capacity);
 void	free_list(char **arr, int n);
 int		matches(const char *p, const char *s);
 void	print_error_expansions(char *str);
+bool	split_arguments(t_cmd *cmd, int j);
+bool	split_arguments_redir(char *str);
+int		is_whitespace(char c);
+bool	skip_quoted_string(const char **str);
+int		count_words(const char *str);
+void	skip_quoted_string_and_count(const char **str, size_t *len);
+char	*get_next_word(const char **str);
+int		expand_empty(t_cmd *cmd, int j, t_ht *env);
 
 #endif

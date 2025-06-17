@@ -40,6 +40,8 @@ SRCS = \
 	$(SRCS_DIR)/execution/redirections.c \
 	$(SRCS_DIR)/execution/syntax_error_checker.c \
 	$(SRCS_DIR)/expansion/argument_expansion.c \
+	$(SRCS_DIR)/expansion/split_arguments.c \
+	$(SRCS_DIR)/expansion/split_arguments_utils.c \
 	$(SRCS_DIR)/expansion/expansion.c \
 	$(SRCS_DIR)/expansion/expansion_utils.c \
 	$(SRCS_DIR)/expansion/matches.c \

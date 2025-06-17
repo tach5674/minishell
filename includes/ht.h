@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:49:00 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/17 12:47:03 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:30:58 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ bool			ht_resize(t_ht *ht);
 int				ht_print(t_ht *ht);
 void			ht_free(t_ht *ht);
 void			ht_free_node(t_ht_item *node);
-char			**ht_to_envp(t_ht *ht, bool export);
+char			**ht_to_envp(t_ht *ht, bool export, size_t i, size_t j);
 int				print_export_line(char *str);
 #endif

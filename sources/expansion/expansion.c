@@ -3,39 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:36 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 21:49:59 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/06/17 16:57:41 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	expand_empty(t_cmd *cmd, int j, t_ht *env)
-{
-	int	i;
-
-	if (ft_isdigit((cmd->args[j])[1]))
-	{
-		if (ft_strlen((cmd->args[j])) == 2)
-			return (append_to_arguments(cmd, NULL, j, 0));
-		return (2);
-	}
-	i = 1;
-	while ((cmd->args[j])[i])
-	{
-		if (!ft_isalnum((cmd->args[j])[i]) && (cmd->args[j])[i] != '_')
-			break ;
-		i++;
-	}
-	if ((cmd->args[j])[i] == '\0')
-	{
-		if (ht_get(env, cmd->args[j] + 1) == false)
-			return (append_to_arguments(cmd, NULL, j, 0));
-	}
-	return (2);
-}
 
 static bool	expand_empty_redir(char *str, t_ht *env)
 {
@@ -62,6 +37,19 @@ static bool	expand_empty_redir(char *str, t_ht *env)
 	return (false);
 }
 
+static bool	process_command_argument(t_cmd *cmd, size_t *i, t_shell *shell)
+{
+	if (expand_arguments(&cmd->args[*i], shell, false) == false)
+		return (perror("minishell"), false);
+	if (split_arguments(cmd, *i) == false)
+		return (false);
+	if (expand_wildcards(cmd, i) == false)
+		return (false);
+	if (remove_quotes(&cmd->args[(*i)++]) == false)
+		return (perror("minishell"), false);
+	return (true);
+}
+
 static bool	expand_commands(t_cmd *cmd, t_shell *shell)
 {
 	size_t	i;
@@ -81,12 +69,8 @@ static bool	expand_commands(t_cmd *cmd, t_shell *shell)
 			else if (check == 1)
 				continue ;
 		}
-		if (expand_arguments(&cmd->args[i], shell, false) == false)
-			return (perror("minishell"), false);
-		if (expand_wildcards(cmd, &i) == false)
+		if (!process_command_argument(cmd, &i, shell))
 			return (false);
-		if (remove_quotes(&cmd->args[i++]) == false)
-			return (perror("minishell"), false);
 	}
 	return (true);
 }
@@ -108,14 +92,14 @@ static bool	expand_redirections(t_cmd *cmd, t_shell *shell)
 			if (expand_empty_redir(cmd->redirections[i]->target, shell->env))
 				return (false);
 		}
-		if (expand_arguments(&cmd->redirections[i]->target, shell,
-				false) == false)
+		if (!expand_arguments(&cmd->redirections[i]->target, shell, false))
 			return (perror("minishell"), false);
+		if (split_arguments_redir(cmd->redirections[i]->target) == false)
+			return (false);
 		if (expand_wildcards_redir(&cmd->redirections[i]->target) == false)
 			return (false);
-		if (remove_quotes(&cmd->redirections[i]->target) == false)
+		if (remove_quotes(&cmd->redirections[i++]->target) == false)
 			return (perror("minishell"), false);
-		i++;
 	}
 	return (true);
 }

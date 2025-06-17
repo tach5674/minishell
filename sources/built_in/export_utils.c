@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:49:56 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/17 12:52:51 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:25:19 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ht_print_export_default(t_ht *ht)
 
 	if (!ht)
 		return (1);
-	htcpy = ht_to_envp(ht, true);
+	htcpy = ht_to_envp(ht, true, 0, 0);
 	if (!htcpy)
 		return (1);
 	sorter(htcpy, ht->count);

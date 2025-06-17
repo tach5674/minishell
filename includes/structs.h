@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:05:38 by mzohraby          #+#    #+#             */
-/*   Updated: 2025/06/17 11:59:13 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:23:40 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,16 @@ typedef struct s_expand_state
 
 typedef struct s_export_state
 {
-	int	i;
-	int	j;
-	int	return_code;
-	int	exit_code;
+	int					i;
+	int					j;
+	int					return_code;
+	int					exit_code;
 }						t_export_state;
+
+typedef struct s_ids
+{
+	int					i;
+	int					j;
+}						t_ids;
 
 #endif

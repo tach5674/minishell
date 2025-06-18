@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_add.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:56:08 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/17 15:13:58 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:06:43 by mikayel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ static bool	create_item(t_ht_item **new_item, const char *key,
 		free(*new_item);
 		return (false);
 	}
+	(*new_item)->only_exported = only_exported;
 	if (only_exported)
 	{
 		(*new_item)->value = NULL;
-		(*new_item)->only_exported = only_exported;
 		return (true);
 	}
 	(*new_item)->value = ft_strdup(value);

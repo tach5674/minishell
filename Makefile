@@ -6,7 +6,7 @@ AUTHORS = ggevorgi & mzohraby
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 # Directories
 SRCS_DIR = sources

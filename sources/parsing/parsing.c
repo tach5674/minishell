@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mikayel <mikayel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:29:01 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 20:41:03 by mikayel          ###   ########.fr       */
+/*   Updated: 2025/11/08 19:07:43 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 		perror("allocation error");
 		return (NULL);
 	}
-	node->cmd = create_cmd_from_tokens(*tokens, shell);
+	node->cmd = create_cmd_from_tokens(tokens, shell);
 	if (!node->cmd)
 	{
 		if (ft_strcmp(shell->last_status_code, "130")
@@ -64,10 +64,6 @@ static t_ast	*parse_command_or_subshell(t_token **tokens, t_shell *shell)
 			perror("allocation error");
 		return (free_ast(node), NULL);
 	}
-	while (*tokens && (*tokens)->type != TOKEN_PIPE
-		&& (*tokens)->type != TOKEN_AND && (*tokens)->type != TOKEN_OR
-		&& (*tokens)->type != TOKEN_PAREN_RIGHT)
-		*tokens = (*tokens)->next;
 	return (node);
 }
 
@@ -89,7 +85,7 @@ static t_ast	*parse_subshell(t_token **tokens, t_shell *shell)
 		subshell_node = new_ast_node(AST_SUBSHELL);
 		if (!subshell_node)
 			return (perror("allocation error"), free_ast(child), NULL);
-		subshell_node->cmd = new_cmd_node(NULL, shell);
+		subshell_node->cmd = create_cmd_from_tokens(tokens, shell);
 		if (!subshell_node->cmd)
 			return (perror("allocation error"), free_ast(subshell_node), NULL);
 		subshell_node->left = child;
@@ -134,6 +130,7 @@ t_ast	*parse(t_token **tokens, t_shell *shell)
 	ast = parse_and_or(tokens, shell);
 	if (ast && *tokens)
 	{
+		printf("hedsa\n");
 		free_ast(ast);
 		return (NULL);
 	}

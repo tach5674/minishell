@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:54:49 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/17 18:16:52 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/11/08 19:21:32 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait,
 		return (perror("minishell"), EXIT_FAILURE);
 	if (pid == 0)
 	{
+		if (apply_redirections(ast->cmd, extra_fd) == EXIT_FAILURE)
+			exit_error(shell, NULL, EXIT_FAILURE);
 		set_in_subshell(ast->left);
 		exit_code = execute_ast(ast->left, shell, wait, -1);
 		if (extra_fd != -1)
@@ -39,8 +41,7 @@ static int	execute_subshell(t_ast *ast, t_shell *shell, bool wait,
 	}
 	if (wait == false)
 		return (0);
-	waitpid(pid, &status, 0);
-	return (get_exit_code(status));
+	return (waitpid(pid, &status, 0), get_exit_code(status));
 }
 
 static int	execute_last_pipe(t_ast *ast, t_shell *shell, int pipefd,

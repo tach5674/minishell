@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 19:04:37 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/14 14:43:34 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/11/08 19:23:36 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,31 +48,30 @@ static void	handle_word_token(t_cmd *cmd, t_token *token)
 	add_arg(cmd, token->value);
 }
 
-t_cmd	*create_cmd_from_tokens(t_token *tokens, t_shell *shell)
+t_cmd	*create_cmd_from_tokens(t_token **tokens, t_shell *shell)
 {
 	t_cmd	*cmd;
-	t_token	*tmp;
 
-	tmp = tokens;
 	cmd = new_cmd_node(NULL, shell);
-	while (tmp && tmp->type != TOKEN_PIPE && tmp->type != TOKEN_AND
-		&& tmp->type != TOKEN_OR && tmp->type != TOKEN_PAREN_RIGHT)
+	while ((*tokens) && (*tokens)->type != TOKEN_PIPE
+		&& (*tokens)->type != TOKEN_AND && (*tokens)->type != TOKEN_OR
+		&& (*tokens)->type != TOKEN_PAREN_RIGHT)
 	{
-		if (tmp->type == TOKEN_WORD)
-			handle_word_token(cmd, tmp);
-		else if (tmp->type == TOKEN_REDIR_IN && handle_redirect(&tmp, cmd,
-				REDIR_IN, shell))
+		if ((*tokens)->type == TOKEN_WORD)
+			handle_word_token(cmd, (*tokens));
+		else if ((*tokens)->type == TOKEN_REDIR_IN && handle_redirect(tokens,
+				cmd, REDIR_IN, shell))
 			return (free_cmd(cmd), NULL);
-		else if (tmp->type == TOKEN_REDIR_OUT && handle_redirect(&tmp, cmd,
-				REDIR_OUT, shell))
+		else if ((*tokens)->type == TOKEN_REDIR_OUT && handle_redirect(tokens,
+				cmd, REDIR_OUT, shell))
 			return (free_cmd(cmd), NULL);
-		else if (tmp->type == TOKEN_REDIR_APPEND && handle_redirect(&tmp, cmd,
-				REDIR_APPEND, shell))
+		else if ((*tokens)->type == TOKEN_REDIR_APPEND
+			&& handle_redirect(tokens, cmd, REDIR_APPEND, shell))
 			return (free_cmd(cmd), NULL);
-		else if (tmp->type == TOKEN_HEREDOC && handle_redirect(&tmp, cmd,
-				REDIR_HEREDOC, shell))
+		else if ((*tokens)->type == TOKEN_HEREDOC && handle_redirect(tokens,
+				cmd, REDIR_HEREDOC, shell))
 			return (free_cmd(cmd), NULL);
-		tmp = tmp->next;
+		(*tokens) = (*tokens)->next;
 	}
 	return (cmd);
 }

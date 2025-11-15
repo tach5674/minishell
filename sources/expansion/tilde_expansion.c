@@ -6,7 +6,7 @@
 /*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:51 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/11/15 14:07:35 by mzohraby         ###   ########.fr       */
+/*   Updated: 2025/11/15 14:22:43 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,12 @@ static int	recreate_string(char **str, t_ht *env, int i, char *path)
 	len = 0;
 	temp = ht_get(env, path);
 	if (!temp)
-	{
 		temp = "";
-		len = 1;
-	}
-	else
-		len = ft_strlen(temp);
+	len = ft_strlen(temp);
 	(*str)[i] = '\0';
 	temp = ft_strjoin(*str, temp);
 	if (!temp)
-		return (-1);
+		return (-2);
 	free(*str);
 	*str = temp;
 	return (len - 1);
@@ -62,19 +58,15 @@ static int	recreate_string_slash(char **str, t_ht *env, int i)
 	len = 0;
 	temp = ht_get(env, "HOME");
 	if (!temp)
-	{
 		temp = "";
-		len = 1;
-	}
-	else
-		len = ft_strlen(temp);
+	len = ft_strlen(temp);
 	(*str)[i] = '\0';
 	temp = ft_strjoin(*str, temp);
 	if (!temp)
-		return (-1);
+		return (-2);
 	temp1 = ft_strjoin(temp, *str + i + 1);
 	if (!temp1)
-		return (free(temp), -1);
+		return (free(temp), -2);
 	free(temp);
 	free(*str);
 	*str = temp1;
@@ -115,7 +107,7 @@ bool	expand_tilde(char **str, t_ht *env)
 		else if ((*str)[i] == '~' && in_quotes == 0)
 		{
 			len = expand_tilde_helper(str, i, env);
-			if (len == -1)
+			if (len == -2)
 				return (false);
 			i += len;
 		}

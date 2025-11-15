@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tilde_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggevorgi <sp1tak.gg@gmail.com>             +#+  +:+       +#+        */
+/*   By: mzohraby <mzohraby@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 14:55:51 by ggevorgi          #+#    #+#             */
-/*   Updated: 2025/06/13 14:55:52 by ggevorgi         ###   ########.fr       */
+/*   Updated: 2025/11/15 14:07:35 by mzohraby         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,19 @@ static int	recreate_string(char **str, t_ht *env, int i, char *path)
 
 	len = 0;
 	temp = ht_get(env, path);
-	if (temp)
+	if (!temp)
 	{
-		len = ft_strlen(temp);
-		(*str)[i] = '\0';
-		temp = ft_strjoin(*str, temp);
-		if (!temp)
-			return (-1);
-		free(*str);
-		*str = temp;
+		temp = "";
+		len = 1;
 	}
+	else
+		len = ft_strlen(temp);
+	(*str)[i] = '\0';
+	temp = ft_strjoin(*str, temp);
+	if (!temp)
+		return (-1);
+	free(*str);
+	*str = temp;
 	return (len - 1);
 }
 
@@ -58,20 +61,23 @@ static int	recreate_string_slash(char **str, t_ht *env, int i)
 
 	len = 0;
 	temp = ht_get(env, "HOME");
-	if (temp)
+	if (!temp)
 	{
-		len = ft_strlen(temp);
-		(*str)[i] = '\0';
-		temp = ft_strjoin(*str, temp);
-		if (!temp)
-			return (-1);
-		temp1 = ft_strjoin(temp, *str + i + 1);
-		if (!temp1)
-			return (free(temp), -1);
-		free(temp);
-		free(*str);
-		*str = temp1;
+		temp = "";
+		len = 1;
 	}
+	else
+		len = ft_strlen(temp);
+	(*str)[i] = '\0';
+	temp = ft_strjoin(*str, temp);
+	if (!temp)
+		return (-1);
+	temp1 = ft_strjoin(temp, *str + i + 1);
+	if (!temp1)
+		return (free(temp), -1);
+	free(temp);
+	free(*str);
+	*str = temp1;
 	return (len - 1);
 }
 
